@@ -41,10 +41,6 @@ class Deck {
     })  
     return (i < limit) ? this.recursiveShuffle(newDeck, ++i) : newDeck
   }
-
-  logDeck () {
-    console.log(this.cards)
-  }
 }
 
 module.exports = Deck

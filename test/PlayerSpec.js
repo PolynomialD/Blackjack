@@ -5,9 +5,9 @@ const Gen = require('verify-it').Gen
 
 describe('Player', () => {
   describe('name', () => {
-    it('should be a string', Gen.string, (name) => {
-      const player = new Player(name)
-      player.name.should.eql(name)
+    it('should be a string', () => {
+      const player = new Player('Bob')
+      player.name.should.eql('Bob')
     })
   })
 
@@ -32,13 +32,16 @@ describe('Player', () => {
   })
 
   describe('chips', () => {
-    it('should be a number',  Gen.string, Gen.integerBetween(0, 5000), (string, number) => {
-      const player = new Player('Bob', string)
+    it('should accept a number', () => {
+      const player = new Player('Bob', 9000)
+      player.chips.should.eql(9000)
+    })  
+    it('should be 0 if not given a number', () => {
+      const player = new Player('Bob', 'string')
       player.chips.should.eql(0)
-      const player2 = new Player('Marley', number)
-      player2.chips.should.eql(number)
-    })
+    })  
   })
+
 
   describe('discardCard()', () => {
     it('should remove a card from player.cards', () => {

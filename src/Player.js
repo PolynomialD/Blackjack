@@ -5,8 +5,8 @@ class Player {
     this.checkChips(chips)
   }
 
-  checkChips() {
-    (isNaN(this.chips) === true) ? this.chips = 0 : this.chips = chips
+  checkChips(chips) {
+    (isNaN(chips) === true) ? this.chips = 0 : this.chips = chips
   }
 
   takeCards(amount, deck) {
