@@ -33,13 +33,17 @@ class Deck {
     this.cards = this.recursiveShuffle(this.cards)
   }
 
-  recursiveShuffle (deck, i = 1, limit = 20) {
+  recursiveShuffle (deck, i = 1, limit = 200) {
     const clone = deck.slice(0)
 
     const newDeck = new Array(clone.length).fill(0).map(() => {
         return clone.splice(Math.floor(Math.random() * Math.floor(limit)),1)[0]
     })  
     return (i < limit) ? this.recursiveShuffle(newDeck, ++i) : newDeck
+  }
+
+  logDeck () {
+    console.log(this.cards)
   }
 }
 
