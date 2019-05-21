@@ -50,6 +50,7 @@ describe('Player', () => {
       player.takeCards(10, deck)
       const removedCard = player.cards[4]
       player.discardCard(5).should.eql(removedCard)
+      player.cards.length.should.eql(9)
     })
   })  
 })
