@@ -1,16 +1,22 @@
 class Player {
-  constructor (name) {
+  constructor (name, chips) {
     this.name = name.toString()
     this.cards = []
+    this.checkChips(chips)
+  }
+
+  checkChips() {
+    (isNaN(this.chips) === true) ? this.chips = 0 : this.chips = chips
   }
 
   takeCards(amount, deck) {
-    const playerCards = this.cards
     for(amount; amount>0; amount--) {
-      playerCards.unshift(deck.dealCard())
-      console.log(playerCards)
-      this.cards = playerCards
+      this.cards.unshift(deck.dealCard())     
     }
+  }
+
+  discardCard(cardPos) {
+    return this.cards.splice(cardPos-1,1)[0]
   }
 }
 
