@@ -34,20 +34,17 @@ describe('BlackJackGame', () => {
       game.playerHandValue(1).should.eql(5)
       game.playerHandValue(2).should.eql(9)
     })
-    verify.it('should deal with picture cards', Gen.integerBetween(1,52), Gen.string, (number, string) => {
+    verify.it('should deal with picture cards', () => {
       const bob = new Player('Bob', 9000)
-      const rob = new Player('Rob', 8000)
-      const tim = new Player('Tim', 7000)
-      const jim = new Player('Jim', 6000)
-      const joe = new Player('Joe', 5000)
+      const joe = new Player('Joe', 8000)
       const game = new BlackJackGame()
+      for(let i=9; i>0; i--) {
+        joe.drawCard(game.deck)
+      }
       game.table.addPlayer(bob)
-      game.table.addPlayer(rob)
-      game.table.addPlayer(tim)
-      game.table.addPlayer(jim)
-      game.table.addPlayer(joe)
       game.dealCards()
-      game.playerHandValue(5).should.eql(20)
+      game.playerHandValue(1).should.eql(20)
+      game.dealerHandValue().should.eql(21)
     })
   })
 })

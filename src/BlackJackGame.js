@@ -20,6 +20,7 @@ class BlackJackGame {
   }
   dealerHandValue() {
     const hand = this.dealer.hand
+    console.log(hand)
     return this.handValue(hand)
   }
 
@@ -33,7 +34,7 @@ class BlackJackGame {
     for(let card in hand) {
       let cardValue = hand[card].value
       if (cardValue === 'A') {
-        handvalue += 11
+        handValue += 11
       } else if(cardValue < 10) {
         handValue += cardValue
       } else { 
