@@ -18,14 +18,14 @@ describe('Deck', () => {
   })
 
   describe('cut()', () => {
-    verify.it('have expected top card', Gen.integerBetween(1,52), (placeToCut) => {
+    verify.it('should have expected top card', Gen.integerBetween(1,52), (placeToCut) => {
       const deck = new Deck()
       const expectedTopCard = deck.cards[placeToCut] 
       deck.cut(placeToCut)
       deck.cards.indexOf(expectedTopCard).should.eql(0)
     })
 
-    verify.it('have expected bottom card', Gen.integerBetween(6,45), (placeToCut) => {
+    verify.it('should have expected bottom card', Gen.integerBetween(6,45), (placeToCut) => {
       const deck = new Deck()
       const expectedBottomCard = deck.cards[placeToCut-1] 
       deck.cut(placeToCut)

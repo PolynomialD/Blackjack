@@ -1,22 +1,31 @@
 class Player {
   constructor (name, chips) {
     this.name = name.toString()
-    this.cards = []
+    this.hand = []
     this.checkChips(chips)
   }
 
   checkChips(chips) {
-    (isNaN(chips) === true) ? this.chips = 0 : this.chips = chips
+    (isNaN(chips) === true) ? this.chips = 1000 : this.chips = chips
   }
 
-  takeCards(amount, deck) {
-    for(amount; amount>0; amount--) {
-      this.cards.unshift(deck.dealCard())     
+  placeBet(bet) {
+    if(bet <= this.chips) {
+      this.chips -= bet
+      return bet
+    } else { 
+      const chips = this.chips
+      this.chips = 0
+      return chips
     }
   }
 
-  discardCard(cardPos) {
-    return this.cards.splice(cardPos-1,1)[0]
+  drawCard(deck) {
+    this.hand.unshift(deck.dealCard())     
+  }
+
+  removeCard(cardPos) {
+    return this.hand.splice(cardPos-1,1)[0]
   }
 }
 
