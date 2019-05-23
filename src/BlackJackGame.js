@@ -30,17 +30,17 @@ class BlackJackGame {
   }
 
   handValue(hand) {
+    let handValueArray = []
     let handValue = 0
     for(let card in hand) {
       let cardValue = hand[card].value
-      if (cardValue === 'A') {
-        handValue += 11
-      } else if(cardValue < 10) {
-        handValue += cardValue
-      } else { 
-        handValue += 10
-      }
+      if(cardValue === 'A') {handValueArray.push(11)}
+      else if(cardValue < 10) {handValueArray.push(cardValue)}
+      else {handValueArray.push(10)}
     }
+    handValue = handValueArray.reduce((total, num) => {
+      return total + num
+    })
     return handValue
   }
 }
