@@ -1,0 +1,53 @@
+const Player = require('../src/Player')
+const BlackJackGame = require('../src/BlackJackGame')
+const Gen = require('verify-it').Gen
+
+describe('BlackJackGame', () => {
+  describe('deal()', () => {
+    it('should deal 2 cards to each player and the dealer', () => {
+      const bob = new Player('Bob', 9000)
+      const joe = new Player('Joe', 5000)
+      const game = new BlackJackGame()
+      game.table.addPlayer(bob)
+      game.table.addPlayer(joe)
+      game.dealCards()
+      bob.hand.length.should.eql(2)
+      joe.hand.length.should.eql(2)
+      game.dealer.hand.length.should.eql(2)
+    })
+  })
+  describe('HandValue()', () => {
+    it('should give the value of the dealers hand', () => {
+      const bob = new Player('Bob', 9000)
+      const game = new BlackJackGame()
+      game.table.addPlayer(bob)
+      game.dealCards()
+      game.dealerHandValue().should.eql(9)
+    })
+    it('should give the value of the players hand', () => {
+      const bob = new Player('Bob', 9000)
+      const joe = new Player('Joe', 5000)
+      const game = new BlackJackGame()
+      game.table.addPlayer(bob)
+      game.table.addPlayer(joe)
+      game.dealCards()
+      game.playerHandValue(1).should.eql(5)
+      game.playerHandValue(2).should.eql(9)
+    })
+    verify.it('should deal with picture cards', Gen.integerBetween(1,52), Gen.string, (number, string) => {
+      const bob = new Player('Bob', 9000)
+      const rob = new Player('Rob', 8000)
+      const tim = new Player('Tim', 7000)
+      const jim = new Player('Jim', 6000)
+      const joe = new Player('Joe', 5000)
+      const game = new BlackJackGame()
+      game.table.addPlayer(bob)
+      game.table.addPlayer(rob)
+      game.table.addPlayer(tim)
+      game.table.addPlayer(jim)
+      game.table.addPlayer(joe)
+      game.dealCards()
+      game.playerHandValue(5).should.eql(20)
+    })
+  })
+})
