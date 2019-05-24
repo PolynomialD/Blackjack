@@ -72,25 +72,6 @@ class BlackJackGame {
     }
   }
 
-    // return (handValue <= 21) ? handValue : this.handValue(this.changeAce(valueArray))
-
-    // if(handValue <= 21) {
-    //   return handValue
-    // } else {
-    //   handValue = this.changeAce(valueArray).reduce((total, num) => total + num)
-    //   if(handValue <= 21) {
-    //     return handValue
-    //  } else {
-    //   handValue = this.changeAce(valueArray).reduce((total, num) => total + num)
-    //     return handValue
-    //  }
-    // }
-  
-
-  total() {
-    return this.reduce((total, num) => total + num)
-  }
-
 }
 
 module.exports = BlackJackGame
