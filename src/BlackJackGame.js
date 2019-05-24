@@ -20,29 +20,77 @@ class BlackJackGame {
   }
   dealerHandValue() {
     const hand = this.dealer.hand
-    console.log(hand)
+    // console.log(
+    //   'dealer hand: ', hand,
+    //   'hand value: ', this.handValue(hand)
+    // )
     return this.handValue(hand)
   }
 
   playerHandValue(player) {
     const hand = this.players[player-1].hand
+    // console.log(
+    //   `player${player} hand: `, hand,
+    //   'hand value: ', this.handValue(hand)
+    // )
     return this.handValue(hand)
   }
-
-  handValue(hand) {
-    let handValueArray = []
-    let handValue = 0
-    for(let card in hand) {
-      let cardValue = hand[card].value
-      if(cardValue === 'A') {handValueArray.push(11)}
-      else if(cardValue < 10) {handValueArray.push(cardValue)}
-      else {handValueArray.push(10)}
+  changeAce(valueArray) {
+    valueArray.sort((a,b) => a - b)
+    let highCard = valueArray.length - 1
+    if(valueArray[highCard] === 11) {
+      valueArray[highCard] = 1
+      return valueArray
+    } else { 
+      return valueArray
     }
-    handValue = handValueArray.reduce((total, num) => {
-      return total + num
-    })
-    return handValue
   }
+
+  createValueArray(hand) {
+    const valueArray = []
+    for(let card in hand) {
+      switch(hand[card].value) {
+        case 'A': valueArray.push(11)
+        break
+        case 'J': valueArray.push(10)
+        break
+        case 'Q': valueArray.push(10)
+        break
+        case 'K': valueArray.push(10)
+        break
+        default: valueArray.push(hand[card].value)
+      }
+    }
+    return valueArray
+  }
+  handValue(hand) { 
+    let valueArray = this.createValueArray(hand)
+    if(valueArray.reduce((a, b) => a + b) <= 21) {
+      return valueArray.reduce((a, b) => a + b)
+    } else {
+      return this.changeAce(valueArray).reduce((a, b) => a + b)
+    }
+  }
+
+    // return (handValue <= 21) ? handValue : this.handValue(this.changeAce(valueArray))
+
+    // if(handValue <= 21) {
+    //   return handValue
+    // } else {
+    //   handValue = this.changeAce(valueArray).reduce((total, num) => total + num)
+    //   if(handValue <= 21) {
+    //     return handValue
+    //  } else {
+    //   handValue = this.changeAce(valueArray).reduce((total, num) => total + num)
+    //     return handValue
+    //  }
+    // }
+  
+
+  total() {
+    return this.reduce((total, num) => total + num)
+  }
+
 }
 
 module.exports = BlackJackGame
