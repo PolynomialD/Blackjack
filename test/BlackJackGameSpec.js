@@ -34,7 +34,7 @@ describe('BlackJackGame', () => {
       game.playerHandValue(1).should.eql(5)
       game.playerHandValue(2).should.eql(9)
     })
-    it('should deal with picture cards', () => {
+    it('should handle picture cards', () => {
       const bob = new Player('Bob', 9000)
       const joe = new Player('Joe', 8000)
       const game = new BlackJackGame()
@@ -46,7 +46,7 @@ describe('BlackJackGame', () => {
       game.playerHandValue(1).should.eql(20)
       game.dealerHandValue().should.eql(21)
     })
-    it('should deal with Aces', () => {
+    it('should handle Aces', () => {
       const bob = new Player('Bob', 9000)
       const joe = new Player('Joe', 8000)
       const jim = new Player('Jim', 5000)
@@ -68,7 +68,7 @@ describe('BlackJackGame', () => {
       game.playerHandValue(3).should.eql(19)
       game.dealerHandValue().should.eql(17)
     })
-    it('should deal with lots of Aces', () => {
+    it('should handle lots of Aces', () => {
       const game = new BlackJackGame()
       const bob = new Player('Bob', 9000)
       const joe = new Player('Joe', 8000)

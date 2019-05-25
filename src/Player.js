@@ -2,11 +2,11 @@ class Player {
   constructor (name, chips) {
     this.name = name.toString()
     this.hand = []
-    this.checkChips(chips)
+    this.chips = this.checkChips(chips)
   }
 
   checkChips(chips) {
-    (isNaN(chips) === true) ? this.chips = 1000 : this.chips = chips
+    return (isNaN(chips) === true) ? 1000 : chips
   }
 
   placeBet(bet) {
