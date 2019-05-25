@@ -1,5 +1,6 @@
 const Player = require('../src/Player')
 const BlackJackGame = require('../src/BlackJackGame')
+const Deck= require('../src/Deck')
 
 describe('BlackJackGame', () => {
   describe('deal()', () => {
@@ -33,7 +34,7 @@ describe('BlackJackGame', () => {
       game.playerHandValue(1).should.eql(5)
       game.playerHandValue(2).should.eql(9)
     })
-    verify.it('should deal with picture cards', () => {
+    it('should deal with picture cards', () => {
       const bob = new Player('Bob', 9000)
       const joe = new Player('Joe', 8000)
       const game = new BlackJackGame()
@@ -45,7 +46,7 @@ describe('BlackJackGame', () => {
       game.playerHandValue(1).should.eql(20)
       game.dealerHandValue().should.eql(21)
     })
-    verify.it('should deal with Aces', () => {
+    it('should deal with Aces', () => {
       const bob = new Player('Bob', 9000)
       const joe = new Player('Joe', 8000)
       const jim = new Player('Jim', 5000)
@@ -62,14 +63,32 @@ describe('BlackJackGame', () => {
       jim.drawCard(game.deck)
       jim.drawCard(game.deck)
 
-      console.log('bob hand', bob.hand, 'handvalue', game.playerHandValue(1))
-      console.log('joe hand', joe.hand, 'handvalue', game.playerHandValue(2))
-      console.log('jim hand', jim.hand, 'handvalue', game.playerHandValue(3))
-      console.log('dealer hand', game.dealer.hand, 'handvalue', game.dealerHandValue(1))
       game.playerHandValue(1).should.eql(25)
       game.playerHandValue(2).should.eql(29)
       game.playerHandValue(3).should.eql(19)
       game.dealerHandValue().should.eql(17)
+    })
+    it('should deal with lots of Aces', () => {
+      const game = new BlackJackGame()
+      const bob = new Player('Bob', 9000)
+      const joe = new Player('Joe', 8000)
+      const jim = new Player('Jim', 5000)
+      game.deck = new Deck(['♠', '♣', '♥', '♦'],['A','A','A','A'])
+      game.table.addPlayer(bob)
+      game.table.addPlayer(joe)
+      game.table.addPlayer(jim)
+      game.dealCards()
+      bob.drawCard(game.deck)
+      joe.drawCard(game.deck)
+      joe.drawCard(game.deck)
+      jim.drawCard(game.deck)
+      jim.drawCard(game.deck)
+      jim.drawCard(game.deck)
+
+      game.playerHandValue(1).should.eql(13)
+      game.playerHandValue(2).should.eql(14)
+      game.playerHandValue(3).should.eql(15)
+      game.dealerHandValue().should.eql(12)
     })
   })
 })
