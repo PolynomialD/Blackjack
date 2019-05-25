@@ -20,58 +20,58 @@ class BlackJackGame {
   }
   dealerHandValue() {
     const hand = this.dealer.hand
-    // console.log(
-    //   'dealer hand: ', hand,
-    //   'hand value: ', this.handValue(hand)
-    // )
+    // console.log('dealer hand: ', hand, 'hand value: ', this.handValue(hand))
     return this.handValue(hand)
   }
 
   playerHandValue(player) {
     const hand = this.players[player-1].hand
-    // console.log(
-    //   `player${player} hand: `, hand,
-    //   'hand value: ', this.handValue(hand)
-    // )
+    // console.log(`player${player} hand: `, hand, 'hand value: ', this.handValue(hand))
     return this.handValue(hand)
   }
-  changeAce(valueArray) {
-    valueArray.sort((a,b) => a - b)
-    let highCard = valueArray.length - 1
-    if(valueArray[highCard] === 11) {
-      valueArray[highCard] = 1
-      return valueArray
-    } else { 
-      return valueArray
-    }
+
+  handValue(hand) { 
+    let array = this.createArray(hand)
+    return this.arrayValue(array)
+  }
+  
+  arrayValue(array) {
+    return (this.total(array) <= 21) ? this.total(array) : 
+      (this.sort(array)[array.length-1] < 11) ? this.total(array) : this.arrayValue(this.changeAce(array))
   }
 
-  createValueArray(hand) {
-    const valueArray = []
+  
+  createArray(hand) {
+    const array = []
     for(let card in hand) {
       switch(hand[card].value) {
-        case 'A': valueArray.push(11)
+        case 'A': array.push(11)
         break
-        case 'J': valueArray.push(10)
+        case 'J': array.push(10)
         break
-        case 'Q': valueArray.push(10)
+        case 'Q': array.push(10)
         break
-        case 'K': valueArray.push(10)
+        case 'K': array.push(10)
         break
-        default: valueArray.push(hand[card].value)
+        default: array.push(hand[card].value)
       }
     }
-    return valueArray
-  }
-  handValue(hand) { 
-    let valueArray = this.createValueArray(hand)
-    if(valueArray.reduce((a, b) => a + b) <= 21) {
-      return valueArray.reduce((a, b) => a + b)
-    } else {
-      return this.changeAce(valueArray).reduce((a, b) => a + b)
-    }
+    return this.sort(array)
   }
 
+  changeAce(array) {
+      array[array.length-1] = 1
+      return array
+  }
+
+  sort(array) {
+    return array.sort((a, b) => a - b)
+  }
+
+  total(array) {
+    return array.reduce((a, b) => a + b)
+  }
+  
 }
 
 module.exports = BlackJackGame
