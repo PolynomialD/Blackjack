@@ -1,7 +1,9 @@
 class Deck {
   constructor(suits, values) {
     this.suits = suits || ['♠', '♣', '♥', '♦']
-    this.values = values || [2,3,4,5,6,7,8,9,10,'J','Q','K','A']
+    this.values = values || [
+      ['2', 2],['3',3],['4', 4],['5', 5],['6', 6],['7', 1],['8', 8],['9', 9],['10', 10],['J', 10],['Q', 10],['K', 10],['A', 11]
+    ]
     this.cards = this.buildCards()
   }
 
@@ -10,7 +12,8 @@ class Deck {
       return this.values.map((value) => {
         return {
           'suit': suit,
-          'value': value
+          'face': suit+`${value[0]}`,
+          'value': value[1]
         }
       })      
     })

@@ -80,13 +80,13 @@ describe('Deck', () => {
       })
     })
   
-    const values = [2,3,4,5,6,7,8,9,10,'J','Q','K','A']
-    values.forEach((value) => {
-      it(`should have 4 ${value}`, () => {
+    const faceValues = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+    faceValues.forEach((faceValue) => {
+      it(`should have 4 ${faceValue}`, () => {
         const deck = new Deck()
         const cards = new Array(52).fill(0).map(() => deck.dealCard())
-        const values = cards.filter((card) => card.value === value)
-        values.length.should.eql(4)
+        const filteredValues = cards.filter((card) => card.face.includes(faceValue))
+        filteredValues.length.should.eql(4)
       })
     })
   })

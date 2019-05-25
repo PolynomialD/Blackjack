@@ -5,12 +5,16 @@ class Dealer {
     this.chips = 1000000
   }
 
-  drawCard(deck) {
-    this.hand.unshift(deck.dealCard())     
+  recieveCard(card) {
+    this.hand.unshift(card)
   }
 
   removeCard(cardPos) {
     return this.hand.splice(cardPos-1,1)[0]
+  }
+
+  handSize() {
+    return 2
   }
 }
 

@@ -4,13 +4,13 @@ const Dealer = require('../src/Dealer')
 describe('Dealer', () => {
   describe('hand', () => {
     it('should store a number of cards', () => {
-      const deck = new Deck(['A','B'], [10])
+      const deck = new Deck(['A','B'], [['J',10]])
       const dealer = new Dealer()
-      dealer.drawCard(deck)
-      dealer.drawCard(deck)
+      dealer.recieveCard(deck.dealCard())
+      dealer.recieveCard(deck.dealCard())
       dealer.hand.should.eql(
-        [{'suit': 'B', 'value': 10},
-         {'suit': 'A','value': 10}]
+        [{'face': 'BJ', 'suit': 'B', 'value': 10},
+         {'face': 'AJ', 'suit': 'A','value': 10}]
       )
     })
   })
@@ -20,7 +20,7 @@ describe('Dealer', () => {
       const deck = new Deck()
       const dealer = new Dealer()
       for(let i=10; i>0; i--) {
-        dealer.drawCard(deck)
+        dealer.recieveCard(deck.dealCard())
       }
       const removedCard = dealer.hand[4]
       dealer.removeCard(5).should.eql(removedCard)
