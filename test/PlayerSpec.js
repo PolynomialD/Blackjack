@@ -14,8 +14,8 @@ describe('Player', () => {
     it('should store a number of cards', () => {
       const deck = new Deck(['A','B'], [['J',10]])
       const player = new Player('Bob')
-      player.recieveCard(deck.dealCard())
-      player.recieveCard(deck.dealCard())
+      player.receiveCard(deck.dealCard())
+      player.receiveCard(deck.dealCard())
       player.hand.should.eql(
         [{'face': 'BJ', 'suit': 'B', 'value': 10},
          {'face': 'AJ', 'suit': 'A','value': 10}]
@@ -41,7 +41,7 @@ describe('Player', () => {
       const deck = new Deck()
       const player = new Player('Bob', 5000)
       for(let i=10; i>0; i--) {
-        player.recieveCard(deck.dealCard())
+        player.receiveCard(deck.dealCard())
       }
       const removedCard = player.hand[4]
       player.removeCard(5).should.eql(removedCard)
@@ -77,7 +77,7 @@ describe('Player', () => {
         const values = generateDeckValues(valueArray)
         const deck = new Deck(['♠'], values)
         valueArray.forEach(() => {
-          bob.recieveCard(deck.dealCard())
+          bob.receiveCard(deck.dealCard())
         })
         bob.handValue().should.eql(expectedValue)
       }
@@ -96,7 +96,7 @@ describe('Player', () => {
 
         const bob = new Player('Bob', 9000)
         values.forEach(() => {
-          bob.recieveCard(deck.dealCard())
+          bob.receiveCard(deck.dealCard())
         })
         
         bob.handValue().should.eql(expectedValue)
@@ -110,9 +110,18 @@ describe('Player', () => {
 
       const bob = new Player('Bob', 9000)
       values.forEach(() => {
-        bob.recieveCard(deck.dealCard())
+        bob.receiveCard(deck.dealCard())
       })
       bob.handValue().should.eql(expectedValue)
+    })
+  })
+
+  describe('getChipsTotal()', () => {
+    verify.it('should return the total number of a players chips',Gen.integerBetween(1, 9000), (bet) => {
+      const bob = new Player('Bob', 9000)
+      const expected = 9000 - bet
+      bob.placeBet(bet)
+      bob.getChipsTotal().should.eql(expected)
     })
   })
 })

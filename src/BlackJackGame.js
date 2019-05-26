@@ -12,9 +12,9 @@ class BlackJackGame {
   dealCards(amountToDeal = 2) {
     for (amountToDeal; amountToDeal > 0; amountToDeal--) {
       this.players.forEach((player) => {
-        player.recieveCard(this.deck.dealCard())
+        player.receiveCard(this.deck.dealCard())
       })
-      this.dealer.recieveCard(this.deck.dealCard())
+      this.dealer.receiveCard(this.deck.dealCard())
     }
   }
 

@@ -38,12 +38,16 @@ class Player {
     }, 0)
   }
 
-  recieveCard(card) {
+  receiveCard(card) {
     this.hand.unshift(card)     
   }
 
   removeCard(cardPos) {
     return this.hand.splice(cardPos-1,1)[0]
+  }
+
+  getChipsTotal() {
+    return this.chips
   }
 }
 

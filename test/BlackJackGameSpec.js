@@ -1,7 +1,7 @@
 const BlackJackGame = require('../src/BlackJackGame')
 
 describe('BlackJackGame', () => {
-  describe('deal()', () => {
+  describe('dealCards()', () => {
     it('should deal 2 cards to each player and the dealer', () => {
       const game = new BlackJackGame()
       game.addPlayer('Bob', 9000)
@@ -14,12 +14,12 @@ describe('BlackJackGame', () => {
       
       game.dealer.handSize().should.eql(2)
     })
-
+  })
+  describe('addPlayer()', () => {
     verify.it('should add a player', () => {
       const game = new BlackJackGame()
       game.addPlayer('Bob', 9000)
       game.getNumberOfPlayers().should.eql(1)
-    })
+    }) 
   })
-  
 })

@@ -5,7 +5,7 @@ class Dealer {
     this.chips = 1000000
   }
 
-  recieveCard(card) {
+  receiveCard(card) {
     this.hand.unshift(card)
   }
 
@@ -14,7 +14,7 @@ class Dealer {
   }
 
   handSize() {
-    return 2
+    return this.hand.length
   }
 }
 
