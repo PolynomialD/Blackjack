@@ -23,17 +23,26 @@ describe('BlackJackGame', () => {
       game.getNumberOfPlayers().should.eql(1)
     }) 
   })
+  
   describe('takeBet()', () => {
-    verify.it('should receive and store the players bet', Gen.integerBetween(0, 9000), Gen.integerBetween(0, 9000), (chips, bet) => {
-      const game = new BlackJackGame()
-      const expectedBet = (bet > chips) ? chips : bet
-      const expectedTotal = (bet < chips) ? chips - bet : 0
+    verify.it('should store the players bets',
+      Gen.integerBetween(2,10), (players) => {
+        const game = new BlackJackGame() 
+        for(let i=0; i<players; i++) {
+          const name = Gen.stringWithLength(6)()
+          const chips = Gen.integerBetween(0,9000)()
+          const bet = Gen.integerBetween(0,9000)()
 
-      game.addPlayer('Bob', chips)
-      game.takeBet(game.players[0].placeBet(bet))
-      game.bets[0].should.eql(expectedBet)
-      game.players[0].getChipsTotal().should.eql(expectedTotal)
+          const expectedBet = (bet > chips) ? chips : bet
+          const expectedChipsTotal = (bet < chips) ? chips - bet : 0
 
+          game.addPlayer(name,chips)
+          game.takeBet(game.players[i].placeBet(bet))
+          game.bets[i].should.eql(expectedBet)
+          game.players[i].getChipsTotal().should.eql(expectedChipsTotal)
+        }
     })
-  } )
+  })
+
 })
+
