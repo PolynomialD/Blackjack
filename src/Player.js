@@ -4,6 +4,7 @@ class Player {
     this.name = name.toString()
     this.hand = []
     this.chips = this.checkChips(chips)
+    this.bet = 0
   }
 
   getChips() {
@@ -17,10 +18,12 @@ class Player {
   placeBet(bet) {
     if(bet <= this.chips) {
       this.chips -= bet
+      this.bet = bet
       return bet
     } else { 
       const chips = this.chips
       this.chips = 0
+      this.bet = chips
       return chips
     }
   }

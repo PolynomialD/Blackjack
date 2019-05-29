@@ -7,6 +7,7 @@ class BlackJackGame {
     this.deck = new Deck()
     this.dealer = new Dealer()
     this.players = []
+    this.bets = []
   }
 
   dealCards(amountToDeal = 2) {
@@ -24,6 +25,10 @@ class BlackJackGame {
 
   getNumberOfPlayers() {
     return this.players.length
+  }
+
+  takeBet(bet) {
+    this.bets.push(bet)
   }
 }
 

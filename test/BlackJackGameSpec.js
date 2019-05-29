@@ -1,4 +1,5 @@
 const BlackJackGame = require('../src/BlackJackGame')
+const Gen = require('verify-it').Gen
 
 describe('BlackJackGame', () => {
   describe('dealCards()', () => {
@@ -22,4 +23,17 @@ describe('BlackJackGame', () => {
       game.getNumberOfPlayers().should.eql(1)
     }) 
   })
+  describe('takeBet()', () => {
+    verify.it('should receive and store the players bet', Gen.integerBetween(0, 9000), Gen.integerBetween(0, 9000), (chips, bet) => {
+      const game = new BlackJackGame()
+      const expectedBet = (bet > chips) ? chips : bet
+      const expectedTotal = (bet < chips) ? chips - bet : 0
+
+      game.addPlayer('Bob', chips)
+      game.takeBet(game.players[0].placeBet(bet))
+      game.bets[0].should.eql(expectedBet)
+      game.players[0].getChipsTotal().should.eql(expectedTotal)
+
+    })
+  } )
 })
