@@ -1,5 +1,7 @@
 const Deck = require('../src/Deck')
 const Dealer = require('../src/Dealer')
+const Player = require('../src/Player')
+const Gen = require('verify-it').Gen
 
 describe('Dealer', () => {
   describe('hand', () => {
@@ -25,6 +27,30 @@ describe('Dealer', () => {
       const removedCard = dealer.hand[4]
       dealer.removeCard(5).should.eql(removedCard)
       dealer.hand.length.should.eql(9)
+    })
+  })
+
+  describe('giveChips', () => {
+    it('should return a number of chips', () => {
+      const dealer = new Dealer()
+      dealer.giveChips(1000).should.eql(1000)
+    })
+
+    verify.it('should remove chips from the dealer', Gen.integerBetween(1, 9000), (chips) => {
+      const dealer = new Dealer()
+      const expected = dealer.chips - chips
+      dealer.giveChips(chips)
+      dealer.chips.should.eql(expected)
+    })
+
+    verify.it('should give chips to the player', () => {
+      Gen.integerBetween(1, 9000), Gen.integerBetween(1, 9000), (chips, dealerChips) => {
+        const dealer = new Dealer()
+        const bob = new Player('Bob', chips)
+        const expected = chips + dealerChips
+        bob.receiveChips(dealer.giveChips(dealerChips))
+        bob.chips.should.eql(expected)
+      }
     })
   })
 })

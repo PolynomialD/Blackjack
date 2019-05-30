@@ -15,6 +15,10 @@ class Player {
     return (isNaN(chips) === true) ? 1000 : chips
   }
 
+  receiveChips(amount) {
+    this.chips += amount
+  }
+
   placeBet(bet) {
     if(bet <= this.chips) {
       this.chips -= bet

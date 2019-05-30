@@ -16,6 +16,11 @@ class Dealer {
   handSize() {
     return this.hand.length
   }
+
+  giveChips(amount, player) {
+    return amount
+  }
 }
+
 
 module.exports = Dealer

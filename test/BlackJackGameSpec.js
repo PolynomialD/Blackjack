@@ -35,6 +35,7 @@ describe('BlackJackGame', () => {
       game.dealer.handSize().should.eql(2)
     })
   })
+
   describe('addPlayer()', () => {
     verify.it('should add a player', () => {
       const game = new BlackJackGame()

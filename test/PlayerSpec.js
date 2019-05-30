@@ -36,11 +36,21 @@ describe('Player', () => {
   })
   
   describe('getChips', () => {
-    verify.it('should give the players chips',Gen.integerBetween(1, 9000), (bet) => {
+    verify.it('should give the players chips total',Gen.integerBetween(1, 9000), (bet) => {
       const bob = new Player('Bob', 9000)
       const expected = 9000 - bet
       bob.placeBet(bet)
       bob.getChips().should.eql(expected)
+    })
+  })
+
+  describe('receiveChips()', () => {
+    verify.it('should add chips to the players chips total',
+      Gen.integerBetween(1, 9000), Gen.integerBetween(1, 9000), (chips, pot) => {
+        const bob = new Player('Bob', chips)
+        const expected = chips + pot
+        bob.receiveChips(pot)
+        bob.chips.should.eql(expected)
     })
   })
 
