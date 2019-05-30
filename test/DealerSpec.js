@@ -36,7 +36,7 @@ describe('Dealer', () => {
       dealer.giveChips(1000).should.eql(1000)
     })
 
-    verify.it('should remove chips from the dealer', Gen.integerBetween(1, 9000), (chips) => {
+    verify.it('should remove chips from the dealer', Gen.integerBetween(1,9000), (chips) => {
       const dealer = new Dealer()
       const expected = dealer.chips - chips
       dealer.giveChips(chips)
@@ -44,7 +44,7 @@ describe('Dealer', () => {
     })
 
     verify.it('should give chips to the player', () => {
-      Gen.integerBetween(1, 9000), Gen.integerBetween(1, 9000), (chips, dealerChips) => {
+      Gen.integerBetween(1,9000), Gen.integerBetween(1,9000), (chips, dealerChips) => {
         const dealer = new Dealer()
         const bob = new Player('Bob', chips)
         const expected = chips + dealerChips

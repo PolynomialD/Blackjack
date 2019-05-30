@@ -33,19 +33,19 @@ class Player {
     }
   }
 
-  handSize(hand) {
-    return (hand === 2) ? this.splitHand.length : this.hand.length
+  handSize(handNumber) {
+    return (handNumber !== 2) ? this.hand.length : this.splitHand.length
   }
 
   splitCards() {
-    this.splitHand = this.hand.splice(0,1)
-    console.log('hand', this.hand)
-    console.log('splitHand', this.splitHand)
+    if(this.hand[0].value === this.hand[1].value) {
+      this.splitHand = this.hand.splice(0,1)
+    }
   }
 
   handValue(hand) {
-    const handToValue = (hand === 2) ? this.splitHand : this.hand
-      return handToValue.sort((a, b) => a.value - b.value).reduce((total, card) => {
+    const handNumber = (hand === 2) ? this.splitHand : this.hand
+      return handNumber.sort((a, b) => a.value - b.value).reduce((total, card) => {
         if(card.face.includes('A') && total + card.value > 21) {
           return total + 1
         }
@@ -55,6 +55,12 @@ class Player {
 
   receiveCard(card) {
     this.hand.unshift(card)     
+  }
+
+  receiveCards(cards) {
+    cards.forEach((card) => {
+      this.hand.push(card)
+    })    
   }
 
   removeCard(cardPos) {

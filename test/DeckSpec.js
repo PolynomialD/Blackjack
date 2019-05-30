@@ -2,11 +2,11 @@ const Deck = require('../src/Deck')
 const Gen = require('verify-it').Gen
 
 const genRandomArray = () => {
-  return Gen.array(Gen.word, Gen.integerBetween(5, 30))()
+  return Gen.array(Gen.word, Gen.integerBetween(5,30))()
 }
 
 describe('Deck', () => {
-  describe('deal()', () => {
+  describe('dealCard()', () => {
     verify.it('should remove a card', Gen.integerBetween(1,52), (cardsToDeal) => {
       const deck = new Deck()
       const expected = deck.size() - cardsToDeal
@@ -16,7 +16,17 @@ describe('Deck', () => {
       deck.size().should.eql(expected)
     })
   })
+  
+  describe('dealCards()', () => {
+    verify.it('should remove the correct number of cards',
+      Gen.integerBetween(1,52), (cardsToDeal) => {
+        const deck = new Deck()
+        const expected = deck.size() - cardsToDeal
+        deck.dealCards(cardsToDeal)
+        deck.size().should.eql(expected)
+    })
 
+  })
   describe('cut()', () => {
     verify.it('should have expected top card', Gen.integerBetween(1,52), (placeToCut) => {
       const deck = new Deck()

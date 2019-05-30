@@ -3,6 +3,16 @@ const Player = require('../src/Player')
 const BlackJackGame = require('../src/BlackJackGame')
 const Gen = require('verify-it').Gen
 
+function createTestGame(players = Gen.integerBetween(1,10)()) {
+  const testGame = new BlackJackGame()
+  for(let i=0; i<players; i++) {
+    const name = Gen.stringWithLength(6)()
+    const chips = Gen.integerBetween(0,9000)()
+    testGame.addPlayer(name,chips)
+  }
+  return testGame
+}
+
 describe('Player', () => {
   describe('name', () => {
     it('should be a string', () => {
@@ -23,6 +33,49 @@ describe('Player', () => {
         )
       })
     })
+
+  describe('handSize()', () => {
+    verify.it('should give the correct handsize',
+      Gen.integerBetween(0,52), (cardsToDeal) => {
+        const deck = new Deck()
+        const bob = new Player('Bob', 5000)
+        const expected = cardsToDeal
+        for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
+          bob.receiveCard(deck.dealCard())
+        }
+        bob.handSize().should.eql(expected)
+    })
+  })
+
+  describe('receiveCard()', () => {
+    verify.it('should put a card into the players hand',
+      Gen.integerBetween(1,5), (cardsToDeal) => {
+        const expected = cardsToDeal
+        const game = createTestGame()
+        for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
+          game.players.forEach((player) => {
+            player.receiveCard(game.deck.dealCard())
+          })
+        }
+        game.players.forEach((player) => {
+          player.handSize().should.eql(expected)
+        })
+    })
+  })
+
+  describe('receiveCards()', () => {
+    verify.it('should put a number of cards into the players hand',
+      Gen.integerBetween(1,5), (cardsToDeal) => {
+        const expected = cardsToDeal
+        const game = createTestGame()
+          game.players.forEach((player) => {
+            player.receiveCards(game.deck.dealCards(cardsToDeal))
+          })
+        game.players.forEach((player) => {
+          player.handSize().should.eql(expected)
+        })
+    })
+  })
     
   describe('chips', () => {
     it('should accept a number', () => {
@@ -37,7 +90,7 @@ describe('Player', () => {
   })
   
   describe('getChips', () => {
-    verify.it('should give the players chips total',Gen.integerBetween(1, 9000), (bet) => {
+    verify.it('should give the players chips total',Gen.integerBetween(1,9000), (bet) => {
       const bob = new Player('Bob', 9000)
       const expected = 9000 - bet
       bob.placeBet(bet)
@@ -47,7 +100,7 @@ describe('Player', () => {
 
   describe('receiveChips()', () => {
     verify.it('should add chips to the players chips total',
-      Gen.integerBetween(1, 9000), Gen.integerBetween(1, 9000), (chips, pot) => {
+      Gen.integerBetween(1, 9000), Gen.integerBetween(1,9000), (chips, pot) => {
         const bob = new Player('Bob', chips)
         const expected = chips + pot
         bob.receiveChips(pot)
@@ -136,16 +189,25 @@ describe('Player', () => {
   })
 
   describe('splitCards()', () => {
-    verify.it('should split the players cards', () => {
+    verify.it('should split the players cards', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
-      const deck = new Deck(['♠', '♣', '♥', '♦'],[['10',10],['J',10],['Q', 10],['K', 10]])
+      const deck = new Deck(['♣'],[[`${value}`,value],[`${value}`,value]])
       bob.receiveCard(deck.dealCard())
       bob.receiveCard(deck.dealCard())
       bob.splitCards()
       bob.handSize().should.eql(1)
       bob.handSize(2).should.eql(1)
-      bob.handValue().should.eql(10)
-      bob.handValue(2).should.eql(10)
+
+    })
+    verify.it('should only split when values are equal',
+    Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
+      const bob = new Player('Bob', 9000)
+      const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
+      bob.receiveCard(deck.dealCard())
+      bob.receiveCard(deck.dealCard())
+      bob.splitCards()
+      bob.handSize().should.eql(2)
+      bob.handSize(2).should.eql(0)
     })
   })
 

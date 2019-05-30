@@ -32,6 +32,14 @@ class Deck {
     return this.cards.shift()
   }
 
+  dealCards (amount) {
+    const cardsToDeal = []
+    for(amount; amount>0; amount--) {
+      cardsToDeal.push(this.cards.shift())
+    }
+    return cardsToDeal
+  }
+
   shuffle () {
     this.cards = this.recursiveShuffle(this.cards)
   }
