@@ -11,22 +11,13 @@ function createTestGame(players = 8) {
   return testGame
 }
 
-function createTestValues(game) {
-  const testValues = new Array()
+function createTestBets(game) {
+  const testBets = new Array()
   game.players.forEach((player) => {
-    const bet = Gen.integerBetween(0,9000)()
-    const chips = player.getChips()
-    const expectedBet = (bet > chips) ? chips : bet
-    const remainingChips = (bet < chips) ? chips - bet : 0
-
-    testValues.push({
-      'bet':bet,
-      'expectedBet':expectedBet,
-      'chips': chips,
-      'remainingChips': remainingChips
-    })
+    const bet = Gen.integerBetween(0,player.getChips())()
+    testBets.push(bet)
   })
-  return testValues
+  return testBets
 }
 
 describe('BlackJackGame', () => {
@@ -51,43 +42,17 @@ describe('BlackJackGame', () => {
       game.getNumberOfPlayers().should.eql(1)
     }) 
   })
-  
-  describe('takeBet()', () => {
-    verify.it('should store the players bets',
-      Gen.integerBetween(2,10), (players) => {
-        const game = new BlackJackGame() 
-        for(let i=0; i<players; i++) {
-          const name = Gen.stringWithLength(6)()
-          const chips = Gen.integerBetween(0,9000)()
-          const bet = Gen.integerBetween(0,9000)()
-
-          const expectedBet = (bet > chips) ? chips : bet
-          const remainingChips = (bet < chips) ? chips - bet : 0
-
-          game.addPlayer(name,chips)
-          game.takeBet(game.players[i].placeBet(bet))
-          console.log('bets', game.bets[i])
-          game.bets[i].should.eql(expectedBet)
-          console.log('chips', game.players[i].getChips())
-          game.players[i].getChips().should.eql(remainingChips)
-        }
-    })
-  })
 
   describe('takeBet()', () => {
     verify.it('should store the players bets', () => {
       const game = createTestGame()
-      const testValues = createTestValues(game)
-      console.log(testValues)
+      const testBets = createTestBets(game)
 
       game.players.forEach((player, index) => {
-        game.takeBet(player.placeBet(testValues[index].bet))      
+        game.takeBet(player.placeBet(testBets[index]))      
       })
-      game.players.forEach((player, index) => {
-        console.log('bet', game.bets[index], 'testbet', testValues[index].expectedBet)
-        game.bets[index].should.eql(testValues[index].expectedBet)
-        console.log('chips', player.getChips(), 'testchips', testValues[index].remainingChips)
-        player.getChips().should.eql(testValues[index].remainingChips)
+      game.bets.forEach((bet, index) => {
+        bet.should.eql(testBets[index])
       })
     })
   })
