@@ -52,11 +52,7 @@ describe('Player', () => {
       Gen.integerBetween(1,5), (cardsToDeal) => {
         const expected = cardsToDeal
         const game = createTestGame()
-        for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
-          game.players.forEach((player) => {
-            player.receiveCard(game.deck.dealCard())
-          })
-        }
+        game.dealCards(cardsToDeal)
         game.players.forEach((player) => {
           player.handSize().should.eql(expected)
         })
@@ -68,9 +64,7 @@ describe('Player', () => {
       Gen.integerBetween(1,5), (cardsToDeal) => {
         const expected = cardsToDeal
         const game = createTestGame()
-          game.players.forEach((player) => {
-            player.receiveCards(game.deck.dealCards(cardsToDeal))
-          })
+        game.dealCards(cardsToDeal)
         game.players.forEach((player) => {
           player.handSize().should.eql(expected)
         })
@@ -192,19 +186,17 @@ describe('Player', () => {
     verify.it('should split the players cards', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣'],[[`${value}`,value],[`${value}`,value]])
-      bob.receiveCard(deck.dealCard())
-      bob.receiveCard(deck.dealCard())
+      bob.receiveCards(deck.dealCards(2))
       bob.splitCards()
-      bob.handSize().should.eql(1)
       bob.handSize(2).should.eql(1)
+      bob.handValue(2).should.eql(value)
 
     })
     verify.it('should only split when values are equal',
     Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
-      bob.receiveCard(deck.dealCard())
-      bob.receiveCard(deck.dealCard())
+      bob.receiveCards(deck.dealCards(2))
       bob.splitCards()
       bob.handSize().should.eql(2)
       bob.handSize(2).should.eql(0)
