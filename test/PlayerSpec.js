@@ -1,5 +1,6 @@
 const Deck = require('../src/Deck')
 const Player = require('../src/Player')
+const BlackJackGame = require('../src/BlackJackGame')
 const Gen = require('verify-it').Gen
 
 describe('Player', () => {
@@ -131,6 +132,19 @@ describe('Player', () => {
         bob.receiveCard(deck.dealCard())
       })
       bob.handValue().should.eql(expectedValue)
+    })
+  })
+
+  describe('splitCards()', () => {
+    verify.it('should split the players cards', () => {
+      const bob = new Player('Bob', 9000)
+      const deck = new Deck(['♠', '♣', '♥', '♦'],[['10',10],['J',10],['Q', 10],['K', 10]])
+      bob.receiveCard(deck.dealCard())
+      bob.receiveCard(deck.dealCard())
+      bob.handValue().should.eql(20)
+      bob.splitCards()
+      bob.handValue().should.eql(10)
+      bob.handValue(2).should.eql(10)
     })
   })
 

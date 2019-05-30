@@ -3,6 +3,7 @@ class Player {
   constructor (name, chips) {
     this.name = name.toString()
     this.hand = []
+    this.splitHand = []
     this.chips = this.checkChips(chips)
     this.bet = 0
   }
@@ -36,13 +37,23 @@ class Player {
     return this.hand.length
   }
 
-  handValue() {
-    return this.hand.sort((a, b) => a.value - b.value).reduce((total, card) => {
-      if(card.face.includes('A') && total + card.value > 21) {
-        return total + 1
-      }
-      return total + card.value
-    }, 0)
+  handValue(hand = 1) {
+    if(hand === 1) {
+      return this.hand.sort((a, b) => a.value - b.value).reduce((total, card) => {
+        if(card.face.includes('A') && total + card.value > 21) {
+          return total + 1
+        }
+        return total + card.value
+      }, 0)
+    }
+    if(hand === 2) {
+      return this.splitHand.sort((a, b) => a.value - b.value).reduce((total, card) => {
+        if(card.face.includes('A') && total + card.value > 21) {
+          return total + 1
+        }
+        return total + card.value
+      }, 0)
+    }
   }
 
   receiveCard(card) {

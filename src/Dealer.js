@@ -17,7 +17,8 @@ class Dealer {
     return this.hand.length
   }
 
-  giveChips(amount, player) {
+  giveChips(amount) {
+    this.chips -= amount
     return amount
   }
 }
