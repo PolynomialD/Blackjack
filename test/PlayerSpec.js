@@ -9,7 +9,7 @@ describe('Player', () => {
       player.name.should.eql('Bob')
     })
   })
-
+  
   describe('hand', () => {
     it('should store a number of cards', () => {
       const deck = new Deck(['A','B'], [['J',10]])
@@ -18,23 +18,31 @@ describe('Player', () => {
       player.receiveCard(deck.dealCard())
       player.hand.should.eql(
         [{'face': 'BJ', 'suit': 'B', 'value': 10},
-         {'face': 'AJ', 'suit': 'A','value': 10}]
-      )
+        {'face': 'AJ', 'suit': 'A','value': 10}]
+        )
+      })
     })
-  })
-
+    
   describe('chips', () => {
     it('should accept a number', () => {
       const player = new Player('Bob', 9000)
       player.getChips().should.eql(9000)
     })
-
+    
     it('should be 0 if not given a number', () => {
       const player = new Player('Bob', 'string')
       player.getChips().should.eql(1000)
     })  
   })
-
+  
+  describe('getChips', () => {
+    verify.it('should give the players chips',Gen.integerBetween(1, 9000), (bet) => {
+      const bob = new Player('Bob', 9000)
+      const expected = 9000 - bet
+      bob.placeBet(bet)
+      bob.getChips().should.eql(expected)
+    })
+  })
 
   describe('removeCard()', () => {
     it('should remove a card from player.hand', () => {
@@ -116,12 +124,4 @@ describe('Player', () => {
     })
   })
 
-  describe('getChipsTotal()', () => {
-    verify.it('should return the total number of a players chips',Gen.integerBetween(1, 9000), (bet) => {
-      const bob = new Player('Bob', 9000)
-      const expected = 9000 - bet
-      bob.placeBet(bet)
-      bob.getChipsTotal().should.eql(expected)
-    })
-  })
 })

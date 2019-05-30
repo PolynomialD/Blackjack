@@ -48,10 +48,6 @@ class Player {
   removeCard(cardPos) {
     return this.hand.splice(cardPos-1,1)[0]
   }
-
-  getChipsTotal() {
-    return this.chips
-  }
 }
 
 module.exports = Player
