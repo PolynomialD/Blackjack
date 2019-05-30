@@ -11,6 +11,24 @@ function createTestGame(players = 8) {
   return testGame
 }
 
+function createTestValues(game) {
+  const testValues = new Array()
+  game.players.forEach((player) => {
+    const bet = Gen.integerBetween(0,9000)()
+    const chips = player.getChips()
+    const expectedBet = (bet > chips) ? chips : bet
+    const remainingChips = (bet < chips) ? chips - bet : 0
+
+    testValues.push({
+      'bet':bet,
+      'expectedBet':expectedBet,
+      'chips': chips,
+      'remainingChips': remainingChips
+    })
+  })
+  return testValues
+}
+
 describe('BlackJackGame', () => {
   describe('dealCards()', () => {
     it('should deal 2 cards to each player and the dealer', () => {
@@ -44,38 +62,33 @@ describe('BlackJackGame', () => {
           const bet = Gen.integerBetween(0,9000)()
 
           const expectedBet = (bet > chips) ? chips : bet
-          const expectedChipsTotal = (bet < chips) ? chips - bet : 0
+          const remainingChips = (bet < chips) ? chips - bet : 0
 
           game.addPlayer(name,chips)
           game.takeBet(game.players[i].placeBet(bet))
           console.log('bets', game.bets[i])
           game.bets[i].should.eql(expectedBet)
           console.log('chips', game.players[i].getChips())
-          game.players[i].getChips().should.eql(expectedChipsTotal)
+          game.players[i].getChips().should.eql(remainingChips)
         }
     })
   })
 
   describe('takeBet()', () => {
     verify.it('should store the players bets', () => {
-        const game = createTestGame()
-        const chipsArray = []
-        const betsArray = []
-        for(let i=0; i < game.getNumberOfPlayers; i++) {
-          const bet = Gen.integerBetween(0,9000)()
-          const expectedBet = (bet > chips) ? chips : bet
-          betsArray.push({'bet':bet, 'expectedBet':expectedBet})
-          const chips = game.players[i].getChips()
-          const expectedChipsTotal = (bet < chips) ? chips - bet : 0
-          chipsArray.push({'chips': chips, 'expectedChipsTotal': expectedChipsTotal})
+      const game = createTestGame()
+      const testValues = createTestValues(game)
+      console.log(testValues)
 
-          game.takeBet(game.players[i].placeBet(bet))
-          
-        }
-        for(let i=0; i < game.getNumberOfPlayers; i++) {
-          game.bets[i].should.eql(betsArray[i].expectedBet)
-          game.players[i].getChips().should.eql(chipsArray[i].expectedChipsTotal)
-        }
+      game.players.forEach((player, index) => {
+        game.takeBet(player.placeBet(testValues[index].bet))      
+      })
+      game.players.forEach((player, index) => {
+        console.log('bet', game.bets[index], 'testbet', testValues[index].expectedBet)
+        game.bets[index].should.eql(testValues[index].expectedBet)
+        console.log('chips', player.getChips(), 'testchips', testValues[index].remainingChips)
+        player.getChips().should.eql(testValues[index].remainingChips)
+      })
     })
   })
 
