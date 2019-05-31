@@ -2,8 +2,7 @@
 class Player {
   constructor (name, chips) {
     this.name = name.toString()
-    this.hand = []
-    this.splitHand = []
+    this.hand = [[]]
     this.chips = this.checkChips(chips)
     this.bet = 0
   }
@@ -33,19 +32,18 @@ class Player {
     }
   }
 
-  handSize(handNumber) {
-    return (handNumber !== 2) ? this.hand.length : this.splitHand.length
+  handSize(handNumber = 1) {
+    return this.hand[handNumber-1].length
   }
 
   splitCards() {
-    if(this.hand[0].value === this.hand[1].value) {
-      this.splitHand = this.hand.splice(0,1)
+    if(this.hand[0][0].value === this.hand[0][1].value) {
+      this.hand.push([this.hand[0].splice(0,1)[0]])
     }
   }
 
-  handValue(hand) {
-    const handNumber = (hand === 2) ? this.splitHand : this.hand
-      return handNumber.sort((a, b) => a.value - b.value).reduce((total, card) => {
+  handValue(handNumber = 1) {
+      return this.hand[handNumber-1].sort((a, b) => a.value - b.value).reduce((total, card) => {
         if(card.face.includes('A') && total + card.value > 21) {
           return total + 1
         }
@@ -53,18 +51,18 @@ class Player {
       }, 0)
   }
 
-  receiveCard(card) {
-    this.hand.unshift(card)     
+  receiveCard(card, handNumber = 1) {
+    this.hand[handNumber-1].unshift(card)     
   }
 
-  receiveCards(cards) {
+  receiveCards(cards, handNumber = 1) {
     cards.forEach((card) => {
-      this.hand.push(card)
+      this.hand[handNumber-1].push(card)
     })    
   }
 
-  removeCard(cardPos) {
-    return this.hand.splice(cardPos-1,1)[0]
+  removeCard(cardPos, handNumber = 1) {
+    return this.hand[handNumber-1].splice(cardPos-1,1)[0]
   }
 }
 

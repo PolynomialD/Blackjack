@@ -28,8 +28,8 @@ describe('Player', () => {
       player.receiveCard(deck.dealCard())
       player.receiveCard(deck.dealCard())
       player.hand.should.eql(
-        [{'face': 'BJ', 'suit': 'B', 'value': 10},
-        {'face': 'AJ', 'suit': 'A','value': 10}]
+        [[{'face': 'BJ', 'suit': 'B', 'value': 10},
+        {'face': 'AJ', 'suit': 'A','value': 10}]]
         )
       })
     })
@@ -109,7 +109,7 @@ describe('Player', () => {
       for(let i=10; i>0; i--) {
         player.receiveCard(deck.dealCard())
       }
-      const removedCard = player.hand[4]
+      const removedCard = player.hand[0][4]
       player.removeCard(5).should.eql(removedCard)
       player.handSize().should.eql(9)
     })
@@ -183,9 +183,9 @@ describe('Player', () => {
   })
 
   describe('splitCards()', () => {
-    verify.it('should split the players cards', Gen.integerBetween(1,11), (value) => {
+    verify.it('should split the players hand', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
-      const deck = new Deck(['♣'],[[`${value}`,value],[`${value}`,value]])
+      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.receiveCards(deck.dealCards(2))
       bob.splitCards()
       bob.handSize(2).should.eql(1)
@@ -199,7 +199,11 @@ describe('Player', () => {
       bob.receiveCards(deck.dealCards(2))
       bob.splitCards()
       bob.handSize().should.eql(2)
-      bob.handSize(2).should.eql(0)
+      bob.hand.length.should.eql(1)
+    })
+
+    verify.it('should place another bet', () => {
+
     })
   })
 
