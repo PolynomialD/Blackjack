@@ -4,7 +4,7 @@ class Player {
     this.name = name.toString()
     this.hand = [[]]
     this.chips = this.checkChips(chips)
-    this.bet = 0
+    this.bet = []
   }
 
   getChips() {
@@ -22,12 +22,12 @@ class Player {
   placeBet(bet) {
     if(bet <= this.chips) {
       this.chips -= bet
-      this.bet = bet
+      this.bet.push(bet)
       return bet
     } else { 
       const chips = this.chips
       this.chips = 0
-      this.bet = chips
+      this.bet.push(chips)
       return chips
     }
   }
@@ -39,6 +39,7 @@ class Player {
   splitCards() {
     if(this.hand[0][0].value === this.hand[0][1].value) {
       this.hand.push([this.hand[0].splice(0,1)[0]])
+      this.bet.push(this.bet[0])
     }
   }
 

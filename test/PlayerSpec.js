@@ -127,6 +127,12 @@ describe('Player', () => {
       player.placeBet(7000).should.eql(5000)
       player.getChips().should.eql(0)
     })
+
+    it('should add the bet to player bets array', () => {
+      const player = new Player('Bob', 5000)
+      player.placeBet(1000)
+      player.bet.should.eql([1000])
+    })
   })
 
   describe('HandValue()', () => {
@@ -202,8 +208,13 @@ describe('Player', () => {
       bob.hand.length.should.eql(1)
     })
 
-    verify.it('should place another bet', () => {
-
+    verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
+      const bob = new Player('Bob', 9000)
+      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
+      bob.placeBet(1000)
+      bob.receiveCards(deck.dealCards(2))
+      bob.splitCards()
+      bob.bet.should.eql([1000,1000])
     })
   })
 
