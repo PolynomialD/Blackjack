@@ -1,6 +1,6 @@
 class Deck {
   constructor(suits, values) {
-    this.suits = suits || ['♠', '♣', '♥', '♦']
+    this.suits = suits || ['♣', '♦', '♥', '♠']
     this.values = values || [
       ['2', 2],['3',3],['4', 4],['5', 5],['6', 6],['7', 1],['8', 8],['9', 9],['10', 10],['J', 10],['Q', 10],['K', 10],['A', 11]
     ]
@@ -52,6 +52,11 @@ class Deck {
     })  
     return (i < limit) ? this.recursiveShuffle(newDeck, ++i) : newDeck
   }
+
+  sort() {
+    this.cards.sort(function(a, b){return a.value - b.value})
+  }
+
 }
 
 module.exports = Deck

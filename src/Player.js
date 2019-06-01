@@ -25,19 +25,19 @@ class Player {
       this.bet.push(bet)
       return bet
     } else { 
-      const chips = this.chips
-      this.chips = 0
-      this.bet.push(chips)
-      return chips
-    }
+        const chips = this.chips
+        this.chips = 0
+        this.bet.push(chips)
+        return chips
+      }
   }
 
   handSize(handNumber = 1) {
     return this.hand[handNumber-1].length
   }
 
-  splitCards() {
-    if(this.hand[0][0].value === this.hand[0][1].value) {
+  splitCards(handNumber = 1) {
+    if(this.hand[handNumber-1][0].value === this.hand[handNumber-1][1].value) {
       this.hand.push([this.hand[0].splice(0,1)[0]])
       this.bet.push(this.bet[0])
     }
