@@ -1,8 +1,9 @@
+const Hand = require('./Hand')
 
 class Player {
   constructor (name, chips) {
     this.name = name.toString()
-    this.hand = [[]]
+    this.hands = [new Hand()]
     this.chips = this.checkChips(chips)
     this.bet = []
   }
@@ -32,38 +33,24 @@ class Player {
       }
   }
 
-  handSize(handNumber = 1) {
-    return this.hand[handNumber-1].length
+  showHand(handNumber = 0) {
+    return this.hands[handNumber].showCards()
   }
 
-  splitCards(handNumber = 1) {
-    if(this.hand[handNumber-1][0].value === this.hand[handNumber-1][1].value) {
-      this.hand.push([this.hand[0].splice(0,1)[0]])
-      this.bet.push(this.bet[0])
+  splitHand(handNumber = 0) {
+    const hand = this.hands[handNumber]
+
+    if(hand.isSplittable()) {
+      this.hands = hand.split() 
     }
   }
 
-  handValue(handNumber = 1) {
-      return this.hand[handNumber-1].sort((a, b) => a.value - b.value).reduce((total, card) => {
-        if(card.face.includes('A') && total + card.value > 21) {
-          return total + 1
-        }
-        return total + card.value
-      }, 0)
+  receiveCard(card, handNumber = 0) {
+    this.hands[handNumber].takeCard(card)     
   }
 
-  receiveCard(card, handNumber = 1) {
-    this.hand[handNumber-1].unshift(card)     
-  }
-
-  receiveCards(cards, handNumber = 1) {
-    cards.forEach((card) => {
-      this.hand[handNumber-1].push(card)
-    })    
-  }
-
-  removeCard(cardPos, handNumber = 1) {
-    return this.hand[handNumber-1].splice(cardPos-1,1)[0]
+  removeCard(cardPos, handNumber = 0) {
+    return this.hands[handNumber].getCard(cardPos-1)
   }
 }
 

@@ -21,20 +21,7 @@ describe('Player', () => {
     })
   })
   
-  describe('hand', () => {
-    it('should store a number of cards', () => {
-      const deck = new Deck(['A','B'], [['J',10]])
-      const player = new Player('Bob')
-      player.receiveCard(deck.dealCard())
-      player.receiveCard(deck.dealCard())
-      player.hand.should.eql(
-        [[{'face': 'BJ', 'suit': 'B', 'value': 10},
-        {'face': 'AJ', 'suit': 'A','value': 10}]]
-        )
-      })
-    })
-
-  describe('handSize()', () => {
+  describe('showHand()', () => {
     verify.it('should give the correct handsize',
       Gen.integerBetween(0,52), (cardsToDeal) => {
         const deck = new Deck()
@@ -43,31 +30,7 @@ describe('Player', () => {
         for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
           bob.receiveCard(deck.dealCard())
         }
-        bob.handSize().should.eql(expected)
-    })
-  })
-
-  describe('receiveCard()', () => {
-    verify.it('should put a card into the players hand',
-      Gen.integerBetween(1,5), (cardsToDeal) => {
-        const expected = cardsToDeal
-        const game = createTestGame()
-        game.dealCards(cardsToDeal)
-        game.players.forEach((player) => {
-          player.handSize().should.eql(expected)
-        })
-    })
-  })
-
-  describe('receiveCards()', () => {
-    verify.it('should put a number of cards into the players hand',
-      Gen.integerBetween(1,5), (cardsToDeal) => {
-        const expected = cardsToDeal
-        const game = createTestGame()
-        game.dealCards(cardsToDeal)
-        game.players.forEach((player) => {
-          player.handSize().should.eql(expected)
-        })
+        bob.showHand().length.should.eql(expected)
     })
   })
     
@@ -109,9 +72,9 @@ describe('Player', () => {
       for(let i=10; i>0; i--) {
         player.receiveCard(deck.dealCard())
       }
-      const removedCard = player.hand[0][4]
+      const removedCard = player.hands[0].cards[4]
       player.removeCard(5).should.eql(removedCard)
-      player.handSize().should.eql(9)
+      player.showHand().length.should.eql(9)
     })
   })
 
@@ -135,87 +98,37 @@ describe('Player', () => {
     })
   })
 
-  describe('HandValue()', () => {
-    const generateDeckValues = (valueArray) => {
-      return valueArray.map((value) => {
-        return [`${value}`, value]
-      })
-    }
-
-    verify.it('should return the sum of card values without aces', 
-      Gen.array(Gen.integerBetween(2, 30), Gen.integerBetween(2, 10)()), (valueArray) => {
-        const bob = new Player('Bob', 9000)
-        const expectedValue = valueArray.reduce((total, value) => total + value)
-        const values = generateDeckValues(valueArray)
-        const deck = new Deck(['♠'], values)
-        valueArray.forEach(() => {
-          bob.receiveCard(deck.dealCard())
-        })
-        bob.handValue().should.eql(expectedValue)
-      }
-    )
-
-    verify.it('should score an A as 1 if the total is higher than 21', 
-      Gen.array(Gen.integerBetween(6, 10), 2), Gen.integerBetween(2, 6), (valueArray, numberOfAces) => {
-        const values = generateDeckValues(valueArray)
-
-        new Array(numberOfAces).fill(0).forEach(() => {
-          values.push(['A', 11])
-        })
-
-        const deck = new Deck(['♠'], values)
-        const expectedValue = valueArray.reduce((total, value) => total + value) + numberOfAces
-
-        const bob = new Player('Bob', 9000)
-        values.forEach(() => {
-          bob.receiveCard(deck.dealCard())
-        })
-        
-        bob.handValue().should.eql(expectedValue)
-      })
-
-    verify.it('should use an ace as 11 if it can', Gen.integerBetween(1, 8), (firstValue) => {
-      const secondValue = 9 - firstValue
-      const values = [[`${firstValue}`, firstValue], [`${secondValue}`, secondValue], ['A', 11], ['A', 11]]
-      const deck = new Deck(['♠'], values)
-      const expectedValue = 21
-
-      const bob = new Player('Bob', 9000)
-      values.forEach(() => {
-        bob.receiveCard(deck.dealCard())
-      })
-      bob.handValue().should.eql(expectedValue)
-    })
-  })
-
-  describe('splitCards()', () => {
+  describe('splitHand()', () => {
     verify.it('should split the players hand', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-      bob.receiveCards(deck.dealCards(2))
-      bob.splitCards()
-      bob.handSize(2).should.eql(1)
-      bob.handValue(2).should.eql(value)
 
+      deck.cards.forEach((card) => {
+        bob.receiveCard(card)
+      })
+
+      bob.splitHand()
+      bob.hands.length.should.eql(2)
     })
+
     verify.it('should only split when values are equal',
     Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
-      bob.receiveCards(deck.dealCards(2))
-      bob.splitCards()
-      bob.handSize().should.eql(2)
-      bob.hand.length.should.eql(1)
+      deck.cards.forEach((card) => {
+        bob.receiveCard(card)
+      })
+      bob.splitHand()
+      bob.hands.length.should.eql(1)
     })
 
-    verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 9000)
-      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-      bob.placeBet(1000)
-      bob.receiveCards(deck.dealCards(2))
-      bob.splitCards()
-      bob.bet.should.eql([1000,1000])
-    })
+    // verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
+    //   const bob = new Player('Bob', 9000)
+    //   const deck = new Deck(['♣','♥'],[[`${value}`,value]])
+    //   bob.placeBet(1000)
+    //   bob.receiveCards(deck.dealCards(2))
+    //   bob.splitCards()
+    //   bob.bet.should.eql([1000,1000])
+    // })
   })
-
 })

@@ -48,14 +48,14 @@ class Deck {
     const clone = deck.slice(0)
 
     const newDeck = new Array(clone.length).fill(0).map(() => {
-        return clone.splice(Math.floor(Math.random() * Math.floor(limit)),1)[0]
+        return clone.splice(Math.floor(Math.random() * Math.floor(clone.length)),1)[0]
     })  
     return (i < limit) ? this.recursiveShuffle(newDeck, ++i) : newDeck
   }
 
-  sort() {
-    this.cards.sort(function(a, b){return a.value - b.value})
-  }
+  // sort() {
+  //   this.cards.sort(function(a, b){return a.value - b.value})
+  // }
 
 }
 

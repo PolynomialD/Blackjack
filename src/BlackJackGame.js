@@ -3,8 +3,8 @@ const Dealer = require('./Dealer')
 const Player = require('./Player')
 
 class BlackJackGame {
-  constructor () {
-    this.deck = new Deck()
+  constructor (deck) {
+    this.deck = deck || new Deck()
     this.dealer = new Dealer()
     this.players = []
     this.bets = []
@@ -29,6 +29,15 @@ class BlackJackGame {
 
   takeBet(bet) {
     this.bets.push(bet)
+  }
+
+  handValue(hand) {
+    return hand.sort((a, b) => a.value - b.value).reduce((total, card) => {
+      if(card.face.includes('A') && total + card.value > 21) {
+        return total + 1
+      }
+      return total + card.value
+    }, 0)
   }
 }
 
