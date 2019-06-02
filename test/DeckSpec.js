@@ -81,8 +81,6 @@ describe('Deck', () => {
   //     deck.shuffle()
   //     deck.sort()
   //     deck.cards.should.eql(freshDeck.cards)
-
-
   //   })
   // })
 

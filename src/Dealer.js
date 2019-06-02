@@ -1,16 +1,18 @@
+const Hand = require('./Hand')
+
 class Dealer {
   constructor () {
     this.name = 'Dealer'
-    this.hand = []
+    this.hand = new Hand()
     this.chips = 1000000
   }
 
   receiveCard(card) {
-    this.hand.unshift(card)
+    this.hand.takeCard(card)
   }
 
-  removeCard(cardPos) {
-    return this.hand.splice(cardPos-1,1)[0]
+  removeCard(index) {
+    return this.hand.getCard(index)
   }
 
   handSize() {
