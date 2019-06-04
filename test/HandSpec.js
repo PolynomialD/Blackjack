@@ -72,7 +72,7 @@ describe('Hand', () => {
   })
 
   describe('split()', () => {
-    verify.it('should return 2 hand objects if hand is slpittable', () => {
+    verify.it('should return 2 hand objects if hand is splittable', () => {
       const deck = new Deck(['♣', '♦'], [['10', 10]])
       const hand = new Hand(deck.cards)
       const newHands = hand.split()
@@ -82,7 +82,7 @@ describe('Hand', () => {
       })
     })
 
-    verify.it('should return undefined if hand is not slpittable', () => {
+    verify.it('should return undefined if hand is not splittable', () => {
       const deck = new Deck(['♣'], [['10', 10],['5', 5]])
       const hand = new Hand(deck.cards)
       const newHands = hand.split()

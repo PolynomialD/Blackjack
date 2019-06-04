@@ -39,11 +39,6 @@ describe('Player', () => {
       const player = new Player('Bob', 9000)
       player.getChips().should.eql(9000)
     })
-    
-    it('should be 0 if not given a number', () => {
-      const player = new Player('Bob', 'string')
-      player.getChips().should.eql(1000)
-    })  
   })
   
   describe('getChips', () => {
@@ -125,6 +120,7 @@ describe('Player', () => {
     verify.it('should be able to split multiple times', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥','♠','♦'],[[`${value}`,value]])
+      bob.placeBet(1000)
       bob.receiveCard(deck.dealCard())
       bob.receiveCard(deck.dealCard())
       bob.splitHand(1)
@@ -137,13 +133,15 @@ describe('Player', () => {
 
     })
 
-    // verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
-    //   const bob = new Player('Bob', 9000)
-    //   const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-    //   bob.placeBet(1000)
-    //   bob.receiveCards(deck.dealCards(2))
-    //   bob.splitCards()
-    //   bob.bet.should.eql([1000,1000])
-    // })
+    verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
+      const game = new BlackJackGame()
+      const bob = new Player('Bob', 9000)
+      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
+      game.takeBet(bob.placeBet(1000))
+      bob.receiveCard(deck.dealCard())
+      bob.receiveCard(deck.dealCard())
+      bob.splitHand(1)
+      bob.bet.should.eql([1000,1000])
+    })
   })
 })

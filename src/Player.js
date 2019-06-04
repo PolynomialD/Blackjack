@@ -4,7 +4,7 @@ class Player {
   constructor (name, chips) {
     this.name = name.toString()
     this.hands = [new Hand()]
-    this.chips = this.checkChips(chips)
+    this.chips = chips
     this.bet = []
   }
 
@@ -12,25 +12,21 @@ class Player {
     return this.chips
   }
 
-  checkChips(chips) {
-    return (isNaN(chips) === true) ? 1000 : chips
-  }
-
   receiveChips(amount) {
     this.chips += amount
   }
 
-  placeBet(bet) {
-    if(bet <= this.chips) {
+  placeBet(bet) {  
+    if(bet > 0 && bet <= this.chips) {
       this.chips -= bet
       this.bet.push(bet)
       return bet
-    } else { 
+    } else if(bet > this.chips) { 
         const chips = this.chips
         this.chips = 0
         this.bet.push(chips)
         return chips
-      }
+      } else return 0
   }
 
   showHand(handNumber = 1) {
@@ -40,10 +36,11 @@ class Player {
   splitHand(handNumber = 1) {
     const hand = this.hands[handNumber-1]
 
-    if(hand.isSplittable()) {
+    if(hand.isSplittable() && this.getChips() > 0) {
       const newHands = hand.split()
       this.hands[handNumber-1] = newHands[0]
       this.hands.push(newHands[1])
+      this.placeBet(this.bet[0])
     }
   }
 
