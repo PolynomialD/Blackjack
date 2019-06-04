@@ -41,7 +41,9 @@ class Player {
     const hand = this.hands[handNumber-1]
 
     if(hand.isSplittable()) {
-      this.hands = hand.split() 
+      const newHands = hand.split()
+      this.hands[handNumber-1] = newHands[0]
+      this.hands.push(newHands[1])
     }
   }
 
