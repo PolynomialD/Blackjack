@@ -33,24 +33,24 @@ class Player {
       }
   }
 
-  showHand(handNumber = 0) {
-    return this.hands[handNumber].showCards()
+  showHand(handNumber = 1) {
+    return this.hands[handNumber-1].showCards()
   }
 
-  splitHand(handNumber = 0) {
-    const hand = this.hands[handNumber]
+  splitHand(handNumber = 1) {
+    const hand = this.hands[handNumber-1]
 
     if(hand.isSplittable()) {
       this.hands = hand.split() 
     }
   }
 
-  receiveCard(card, handNumber = 0) {
-    this.hands[handNumber].takeCard(card)     
+  receiveCard(card, handNumber = 1) {
+    this.hands[handNumber-1].takeCard(card)     
   }
 
-  removeCard(cardPos, handNumber = 0) {
-    return this.hands[handNumber].getCard(cardPos-1)
+  removeCard(cardPos, handNumber = 1) {
+    return this.hands[handNumber-1].getCard(cardPos-1)
   }
 }
 
