@@ -1,6 +1,7 @@
 const Deck = require('../src/Deck')
 const Dealer = require('../src/Dealer')
 const Player = require('../src/Player')
+const BlackJackGame = require('../src/BlackJackGame')
 const Gen = require('verify-it').Gen
 
 describe('Dealer', () => {
@@ -54,4 +55,15 @@ describe('Dealer', () => {
       }
     })
   })
+
+  describe('playHand', () => {
+    verify.it('should draw cards until hand value is 17+', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
+      const game = new BlackJackGame(deck)
+      game.dealCards()
+      game.dealer.playHand()
+      game.handValue(game.dealer.hand.showCards()).should.eql(20)
+    })
+  })
+
 })

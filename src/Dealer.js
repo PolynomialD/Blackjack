@@ -23,7 +23,10 @@ class Dealer {
     this.chips -= amount
     return amount
   }
+  
+  playHand() {
+    return 0
+  }
 }
-
 
 module.exports = Dealer

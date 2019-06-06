@@ -17,7 +17,7 @@ function createTestBets(game) {
   const testBets = new Array()
   game.players.forEach((player) => {
     const bet = Gen.integerBetween(0,player.getChips())()
-    testBets.push([bet])
+    testBets.push(bet)
   })
   return testBets
 }
@@ -49,11 +49,11 @@ describe('BlackJackGame', () => {
       const game = createTestGame()
       const testBets = createTestBets(game)
       game.players.forEach((player, index) => {
-        player.placeBet(testBets[index][0])
+        player.placeBet(testBets[index])
       })
       game.takeBets()
       testBets.forEach((bet, index) => {
-        game.bets[index].should.eql(bet)
+        game.bets[index].should.eql([bet])
       })
     })
   })

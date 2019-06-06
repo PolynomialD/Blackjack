@@ -74,16 +74,6 @@ describe('Deck', () => {
     })
   })
 
-  // describe('sort()', () => {
-  //   verify.it('should sort the deck', () => {
-  //     const deck = new Deck()
-  //     const freshDeck = new Deck()
-  //     deck.shuffle()
-  //     deck.sort()
-  //     deck.cards.should.eql(freshDeck.cards)
-  //   })
-  // })
-
   describe('with custom deck', () => {
     verify.it('should have the correct number cards', genRandomArray, genRandomArray, (suits, cards) => {
       const deck = new Deck(suits, cards)
@@ -91,7 +81,6 @@ describe('Deck', () => {
       deck.size().should.eql(expected)
     })
   })
-
 
   describe('with default cards', () => {
     verify.it('should have 52 cards', () => {
