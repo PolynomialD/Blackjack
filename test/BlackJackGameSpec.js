@@ -1,6 +1,5 @@
 const BlackJackGame = require('../src/BlackJackGame')
 const Deck = require('../src/Deck')
-
 const Gen = require('verify-it').Gen
 
 function createTestGame(players = 8) {
@@ -97,5 +96,48 @@ describe('BlackJackGame', () => {
       game.handValue(game.deck.cards).should.eql(expectedValue)
     })
   })
-})
 
+  describe('playDealersHand', () => {
+    verify.it('should draw cards until hand value is 17+', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
+      const game = new BlackJackGame(deck)
+      game.dealCards()
+      game.playDealersHand()
+      game.handValue(game.dealer.hand.showCards()).should.eql(20)
+    })
+  })
+
+  describe('payWinners()', () => {
+    verify.it('should give chips to winning players', () => {
+      const game = createTestGame()
+      const testBets = createTestBets(game)
+      const playerChips = []
+      const expectedChips = []
+
+      game.dealCards()
+      game.players.forEach((player, index) => {
+        playerChips.push(player.chips)
+        player.placeBet(testBets[index])
+      })
+      game.players.forEach((player) => {
+        player.receiveCard(game.deck.dealCard())
+      })
+      game.takeBets()
+      game.playDealersHand()
+      game.players.forEach((player, index) => {
+        if(game.handValue(player.hands[0].showCards()) < 22 && 
+          game.handValue(player.hands[0].showCards()) > game.handValue(game.dealer.hand.showCards())) {
+          expectedChips.push(playerChips[index] + testBets[index])
+        } else {
+          expectedChips.push(playerChips[index] - testBets[index])
+        }
+      })
+      game.payWinners()
+
+      game.players.forEach((player, index) => {
+        player.chips.should.eql(expectedChips[index])
+      })
+    })
+  })
+
+})

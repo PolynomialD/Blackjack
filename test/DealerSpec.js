@@ -55,15 +55,4 @@ describe('Dealer', () => {
       }
     })
   })
-
-  describe('playHand', () => {
-    verify.it('should draw cards until hand value is 17+', () => {
-      const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
-      const game = new BlackJackGame(deck)
-      game.dealCards()
-      game.dealer.playHand()
-      game.handValue(game.dealer.hand.showCards()).should.eql(20)
-    })
-  })
-
 })

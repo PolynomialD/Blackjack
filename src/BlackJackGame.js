@@ -41,6 +41,17 @@ class BlackJackGame {
       return total + card.value
     }, 0)
   }
+
+  playDealersHand() {
+    while(this.handValue(this.dealer.hand.cards) < 17) {
+      this.dealer.receiveCard(this.deck.dealCard())
+    }
+  }
+
+payWinners() {
+  return 0
+}
+
 }
 
 module.exports = BlackJackGame
