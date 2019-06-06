@@ -43,20 +43,6 @@ describe('BlackJackGame', () => {
     }) 
   })
 
-  describe('takeBets()', () => {
-    verify.it('should store the players bets', () => {
-      const game = createTestGame()
-      const testBets = createTestBets(game)
-      game.players.forEach((player, index) => {
-        player.placeBet(testBets[index])
-      })
-      game.takeBets()
-      testBets.forEach((bet, index) => {
-        game.bets[index].should.eql([bet])
-      })
-    })
-  })
-
   describe('HandValue()', () => {
     const generateDeckValues = (valueArray) => {
       return valueArray.map((value) => {
@@ -108,24 +94,23 @@ describe('BlackJackGame', () => {
   })
 
   describe('payWinners()', () => {
-    verify.it('should give chips to winning players', () => {
+    verify.it('should give chips to the winning players', () => {
       const game = createTestGame()
       const testBets = createTestBets(game)
       const startingChips = []
-      const expectedChips = []
-
-      game.deck.shuffle()
-      game.dealCards()
+      
       game.players.forEach((player, index) => {
         startingChips.push(player.chips)
         player.placeBet(testBets[index])
       })
+      game.deck.shuffle()
+      game.dealCards()
       game.players.forEach((player) => {
         player.receiveCard(game.deck.dealCard())
       })
-      game.takeBets()
       game.playDealersHand()
-
+      
+      const expectedChips = []
       const dealerHandValue = game.handValue(game.dealer.hand.showCards())
       game.players.forEach((player, index) => {
         const playerHandvalue = game.handValue(player.hands[0].showCards())
@@ -140,6 +125,27 @@ describe('BlackJackGame', () => {
       game.players.forEach((player, index) => {
         player.chips.should.eql(expectedChips[index])
       })
+    })
+
+    verify.it('should handle split bets', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['J',10],['Q',10]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Bob', 9000)
+      game.addPlayer('Jim', 9000)
+      const bob = game.players[0]
+      const jim = game.players[1]
+
+      jim.placeBet(1000)
+      bob.placeBet(1000)
+      game.dealCards()
+      jim.receiveCard(game.deck.dealCard())
+      bob.splitHand()
+      bob.receiveCard(game.deck.dealCard(),1)
+      bob.receiveCard(game.deck.dealCard(),2)
+      game.payWinners()
+
+      jim.chips.should.eql(10000)
+      bob.chips.should.eql(11000)
     })
   })
 })

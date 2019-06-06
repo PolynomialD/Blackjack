@@ -107,10 +107,10 @@ describe('Player', () => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
 
+      bob.placeBet(1000)
       deck.cards.forEach((card) => {
         bob.receiveCard(card)
       })
-
       bob.splitHand()
       bob.hands.length.should.eql(2)
     })
@@ -143,15 +143,24 @@ describe('Player', () => {
     })
 
     verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
-      const game = new BlackJackGame()
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.placeBet(1000)
-      game.takeBets()
       bob.receiveCard(deck.dealCard())
       bob.receiveCard(deck.dealCard())
-      bob.splitHand(1)
+      bob.splitHand()
       bob.bets.should.eql([1000,1000])
     })
+
+    verify.it("should not split if the player cannot place a matching bet", Gen.integerBetween(1,11), (value) => {
+      const bob = new Player('Bob', 1100)
+      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
+      bob.placeBet(1000)
+      bob.receiveCard(deck.dealCard())
+      bob.receiveCard(deck.dealCard())
+      bob.splitHand()
+      bob.hands.length.should.eql(1)
+    })
+
   })
 })

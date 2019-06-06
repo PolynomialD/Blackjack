@@ -7,7 +7,6 @@ class BlackJackGame {
     this.deck = deck || new Deck()
     this.dealer = new Dealer()
     this.players = []
-    this.bets = []
   }
 
   dealCards(amountToDeal = 2) {
@@ -25,12 +24,6 @@ class BlackJackGame {
 
   getNumberOfPlayers() {
     return this.players.length
-  }
-
-  takeBets() {
-    this.players.forEach((player) => {
-      this.bets.push(player.getBets())
-    })
   }
 
   handValue(hand) {
@@ -51,12 +44,14 @@ class BlackJackGame {
 payWinners() {
   const dealerHandValue = this.handValue(this.dealer.hand.showCards())
   this.players.forEach((player) => {
-    const playerHandValue = this.handValue(player.hands[0].showCards())
-    if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
+    for(let i=0; i<player.hands.length; i++) {
+      const playerHandValue = this.handValue(player.hands[i].showCards())
+      if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
       player.receiveChips(player.getBets()[0] * 2)
       player.removeBet()
-    } else {
-      player.removeBet()
+      } else {
+        player.removeBet()
+      }
     }
   })
 }

@@ -42,7 +42,7 @@ class Player {
   splitHand(handNumber = 1) {
     const hand = this.hands[handNumber-1]
 
-    if(hand.isSplittable() && this.getChips() > 0) {
+    if(hand.isSplittable() && this.getChips() >= this.bets[0]) {
       const newHands = hand.split()
       this.hands[handNumber-1] = newHands[0]
       this.hands.push(newHands[1])
