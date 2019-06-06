@@ -52,11 +52,6 @@ class Deck {
     })  
     return (i < limit) ? this.recursiveShuffle(newDeck, ++i) : newDeck
   }
-
-  // sort() {
-  //   this.cards.sort(function(a, b){return a.value - b.value})
-  // }
-
 }
 
 module.exports = Deck

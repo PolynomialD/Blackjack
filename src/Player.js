@@ -12,6 +12,10 @@ class Player {
     return this.bets
   }
 
+  removeBet() {
+    this.bets.pop()
+  }
+
   getChips() {
     return this.chips
   }

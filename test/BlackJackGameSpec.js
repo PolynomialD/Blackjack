@@ -111,12 +111,13 @@ describe('BlackJackGame', () => {
     verify.it('should give chips to winning players', () => {
       const game = createTestGame()
       const testBets = createTestBets(game)
-      const playerChips = []
+      const startingChips = []
       const expectedChips = []
 
+      game.deck.shuffle()
       game.dealCards()
       game.players.forEach((player, index) => {
-        playerChips.push(player.chips)
+        startingChips.push(player.chips)
         player.placeBet(testBets[index])
       })
       game.players.forEach((player) => {
@@ -124,12 +125,14 @@ describe('BlackJackGame', () => {
       })
       game.takeBets()
       game.playDealersHand()
+      
+      const dealerHandValue = game.handValue(game.dealer.hand.showCards())
       game.players.forEach((player, index) => {
-        if(game.handValue(player.hands[0].showCards()) < 22 && 
-          game.handValue(player.hands[0].showCards()) > game.handValue(game.dealer.hand.showCards())) {
-          expectedChips.push(playerChips[index] + testBets[index])
+        const playerHandvalue = game.handValue(player.hands[0].showCards())
+        if(playerHandvalue < 22 && playerHandvalue > dealerHandValue) {
+          expectedChips.push(startingChips[index] + testBets[index])
         } else {
-          expectedChips.push(playerChips[index] - testBets[index])
+          expectedChips.push(startingChips[index] - testBets[index])
         }
       })
       game.payWinners()
@@ -139,5 +142,4 @@ describe('BlackJackGame', () => {
       })
     })
   })
-
 })

@@ -49,7 +49,16 @@ class BlackJackGame {
   }
 
 payWinners() {
-  return 0
+  const dealerHandValue = this.handValue(this.dealer.hand.showCards())
+  this.players.forEach((player) => {
+    const playerHandValue = this.handValue(player.hands[0].showCards())
+    if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
+      player.receiveChips(player.bets[0] * 2)
+      player.removeBet()
+    } else {
+      player.removeBet()
+    }
+  })
 }
 
 }
