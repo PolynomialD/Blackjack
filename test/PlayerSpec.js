@@ -63,13 +63,13 @@ describe('Player', () => {
   describe('removeCard()', () => {
     it('should remove a card from player.hand', () => {
       const deck = new Deck()
-      const player = new Player('Bob', 5000)
+      const bob = new Player('Bob', 5000)
       for(let i=10; i>0; i--) {
-        player.receiveCard(deck.dealCard())
+        bob.receiveCard(deck.dealCard())
       }
-      const removedCard = player.hands[0].cards[4]
-      player.removeCard(5).should.eql(removedCard)
-      player.showHand().length.should.eql(9)
+      const removedCard = bob.hands[0].cards[4]
+      bob.removeCard(5).should.eql(removedCard)
+      bob.showHand().length.should.eql(9)
     })
   })
 
@@ -80,16 +80,25 @@ describe('Player', () => {
       player.getChips().should.eql(4000)
     })
     
-    it('should return a number not more than the players chips', () => {
-      const player = new Player('Bob', 5000)
-      player.placeBet(7000).should.eql(5000)
-      player.getChips().should.eql(0)
+    it('should place a bet not more than the players chips', () => {
+      const bob = new Player('Bob', 5000)
+      bob.placeBet(7000)
+      bob.bets[0].should.eql(5000)
+      bob.getChips().should.eql(0)
     })
 
     it('should add the bet to player bets array', () => {
-      const player = new Player('Bob', 5000)
-      player.placeBet(1000)
-      player.bet.should.eql([1000])
+      const bob = new Player('Bob', 5000)
+      bob.placeBet(1000)
+      bob.bets.should.eql([1000])
+    })
+  })
+
+  describe('getBets()', () => {
+    verify.it('should return a players bets', Gen.integerBetween(1,9000), (bet) => {
+      const bob = new Player('Bob', 9000)
+      bob.placeBet(bet)
+      bob.getBets().should.eql([bet])
     })
   })
 
@@ -137,11 +146,12 @@ describe('Player', () => {
       const game = new BlackJackGame()
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-      game.takeBet(bob.placeBet(1000))
+      bob.placeBet(1000)
+      game.takeBets()
       bob.receiveCard(deck.dealCard())
       bob.receiveCard(deck.dealCard())
       bob.splitHand(1)
-      bob.bet.should.eql([1000,1000])
+      bob.bets.should.eql([1000,1000])
     })
   })
 })

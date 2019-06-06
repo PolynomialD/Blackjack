@@ -5,7 +5,11 @@ class Player {
     this.name = name.toString()
     this.hands = [new Hand()]
     this.chips = chips
-    this.bet = []
+    this.bets = []
+  }
+
+  getBets() {
+    return this.bets
   }
 
   getChips() {
@@ -19,14 +23,12 @@ class Player {
   placeBet(bet) {  
     if(bet > 0 && bet <= this.chips) {
       this.chips -= bet
-      this.bet.push(bet)
-      return bet
-    } else if(bet > this.chips) { 
+      this.bets.push(bet)
+    } else if(bet > this.chips) {
         const chips = this.chips
+        this.bets.push(chips)
         this.chips = 0
-        this.bet.push(chips)
-        return chips
-      } else return 0
+      } 
   }
 
   showHand(handNumber = 1) {
@@ -40,7 +42,7 @@ class Player {
       const newHands = hand.split()
       this.hands[handNumber-1] = newHands[0]
       this.hands.push(newHands[1])
-      this.placeBet(this.bet[0])
+      this.placeBet(this.bets[0])
     }
   }
 

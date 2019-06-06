@@ -27,8 +27,10 @@ class BlackJackGame {
     return this.players.length
   }
 
-  takeBet(bet) {
-    this.bets.push(bet)
+  takeBets() {
+    this.players.forEach((player) => {
+      this.bets.push(player.getBets())
+    })
   }
 
   handValue(hand) {

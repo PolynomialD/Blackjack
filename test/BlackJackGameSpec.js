@@ -17,7 +17,7 @@ function createTestBets(game) {
   const testBets = new Array()
   game.players.forEach((player) => {
     const bet = Gen.integerBetween(0,player.getChips())()
-    testBets.push(bet)
+    testBets.push([bet])
   })
   return testBets
 }
@@ -44,16 +44,16 @@ describe('BlackJackGame', () => {
     }) 
   })
 
-  describe('takeBet()', () => {
+  describe('takeBets()', () => {
     verify.it('should store the players bets', () => {
       const game = createTestGame()
       const testBets = createTestBets(game)
-
       game.players.forEach((player, index) => {
-        game.takeBet(player.placeBet(testBets[index]))      
+        player.placeBet(testBets[index][0])
       })
-      game.bets.forEach((bet, index) => {
-        bet.should.eql(testBets[index])
+      game.takeBets()
+      testBets.forEach((bet, index) => {
+        game.bets[index].should.eql(bet)
       })
     })
   })
