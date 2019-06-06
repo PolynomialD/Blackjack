@@ -53,7 +53,7 @@ payWinners() {
   this.players.forEach((player) => {
     const playerHandValue = this.handValue(player.hands[0].showCards())
     if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-      player.receiveChips(player.bets[0] * 2)
+      player.receiveChips(player.getBets()[0] * 2)
       player.removeBet()
     } else {
       player.removeBet()

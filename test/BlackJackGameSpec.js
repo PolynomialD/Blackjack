@@ -125,7 +125,7 @@ describe('BlackJackGame', () => {
       })
       game.takeBets()
       game.playDealersHand()
-      
+
       const dealerHandValue = game.handValue(game.dealer.hand.showCards())
       game.players.forEach((player, index) => {
         const playerHandvalue = game.handValue(player.hands[0].showCards())

@@ -29,10 +29,10 @@ class Player {
       this.chips -= bet
       this.bets.push(bet)
     } else if(bet > this.chips) {
-        const chips = this.chips
-        this.bets.push(chips)
-        this.chips = 0
-      } 
+      const chips = this.chips
+      this.bets.push(chips)
+      this.chips = 0
+    } 
   }
 
   showHand(handNumber = 1) {
