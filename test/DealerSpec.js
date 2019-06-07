@@ -17,21 +17,37 @@ describe('Dealer', () => {
     })
   })
 
- describe('removeCard()', () => {
-    it('should remove a card from the dealers hand', () => {
+  describe('handSize()', () => {
+   verify.it('should give the size of the dealers hand', Gen.integerBetween(2,50), (cards) => {
       const deck = new Deck()
       const dealer = new Dealer()
-      for(let i=10; i>0; i--) {
+      const expected = cards
+      for(cards; cards>0; cards--) {
         dealer.receiveCard(deck.dealCard())
       }
-      const removedCard = dealer.hand.cards[4]
-      dealer.removeCard(4).should.eql(removedCard)
-      dealer.hand.cards.length.should.eql(9)
+      dealer.handSize().should.eql(expected)
+    })
+  })
+
+ describe('removeCard()', () => {
+    verify.it('should remove a card from the dealers hand', Gen.integerBetween(1,52), (cards) => {
+      const deck = new Deck()
+      const dealer = new Dealer()
+      const expected = cards - 1
+      const index = Gen.integerBetween(0,expected)()
+
+      for(cards; cards>0; cards--) {
+        dealer.receiveCard(deck.dealCard())
+      }
+      const removedCard = dealer.hand.cards[index]
+
+      dealer.removeCard(index).should.eql(removedCard)
+      dealer.hand.size().should.eql(expected)
     })
   })
 
   describe('giveChips', Gen.integerBetween(1,9000), (chips) => {
-    it('should return a number of chips', () => {
+    verify.it('should return a number of chips', () => {
       const dealer = new Dealer()
       const expected = chips
       dealer.giveChips(chips).should.eql(expected)

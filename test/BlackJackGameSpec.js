@@ -83,7 +83,7 @@ describe('BlackJackGame', () => {
     })
   })
 
-  describe('playDealersHand', () => {
+  describe('playDealersHand()', () => {
     verify.it('should draw cards until hand value is 17+', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
       const game = new BlackJackGame(deck)
@@ -122,7 +122,6 @@ describe('BlackJackGame', () => {
         }
       })
       game.payWinners()
-      console.log(game.dealer.chips)
 
       game.players.forEach((player, index) => {
         player.chips.should.eql(expectedChips[index])
