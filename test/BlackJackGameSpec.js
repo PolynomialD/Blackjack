@@ -122,6 +122,7 @@ describe('BlackJackGame', () => {
         }
       })
       game.payWinners()
+      console.log(game.dealer.chips)
 
       game.players.forEach((player, index) => {
         player.chips.should.eql(expectedChips[index])
@@ -144,7 +145,6 @@ describe('BlackJackGame', () => {
       bob.receiveCard(game.deck.dealCard(),1)
       bob.receiveCard(game.deck.dealCard(),2)
       game.payWinners()
-
       jim.chips.should.eql(10000)
       bob.chips.should.eql(11000)
     })

@@ -1,7 +1,6 @@
 const Deck = require('../src/Deck')
 const Dealer = require('../src/Dealer')
 const Player = require('../src/Player')
-const BlackJackGame = require('../src/BlackJackGame')
 const Gen = require('verify-it').Gen
 
 describe('Dealer', () => {

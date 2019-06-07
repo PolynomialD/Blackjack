@@ -13,7 +13,7 @@ class Player {
   }
 
   removeBet() {
-    this.bets.pop()
+    return this.bets.pop()
   }
 
   getChips() {

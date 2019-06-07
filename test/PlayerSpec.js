@@ -3,16 +3,6 @@ const Player = require('../src/Player')
 const BlackJackGame = require('../src/BlackJackGame')
 const Gen = require('verify-it').Gen
 
-function createTestGame(players = Gen.integerBetween(1,10)()) {
-  const testGame = new BlackJackGame()
-  for(let i=0; i<players; i++) {
-    const name = Gen.stringWithLength(6)()
-    const chips = Gen.integerBetween(0,9000)()
-    testGame.addPlayer(name,chips)
-  }
-  return testGame
-}
-
 describe('Player', () => {
   describe('name', () => {
     it('should be a string', () => {
@@ -103,8 +93,12 @@ describe('Player', () => {
   })
 
   describe('removeBet()', () => {
-    verify.it('should', () => { 
-
+    verify.it('should remove a bet from bets', () => { 
+      const bob = new Player('Bob', 9000)
+      bob.placeBet(1000)
+      bob.removeBet()
+      bob.bets.should.eql([])
+      bob.chips.should.eql(8000)
     })
   })
 
@@ -135,12 +129,14 @@ describe('Player', () => {
     verify.it('should be able to split multiple times', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
       const deck = new Deck(['♣','♥','♠','♦'],[[`${value}`,value]])
+      
       bob.placeBet(1000)
       bob.receiveCard(deck.dealCard())
       bob.receiveCard(deck.dealCard())
       bob.splitHand(1)
       bob.receiveCard(deck.dealCard(),1)
       bob.receiveCard(deck.dealCard(),2)
+
       bob.splitHand(1)
       bob.hands.length.should.eql(3)
       bob.splitHand(2)
@@ -158,7 +154,7 @@ describe('Player', () => {
       bob.bets.should.eql([1000,1000])
     })
 
-    verify.it("should not split if the player cannot place a matching bet", Gen.integerBetween(1,11), (value) => {
+    verify.it('should not split if the player cannot place a matching bet', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 1100)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.placeBet(1000)
