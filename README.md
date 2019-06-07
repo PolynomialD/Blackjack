@@ -1,12 +1,5 @@
-# Javascript stub
+Cards
 
-_A sample stub project for javascript._
+Card Games:
 
-## Development
-
-Run the tests:
-
-```sh
-npm install
-npm test
-```
+BlackJack
