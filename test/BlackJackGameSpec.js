@@ -111,9 +111,10 @@ describe('BlackJackGame', () => {
       game.playDealersHand()
       
       const expectedChips = []
-      const dealerHandValue = game.handValue(game.dealer.hand.showCards())
+      const dealerHandValue = game.handValue(game.dealer.showHand())
+
       game.players.forEach((player, index) => {
-        const playerHandvalue = game.handValue(player.hands[0].showCards())
+        const playerHandvalue = game.handValue(player.showHand())
         if(playerHandvalue < 22 && playerHandvalue > dealerHandValue) {
           expectedChips.push(startingChips[index] + testBets[index])
         } else {
@@ -127,8 +128,8 @@ describe('BlackJackGame', () => {
       })
     })
 
-    verify.it('should handle split bets', () => {
-      const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['J',10],['Q',10]])
+    verify.it('should give chips for split bets', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['K',10],['Q',10]])
       const game = new BlackJackGame(deck)
       game.addPlayer('Bob', 9000)
       game.addPlayer('Jim', 9000)

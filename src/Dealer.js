@@ -19,6 +19,10 @@ class Dealer {
     return this.hand.length
   }
 
+  showHand() {
+    return this.hand.showCards()
+  }
+
   giveChips(amount) {
     this.chips -= amount
     return amount

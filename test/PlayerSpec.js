@@ -41,7 +41,7 @@ describe('Player', () => {
     })
   })
   
-  describe('getChips', () => {
+  describe('getChips()', () => {
     verify.it('should give the players chips total',Gen.integerBetween(1,9000), (bet) => {
       const bob = new Player('Bob', 9000)
       const expected = 9000 - bet
@@ -74,6 +74,12 @@ describe('Player', () => {
   })
 
   describe('placeBet()', () => {
+    it('should add the bet to player bets array', () => {
+      const bob = new Player('Bob', 5000)
+      bob.placeBet(1000)
+      bob.bets.should.eql([1000])
+    })
+
     it('should remove chips from the player', () => {
       const player = new Player('Bob', 5000)
       player.placeBet(1000)
@@ -83,14 +89,8 @@ describe('Player', () => {
     it('should place a bet not more than the players chips', () => {
       const bob = new Player('Bob', 5000)
       bob.placeBet(7000)
-      bob.bets[0].should.eql(5000)
+      bob.getBets().should.eql([5000])
       bob.getChips().should.eql(0)
-    })
-
-    it('should add the bet to player bets array', () => {
-      const bob = new Player('Bob', 5000)
-      bob.placeBet(1000)
-      bob.bets.should.eql([1000])
     })
   })
 
@@ -99,6 +99,12 @@ describe('Player', () => {
       const bob = new Player('Bob', 9000)
       bob.placeBet(bet)
       bob.getBets().should.eql([bet])
+    })
+  })
+
+  describe('removeBet()', () => {
+    verify.it('should', () => { 
+
     })
   })
 

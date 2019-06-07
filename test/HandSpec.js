@@ -31,7 +31,7 @@ describe('Hand', () => {
     hand.size().should.eql(length)
   })
 
-  describe('getCard', () => {
+  describe('getCard()', () => {
     verify.it('should remove the correct card', generateCards(10), Gen.integerBetween(1, 9), (cards, randomIndex) => {
       const hand = new Hand(cards)
       const expectedCard = cards[randomIndex]
@@ -51,7 +51,7 @@ describe('Hand', () => {
     })
   })
 
-  describe('isSplittable', () => {
+  describe('isSplittable()', () => {
     verify.it('should return false if it can\'t be split', () => {
       const deck = new Deck(['♣'], [['10', 10],['5', 5]])
       const hand = new Hand(deck.cards)
