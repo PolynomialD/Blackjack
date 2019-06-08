@@ -46,7 +46,7 @@ describe('Dealer', () => {
     })
   })
 
-  describe('giveChips', Gen.integerBetween(1,9000), (chips) => {
+  describe('giveChips()', Gen.integerBetween(1,9000), (chips) => {
     verify.it('should return a number of chips', () => {
       const dealer = new Dealer()
       const expected = chips

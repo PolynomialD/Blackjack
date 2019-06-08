@@ -7,7 +7,6 @@ let mainWindow
 app.on('ready', () => {
   mainWindow = new BrowserWindow({})
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-
   const mainMenu = Menu.buildFromTemplate(menuTemplate)
   Menu.setApplicationMenu(mainMenu)
 
@@ -15,6 +14,7 @@ app.on('ready', () => {
     app.quit()
   })
 })
+
 
 const menuTemplate = [
   {
