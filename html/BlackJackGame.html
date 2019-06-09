@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src='../dist/bundle.js'></script>
 </head>
 <body style="background-color:green">
-  <a href="../index.html">Back To Menu</a>
-  <h1 style="text-align:center">&spades;&hearts; BlackJack &clubs;&diams;</h1>
-  <h2 style="text-align:center">Create Game</h2>
-  <form id="newPlayerForm">
+    <a href="../index.html">Back To Menu</a>
+    <h1 style="text-align:center">&spades;&hearts; BlackJack &clubs;&diams;</h1>
+    <h2 style="text-align:center">Create Game</h2>
     <div>
       <label>Enter Player Name</label>
       <input id="nameInput" type="text" autofocus /> </br>
@@ -16,9 +16,7 @@
       <input id="chipsInput" type="number"/>
     </div>
     <button id="addNewPlayerButton" onclick="addNewPlayer()">AddPlayer</button>
-  </form>
-  <ul id="playersList"></ul>
-  
-  <script src='../src/PlayBlackJack.js'></script>
+    <ul id="playersList"></ul>
+    
 </body>
 </html>

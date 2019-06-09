@@ -1,24 +1,20 @@
-const Game = require('./BlackJackGame')
-const game = new BlackJackGame()
+const Player = require('./Player')
 
-const playerArray = []
+const players = []
 function addNewPlayer() {
-  const nameInput = document.getElementById('nameInput')
-  const chipsInput = document.getElementById('chipsInput')
-  
-  const player = {
-    name: nameInput.value,
-    chips: chipsInput.value
-  }
-  
-  playerArray.push(player)
-  game.addPlayer(`${player.name}`, player.chips)
+  const name = document.getElementById('nameInput').value
+  const chips = document.getElementById('chipsInput').value
+  const player = new Player(name, chips)
+
+  players.push(player)
   const li = document.createElement('li')
-  const name = document.createTextNode(`${player.name}`)
-  const chips = document.createTextNode(`${player.chips}`)
-  
-  li.appendChild(name)
-  li.appendChild(chips)
+  const nameNode = document.createTextNode(`${player.getName()}`)
+  const chipsNode = document.createTextNode(`${player.getChips()}`)
+
+  li.appendChild(nameNode)
+  li.appendChild(chipsNode)
 
   document.getElementById('playersList').appendChild(li) 
 }
+
+window.addNewPlayer = addNewPlayer

@@ -20,6 +20,10 @@ class Player {
     return this.chips
   }
 
+  getName() {
+    return this.name
+  }
+
   receiveChips(amount) {
     this.chips += amount
   }

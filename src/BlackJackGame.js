@@ -3,10 +3,10 @@ const Dealer = require('./Dealer')
 const Player = require('./Player')
 
 class BlackJackGame {
-  constructor (deck) {
+  constructor (deck, players) {
     this.deck = deck || new Deck()
     this.dealer = new Dealer()
-    this.players = []
+    this.players = players || []
   }
 
   dealCards(amountToDeal = 2) {
@@ -19,7 +19,9 @@ class BlackJackGame {
   }
 
   addPlayer(name, chips) {
-    this.players.push(new Player(name, chips))
+    const player = new Player(name, chips)
+    this.players.push(player)
+    return player
   }
 
   getNumberOfPlayers() {
