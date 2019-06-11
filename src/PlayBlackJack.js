@@ -11,8 +11,8 @@ function addNewPlayer() {
   chips.value = ''
   players.push(player)
   const li = document.createElement('li')
-  const nameNode = document.createTextNode(`${player.getName()}`)
-  const chipsNode = document.createTextNode(`${player.getChips()}`)
+  const nameNode = document.createTextNode(`${player.getName()}:  `)
+  const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
   
   li.appendChild(nameNode)
   li.appendChild(chipsNode)
@@ -52,7 +52,7 @@ function setUpTable() {
     
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
-    playerChips.innerHTML = player.chips
+    playerChips.innerHTML = `chips: ${player.chips}`
     
     const playerCards = document.createElement('div')
     playerCards.setAttribute('id', `player-${index}-cards`)
@@ -83,10 +83,13 @@ function setUpTable() {
 function makeBet(index) {
   let betInput = document.getElementById(`player${index}-bet-input`)
   let betButton = document.getElementById(`player${index}-bet-button-div`)
+  let chips = document.getElementById(`player${index}-chips`)
+
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
     betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
+    chips.innerHTML = `chips: ${game.players[index].getChips()}`
   }
 }
 window.makeBet = makeBet
