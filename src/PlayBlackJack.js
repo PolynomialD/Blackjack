@@ -1,6 +1,7 @@
 const Player = require('./Player')
 const BlackJackGame = require('./BlackJackGame.js')
 const players = []
+let game
 
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
@@ -12,10 +13,10 @@ function addNewPlayer() {
   const li = document.createElement('li')
   const nameNode = document.createTextNode(`${player.getName()}`)
   const chipsNode = document.createTextNode(`${player.getChips()}`)
-
+  
   li.appendChild(nameNode)
   li.appendChild(chipsNode)
-
+  
   document.getElementById('playersList').appendChild(li) 
 }
 window.addNewPlayer = addNewPlayer
@@ -28,11 +29,11 @@ function setUpTable() {
   dealerImage.setAttribute('height', '50')
   dealerImage.setAttribute('width', '50')
   dealer.appendChild(dealerImage)
-
-  const dealerCardsTile = document.createElement('div')
-  dealerCardsTile.setAttribute('id', 'dealer-cards')
-  dealerCardsTile.setAttribute('style', 'text-align:center')
-  dealer.appendChild(dealerCardsTile)
+  
+  const dealerCards = document.createElement('div')
+  dealerCards.setAttribute('id', 'dealer-cards')
+  dealerCards.setAttribute('style', 'text-align:center')
+  dealer.appendChild(dealerCards)
   
   const playerRow = document.getElementById('players')
   players.forEach((player, index) => {
@@ -44,7 +45,7 @@ function setUpTable() {
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
     playerImage.setAttribute('height', '50')
     playerImage.setAttribute('width', '50')
-
+    
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
     playerName.innerHTML = player.name
@@ -53,33 +54,44 @@ function setUpTable() {
     playerChips.setAttribute('id', `player${index}-chips`)
     playerChips.innerHTML = player.chips
     
-    const cardsTile = document.createElement('div')
-    cardsTile.setAttribute('id', `player-${index}-cards`)
-
+    const playerCards = document.createElement('div')
+    playerCards.setAttribute('id', `player-${index}-cards`)
+    
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
-
+    
     const betButton = document.createElement('div')
     betButton.setAttribute('id', `player${index}-bet-button-div`)
     const button = document.createElement('button')
     button.setAttribute('id', `player${index}-bet-button`)
+    button.setAttribute('onclick', `makeBet(${index})`)
+    button.innerHTML = 'Place Bet'
     betButton.appendChild(button)
-
+    
     playerTile.appendChild(playerImage)
     playerTile.appendChild(playerName)
-    playerTile.appendChild(cardsTile)
+    playerTile.appendChild(playerCards)
     playerTile.appendChild(playerChips)
     playerTile.appendChild(betInput)
     playerTile.appendChild(betButton)
-
+    
     playerRow.appendChild(playerTile)
   })
   document.getElementById('createGameForm').innerHTML = ''
 }
 
+function makeBet(index) {
+  const bet = document.getElementById(`player${index}-bet-input`)
+  console.log(bet.value)
+  game.players[index].placeBet(bet.value)
+  console.log(game.players[index])
+  bet.value = ''
+}
+window.makeBet = makeBet
+
 function createBlackJackGame() {
   setUpTable()
-  const game = new BlackJackGame(null, players)
+  game = new BlackJackGame(null, players)
+  console.log(game)
 }
-
 window.createBlackJackGame = createBlackJackGame
