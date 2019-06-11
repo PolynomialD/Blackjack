@@ -37,9 +37,9 @@ function setUpTable() {
   
   const playerRow = document.getElementById('players')
   players.forEach((player, index) => {
-    const playerTile = document.createElement('div')
-    playerTile.setAttribute('id', `player-${index}`)
-    playerTile.setAttribute('style', 'display: inline-block')
+    const playerDiv = document.createElement('div')
+    playerDiv.setAttribute('id', `player-${index}`)
+    playerDiv.setAttribute('style', 'display: inline-block')
     
     const playerImage = document.createElement('img')
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
@@ -60,22 +60,22 @@ function setUpTable() {
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
     
-    const betButton = document.createElement('div')
-    betButton.setAttribute('id', `player${index}-bet-button-div`)
-    const button = document.createElement('button')
-    button.setAttribute('id', `player${index}-bet-button`)
-    button.setAttribute('onclick', `makeBet(${index})`)
-    button.innerHTML = 'Place Bet'
-    betButton.appendChild(button)
+    const betButtonDiv = document.createElement('div')
+    betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
+    const betButton = document.createElement('button')
+    betButton.setAttribute('id', `player${index}-bet-button`)
+    betButton.setAttribute('onclick', `makeBet(${index})`)
+    betButton.innerHTML = 'Place Bet'
+    betButtonDiv.appendChild(betButton)
     
-    playerTile.appendChild(playerImage)
-    playerTile.appendChild(playerName)
-    playerTile.appendChild(playerCards)
-    playerTile.appendChild(playerChips)
-    playerTile.appendChild(betInput)
-    playerTile.appendChild(betButton)
+    playerDiv.appendChild(playerImage)
+    playerDiv.appendChild(playerName)
+    playerDiv.appendChild(playerCards)
+    playerDiv.appendChild(playerChips)
+    playerDiv.appendChild(betInput)
+    playerDiv.appendChild(betButtonDiv)
     
-    playerRow.appendChild(playerTile)
+    playerRow.appendChild(playerDiv)
   })
   document.getElementById('createGameForm').innerHTML = ''
 }
