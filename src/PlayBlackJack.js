@@ -80,7 +80,7 @@ function setUpTable() {
   document.getElementById('createGameForm').innerHTML = ''
 }
 
-let noOfBets = 0
+let betCount = 0
 function makeBet(index) {
   const betInput = document.getElementById(`player${index}-bet-input`)
   const betButton = document.getElementById(`player${index}-bet-button-div`)
@@ -91,15 +91,15 @@ function makeBet(index) {
     betInput.setAttribute('style', 'display:none')
     betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
     chips.innerHTML = `chips: ${game.players[index].getChips()}`
-    noOfBets++
+    betCount++
   }
-  if(noOfBets === game.getNumberOfPlayers()) {
+  if(betCount === game.getNumberOfPlayers()) {
     const dealCardsButton = document.createElement('button')
     dealCardsButton.setAttribute('id', 'dealCardsButton')
     dealCardsButton.setAttribute('onclick', 'dealCards()')
     dealCardsButton.innerHTML = 'Deal Cards'
     dealer.appendChild(dealCardsButton)
-    noOfBets = 0
+    betCount = 0
   }
 }
 window.makeBet = makeBet
@@ -113,16 +113,18 @@ function dealCards() {
   dealerCards.appendChild(dealerCardOne)
   dealerCards.appendChild(dealerCardTwo)
 
+  appendCards()
+
   game.players.forEach((player, index) => {
-    const playerCards = document.getElementById(`player${index}-cards`)
-    const cardOne = document.createTextNode(player.showHand()[0].face)
-    const cardTwo = document.createTextNode(player.showHand()[1].face)
-    playerCards.appendChild(cardOne)
-    playerCards.appendChild(cardTwo)
+    // const playerCards = document.getElementById(`player${index}-cards`)
+    // const cardOne = document.createTextNode(player.showHand()[0].face)
+    // const cardTwo = document.createTextNode(player.showHand()[1].face)
+    // playerCards.appendChild(cardOne)
+    // playerCards.appendChild(cardTwo)
 
     const drawCardButton = document.createElement('button')
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
-    drawCardButton.setAttribute('onclick', 'drawCard()')
+    drawCardButton.setAttribute('onclick', `drawCard(${index})`)
     drawCardButton.innerHTML = 'Draw Card'
 
     const stickButton = document.createElement('button')
@@ -137,6 +139,25 @@ function dealCards() {
   document.getElementById('dealCardsButton').setAttribute('style', 'display:none')
 }
 window.dealCards = dealCards
+
+function appendCards() {
+  game.players.forEach((player, index) => {
+    const playerCards = document.getElementById(`player${index}-cards`)
+    playerCards.innerHTML = ''
+    player.hands[0].cards.forEach((card, i ) => {
+      const cardToAppend = document.createTextNode(player.showHand()[i].face)
+    playerCards.appendChild(cardToAppend)
+    })
+  })
+}
+
+function drawCard(index) {
+  const card = game.deck.dealCard()
+  game.players[index].receiveCard(card)
+  document.getElementById(`player${index}-cards`)
+  appendCards()
+}
+window.drawCard = drawCard
 
 function createBlackJackGame() {
   setUpTable()
