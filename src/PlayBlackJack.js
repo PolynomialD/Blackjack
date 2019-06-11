@@ -81,16 +81,18 @@ function setUpTable() {
 }
 
 function makeBet(index) {
-  let bet = Number(document.getElementById(`player${index}-bet-input`).value)
-  console.log(bet)
-  game.players[index].placeBet(bet)
-  console.log(game.players[index].bets)
+  let betInput = document.getElementById(`player${index}-bet-input`)
+  let betButton = document.getElementById(`player${index}-bet-button-div`)
+  if(betInput.value !== '') {
+    game.players[index].placeBet(Number(betInput.value))
+    betInput.setAttribute('style', 'display:none')
+    betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
+  }
 }
 window.makeBet = makeBet
 
 function createBlackJackGame() {
   setUpTable()
   game = new BlackJackGame(null, players)
-  console.log(game)
 }
 window.createBlackJackGame = createBlackJackGame
