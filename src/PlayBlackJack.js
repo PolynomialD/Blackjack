@@ -34,6 +34,13 @@ function setUpTable() {
   dealerCards.setAttribute('id', 'dealer-cards')
   dealerCards.setAttribute('style', 'text-align:center')
   dealer.appendChild(dealerCards)
+
+  const table = document.getElementById('table')
+  const deckImage = document.createElement('img')
+  deckImage.setAttribute('src', '../assets/cards/card_deck.png')
+  deckImage.setAttribute('height', '50')
+  deckImage.setAttribute('width', '50')
+  table.appendChild(deckImage)
   
   const playerRow = document.getElementById('players')
   players.forEach((player, index) => {
@@ -116,12 +123,6 @@ function dealCards() {
   appendCards()
 
   game.players.forEach((player, index) => {
-    // const playerCards = document.getElementById(`player${index}-cards`)
-    // const cardOne = document.createTextNode(player.showHand()[0].face)
-    // const cardTwo = document.createTextNode(player.showHand()[1].face)
-    // playerCards.appendChild(cardOne)
-    // playerCards.appendChild(cardTwo)
-
     const drawCardButton = document.createElement('button')
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
     drawCardButton.setAttribute('onclick', `drawCard(${index})`)
@@ -142,11 +143,11 @@ window.dealCards = dealCards
 
 function appendCards() {
   game.players.forEach((player, index) => {
-    const playerCards = document.getElementById(`player${index}-cards`)
-    playerCards.innerHTML = ''
+    const playerCardsDiv = document.getElementById(`player${index}-cards`)
+    playerCardsDiv.innerHTML = ''
     player.hands[0].cards.forEach((card, i ) => {
       const cardToAppend = document.createTextNode(player.showHand()[i].face)
-    playerCards.appendChild(cardToAppend)
+    playerCardsDiv.appendChild(cardToAppend)
     })
   })
 }
