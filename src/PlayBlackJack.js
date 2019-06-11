@@ -80,19 +80,34 @@ function setUpTable() {
   document.getElementById('createGameForm').innerHTML = ''
 }
 
+let noOfBets = 0
 function makeBet(index) {
-  let betInput = document.getElementById(`player${index}-bet-input`)
-  let betButton = document.getElementById(`player${index}-bet-button-div`)
-  let chips = document.getElementById(`player${index}-chips`)
+  const betInput = document.getElementById(`player${index}-bet-input`)
+  const betButton = document.getElementById(`player${index}-bet-button-div`)
+  const chips = document.getElementById(`player${index}-chips`)
 
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
     betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
     chips.innerHTML = `chips: ${game.players[index].getChips()}`
+    noOfBets++
+  }
+  if(noOfBets === game.getNumberOfPlayers()) {
+    const dealCardsButton = document.createElement('button')
+    dealCardsButton.setAttribute('id', 'dealCardsButton')
+    dealCardsButton.setAttribute('onclick', 'dealCards()')
+    dealCardsButton.innerHTML = 'Deal Cards'
+    dealer.appendChild(dealCardsButton)
   }
 }
 window.makeBet = makeBet
+
+function dealCards() {
+  game.dealCards()
+  console.log(game)
+}
+window.dealCards = dealCards
 
 function createBlackJackGame() {
   setUpTable()
