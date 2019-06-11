@@ -24,13 +24,14 @@ function setUpTable() {
   const dealer = document.getElementById('dealer')
   
   const dealerImage = document.createElement('img')
-  dealerImage.setAttribute('src', '/home/steve/Pictures/dealer_avatar.png')
+  dealerImage.setAttribute('src', '../assets/avatars/dealer_avatar.png')
   dealerImage.setAttribute('height', '50')
   dealerImage.setAttribute('width', '50')
   dealer.appendChild(dealerImage)
 
   const dealerCardsTile = document.createElement('div')
   dealerCardsTile.setAttribute('id', 'dealer-cards')
+  dealerCardsTile.setAttribute('style', 'text-align:center')
   dealer.appendChild(dealerCardsTile)
   
   const playerRow = document.getElementById('players')
@@ -40,7 +41,7 @@ function setUpTable() {
     playerTile.setAttribute('style', 'display: inline-block')
     
     const playerImage = document.createElement('img')
-    playerImage.setAttribute('src', '/home/steve/Pictures/player_avatar.png')
+    playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
     playerImage.setAttribute('height', '50')
     playerImage.setAttribute('width', '50')
 
