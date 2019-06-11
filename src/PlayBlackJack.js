@@ -81,11 +81,10 @@ function setUpTable() {
 }
 
 function makeBet(index) {
-  const bet = document.getElementById(`player${index}-bet-input`)
-  console.log(bet.value)
-  game.players[index].placeBet(bet.value)
-  console.log(game.players[index])
-  bet.value = ''
+  let bet = Number(document.getElementById(`player${index}-bet-input`).value)
+  console.log(bet)
+  game.players[index].placeBet(bet)
+  console.log(game.players[index].bets)
 }
 window.makeBet = makeBet
 
