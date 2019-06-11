@@ -45,21 +45,32 @@ function setUpTable() {
     playerImage.setAttribute('height', '50')
     playerImage.setAttribute('width', '50')
 
-    const cardsTile = document.createElement('div')
-    cardsTile.setAttribute('id', `player-${index}-cards`)
-
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
     playerName.innerHTML = player.name
-
+    
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
     playerChips.innerHTML = player.chips
+    
+    const cardsTile = document.createElement('div')
+    cardsTile.setAttribute('id', `player-${index}-cards`)
+
+    const betInput = document.createElement('input')
+    betInput.setAttribute('id', `player${index}-bet-input`)
+
+    const betButton = document.createElement('div')
+    betButton.setAttribute('id', `player${index}-bet-button-div`)
+    const button = document.createElement('button')
+    button.setAttribute('id', `player${index}-bet-button`)
+    betButton.appendChild(button)
 
     playerTile.appendChild(playerImage)
     playerTile.appendChild(playerName)
-    playerTile.appendChild(playerChips)
     playerTile.appendChild(cardsTile)
+    playerTile.appendChild(playerChips)
+    playerTile.appendChild(betInput)
+    playerTile.appendChild(betButton)
 
     playerRow.appendChild(playerTile)
   })
