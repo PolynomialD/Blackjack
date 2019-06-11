@@ -99,12 +99,28 @@ function makeBet(index) {
     dealCardsButton.setAttribute('onclick', 'dealCards()')
     dealCardsButton.innerHTML = 'Deal Cards'
     dealer.appendChild(dealCardsButton)
+    noOfBets = 0
   }
 }
 window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
+
+  const dealerCards = document.getElementById('dealer-cards')
+  const dealerCardOne = document.createTextNode(game.dealer.showHand()[0].face)
+  const dealerCardTwo = document.createTextNode(game.dealer.showHand()[1].face)
+  dealerCards.appendChild(dealerCardOne)
+  dealerCards.appendChild(dealerCardTwo)
+
+  game.players.forEach((player, index) => {
+    const playerCards = document.getElementById(`player-${index}-cards`)
+    const cardOne = document.createTextNode(player.showHand()[0].face)
+    const cardTwo = document.createTextNode(player.showHand()[1].face)
+    playerCards.appendChild(cardOne)
+    playerCards.appendChild(cardTwo)
+  })
+  document.getElementById('dealCardsButton').setAttribute('style', 'display:none')
   console.log(game)
 }
 window.dealCards = dealCards
