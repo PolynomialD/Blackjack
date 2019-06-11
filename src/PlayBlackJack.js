@@ -38,7 +38,7 @@ function setUpTable() {
   const playerRow = document.getElementById('players')
   players.forEach((player, index) => {
     const playerDiv = document.createElement('div')
-    playerDiv.setAttribute('id', `player-${index}`)
+    playerDiv.setAttribute('id', `player${index}-div`)
     playerDiv.setAttribute('style', 'display: inline-block')
     
     const playerImage = document.createElement('img')
@@ -55,7 +55,7 @@ function setUpTable() {
     playerChips.innerHTML = `chips: ${player.chips}`
     
     const playerCards = document.createElement('div')
-    playerCards.setAttribute('id', `player-${index}-cards`)
+    playerCards.setAttribute('id', `player${index}-cards`)
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
@@ -114,14 +114,27 @@ function dealCards() {
   dealerCards.appendChild(dealerCardTwo)
 
   game.players.forEach((player, index) => {
-    const playerCards = document.getElementById(`player-${index}-cards`)
+    const playerCards = document.getElementById(`player${index}-cards`)
     const cardOne = document.createTextNode(player.showHand()[0].face)
     const cardTwo = document.createTextNode(player.showHand()[1].face)
     playerCards.appendChild(cardOne)
     playerCards.appendChild(cardTwo)
+
+    const drawCardButton = document.createElement('button')
+    drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
+    drawCardButton.setAttribute('onclick', 'drawCard()')
+    drawCardButton.innerHTML = 'Draw Card'
+
+    const stickButton = document.createElement('button')
+    stickButton.setAttribute('id', `player${index}-stickButton`)
+    stickButton.setAttribute('onclick', 'stick()')
+    stickButton.innerHTML = 'Stick'
+
+    const playerDiv = document.getElementById(`player${index}-div`)
+    playerDiv.appendChild(drawCardButton)
+    playerDiv.appendChild(stickButton)
   })
   document.getElementById('dealCardsButton').setAttribute('style', 'display:none')
-  console.log(game)
 }
 window.dealCards = dealCards
 
