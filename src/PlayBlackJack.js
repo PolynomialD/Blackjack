@@ -43,6 +43,7 @@ function setUpTable() {
   table.appendChild(deckImage)
   
   const playerRow = document.getElementById('players')
+  const playerDivs = []
   players.forEach((player, index) => {
     const playerDiv = document.createElement('div')
     playerDiv.setAttribute('id', `player${index}-div`)
@@ -82,6 +83,9 @@ function setUpTable() {
     playerDiv.appendChild(betInput)
     playerDiv.appendChild(betButtonDiv)
     
+    playerDivs.push(playerDiv)
+  })
+  playerDivs.reverse().forEach((playerDiv) => {
     playerRow.appendChild(playerDiv)
   })
   document.getElementById('createGameForm').innerHTML = ''
