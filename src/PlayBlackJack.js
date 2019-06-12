@@ -22,19 +22,6 @@ function addNewPlayer() {
 window.addNewPlayer = addNewPlayer
 
 function setUpTable() {
-  const dealer = document.getElementById('dealer')
-  
-  const dealerImage = document.createElement('img')
-  dealerImage.setAttribute('src', '../assets/avatars/dealer_avatar.png')
-  dealerImage.setAttribute('height', '50')
-  dealerImage.setAttribute('width', '50')
-  dealer.appendChild(dealerImage)
-  
-  const dealerCards = document.createElement('div')
-  dealerCards.setAttribute('id', 'dealer-cards')
-  dealerCards.setAttribute('style', 'text-align:center')
-  dealer.appendChild(dealerCards)
-
   const table = document.getElementById('table')
   const deckImage = document.createElement('img')
   deckImage.setAttribute('src', '../assets/cards/card_deck.png')
@@ -118,11 +105,11 @@ window.makeBet = makeBet
 function dealCards() {
   game.dealCards()
 
-  const dealerCards = document.getElementById('dealer-cards')
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
   const dealerCardOne = document.createTextNode(game.dealer.showHand()[0].face)
   const dealerCardTwo = document.createTextNode(game.dealer.showHand()[1].face)
-  dealerCards.appendChild(dealerCardOne)
-  dealerCards.appendChild(dealerCardTwo)
+  dealerCardsDiv.appendChild(dealerCardOne)
+  dealerCardsDiv.appendChild(dealerCardTwo)
 
   appendCards()
 
