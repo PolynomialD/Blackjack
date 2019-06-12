@@ -22,15 +22,11 @@ function addNewPlayer() {
 window.addNewPlayer = addNewPlayer
 
 function setUpTable() {
-  const table = document.getElementById('table')
-  const deckImage = document.createElement('img')
-  deckImage.setAttribute('src', '../assets/cards/card_deck.png')
-  deckImage.setAttribute('height', '50')
-  deckImage.setAttribute('width', '50')
-  table.appendChild(deckImage)
-  
+  document.getElementById('table-div').setAttribute('style', 'display:block')
+
   const playerRow = document.getElementById('players')
   const playerDivs = []
+
   players.forEach((player, index) => {
     const playerDiv = document.createElement('div')
     playerDiv.setAttribute('id', `player${index}-div`)
@@ -104,13 +100,6 @@ window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
-
-  const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  const dealerCardOne = document.createTextNode(game.dealer.showHand()[0].face)
-  const dealerCardTwo = document.createTextNode(game.dealer.showHand()[1].face)
-  dealerCardsDiv.appendChild(dealerCardOne)
-  dealerCardsDiv.appendChild(dealerCardTwo)
-
   appendCards()
 
   game.players.forEach((player, index) => {
@@ -133,6 +122,12 @@ function dealCards() {
 window.dealCards = dealCards
 
 function appendCards() {
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
+  dealerCardsDiv.innerHTML = ''
+  for(let i=0; i<game.dealer.handSize(); i++) {
+    const cardToAppend = document.createTextNode(game.dealer.showHand()[i].face)
+    dealerCardsDiv.appendChild(cardToAppend)
+  }
   game.players.forEach((player, index) => {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
     playerCardsDiv.innerHTML = ''
@@ -144,9 +139,7 @@ function appendCards() {
 }
 
 function drawCard(index) {
-  const card = game.deck.dealCard()
-  game.players[index].receiveCard(card)
-  document.getElementById(`player${index}-cards`)
+  game.players[index].receiveCard(game.deck.dealCard())
   appendCards()
 }
 window.drawCard = drawCard

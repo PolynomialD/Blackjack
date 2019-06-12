@@ -22,12 +22,14 @@
     <button id="createGameButton" onclick="createBlackJackGame()">Create Game</button>
     <ul id="playersList"></ul>
   </div>
-  <div id="tableDiv">
+  <div id="table-div" style="display:none">
     <div id="dealer" style="text-align:center">
-      <img src="../assets/avatars/dealer_avatar.png" style="height:80px;width:80px;">
+      <img id="dealer-img" src="../assets/avatars/dealer_avatar.png" style="height:80px;width:80px;">
       <div id="dealer-cards-div"></div>
     </div>
-    <div id="table" style="text-align:center"></div>
+    <div id="deck-div" style="text-align:center">
+      <img id="deck-img" src="../assets/cards/card_deck.png" style="height:80px;width:80px;">
+    </div>
     <div id="players" style="text-align:center"></div>
   </div>
 </body>
