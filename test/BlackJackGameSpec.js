@@ -114,9 +114,12 @@ describe('BlackJackGame', () => {
       const dealerHandValue = game.handValue(game.dealer.showHand())
 
       game.players.forEach((player, index) => {
-        const playerHandvalue = game.handValue(player.showHand())
-        if(playerHandvalue < 22 && playerHandvalue > dealerHandValue) {
+        const playerHandValue = game.handValue(player.showHand())
+        if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
           expectedChips.push(startingChips[index] + testBets[index])
+        } else if(playerHandValue < 22 && dealerHandValue > 21) {
+          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
+          player.receiveChips(player.removeBet())
         } else {
           expectedChips.push(startingChips[index] - testBets[index])
         }
@@ -125,6 +128,23 @@ describe('BlackJackGame', () => {
 
       game.players.forEach((player, index) => {
         player.chips.should.eql(expectedChips[index])
+      })
+    })
+
+    verify.it('should pay winners when the dealer goes bust', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['J',10],['Q',10],['K',10]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Bob', 1000)
+      game.addPlayer('Jim', 1000)
+      game.players.forEach((player) => {
+        player.placeBet(1000)
+      })
+      game.dealCards()
+      game.dealer.receiveCard(game.deck.dealCard())
+      game.payWinners()
+
+      game.players.forEach((player) => {
+        player.getChips().should.eql(2000)
       })
     })
 
