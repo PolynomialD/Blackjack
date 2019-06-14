@@ -54,6 +54,10 @@ class Player {
     }
   }
 
+  discardHands() {
+    this.hands = [new Hand()]
+  }
+
   receiveCard(card, handNumber = 1) {
     this.hands[handNumber-1].takeCard(card)     
   }

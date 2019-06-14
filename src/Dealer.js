@@ -23,6 +23,10 @@ class Dealer {
     return this.hand.showCards()
   }
 
+  discardHand() {
+    this.hand = new Hand()
+  }
+
   giveChips(amount) {
     this.chips -= amount
     return amount

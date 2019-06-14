@@ -89,11 +89,7 @@ function makeBet(index) {
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
-    const dealCardsButton = document.createElement('button')
-    dealCardsButton.setAttribute('id', 'dealCardsButton')
-    dealCardsButton.setAttribute('onclick', 'dealCards()')
-    dealCardsButton.innerHTML = 'Deal Cards'
-    dealer.appendChild(dealCardsButton)
+    document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
     betCount = 0
   }
 }
@@ -101,7 +97,7 @@ window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
-  appendCards()
+  displayAllCards()
 
   game.players.forEach((player, index) => {
     const drawCardButton = document.createElement('button')
@@ -121,11 +117,11 @@ function dealCards() {
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton)
   })
-  document.getElementById('dealCardsButton').setAttribute('style', 'display:none')
+  document.getElementById('dealCards-button').setAttribute('style', 'display:none')
 }
 window.dealCards = dealCards
 
-function appendCards() {
+function displayAllCards() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
@@ -144,7 +140,7 @@ function appendCards() {
 
 function drawCard(index) {
   game.players[index].receiveCard(game.deck.dealCard())
-  appendCards()
+  displayAllCards()
 }
 window.drawCard = drawCard
 
@@ -154,6 +150,7 @@ function stick(index) {
 
   if(index+1 === players.length) {
     playDealersHand()
+    document.getElementById('next-button').setAttribute('style', 'display:inline-block')
   } else {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
@@ -161,16 +158,13 @@ function stick(index) {
 }
 window.stick = stick
 
-function refreshChips() {
+function displayChips() {
   game.players.forEach((player, index) => {
-    console.log('AR dealer hand', game.dealer.showHand())
-    console.log(`AR player${index} hand`, player.showHand())
-    console.log(`AR player${index} chips`, player.getChips())
     document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
   })
 }
 
-function refreshBets() {
+function resetBets() {
   game.players.forEach((player, index) => {
     document.getElementById(`player${index}-bet-button-div`).innerHTML = ''
   })
@@ -178,11 +172,10 @@ function refreshBets() {
 
 function playDealersHand() {
   game.playDealersHand()
-  appendCards()
+  displayAllCards()
   game.payWinners()
-  console.log('after paywinners', game.players)
-  refreshChips()
-  refreshBets()
+  displayChips()
+  resetBets()
 }
 
 function createBlackJackGame() {
@@ -190,3 +183,15 @@ function createBlackJackGame() {
   game = new BlackJackGame(null, players)
 }
 window.createBlackJackGame = createBlackJackGame
+
+function nextRound() {
+  game.dealer.discardHand()
+  game.players.forEach((player) => {
+    player.discardHands()
+  })
+  displayAllCards()
+  document.getElementById('players-div').innerHTML = ''
+  document.getElementById('next-button').setAttribute('style', 'display:none')
+  setUpTable()
+}
+window.nextRound = nextRound
