@@ -161,6 +161,22 @@ function stick(index) {
 }
 window.stick = stick
 
+function refreshChips() {
+  game.players.forEach((player, index) => {
+    console.log(game.dealer.showHand())
+    console.log(player.showHand())
+    console.log(player.getChips())
+    document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
+  })
+}
+
+function playDealersHand() {
+  game.playDealersHand()
+  appendCards()
+  game.payWinners()
+  refreshChips()
+}
+
 function createBlackJackGame() {
   setUpTable()
   game = new BlackJackGame(null, players)
