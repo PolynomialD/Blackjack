@@ -103,7 +103,9 @@ window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
-  displayAllCards()
+  // displayAllCards()
+  displayDealerCard()
+  displayPlayerCards()
 
   game.players.forEach((player, index) => {
     const drawCardButton = document.createElement('button')
@@ -144,9 +146,31 @@ function displayAllCards() {
   })
 }
 
+function displayPlayerCards() {
+  game.players.forEach((player, index) => {
+    const playerCardsDiv = document.getElementById(`player${index}-cards`)
+    playerCardsDiv.innerHTML = ''
+    player.hands[0].cards.forEach((card, i ) => {
+      const cardToAppend = document.createTextNode(player.showHand()[i].face)
+    playerCardsDiv.appendChild(cardToAppend)
+    })
+  })
+}
+
+function displayDealerCard() {
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
+  const cardBack = document.createElement('img')
+  cardBack.setAttribute('src', '../assets/cards/card_back.png')
+  cardBack.setAttribute('style', 'height:20px')
+  cardBack.setAttribute('style', 'width:20px')
+  dealerCardsDiv.innerHTML = ''
+  dealerCardsDiv.appendChild(cardBack)
+  dealerCardsDiv.appendChild(document.createTextNode(game.dealer.showHand()[1].face))
+}
+
 function drawCard(index) {
   game.players[index].receiveCard(game.deck.dealCard())
-  displayAllCards()
+  displayPlayerCards()
 }
 window.drawCard = drawCard
 
@@ -168,12 +192,6 @@ window.stick = stick
 function displayChips() {
   game.players.forEach((player, index) => {
     document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
-  })
-}
-
-function resetBets() {
-  game.players.forEach((player, index) => {
-    document.getElementById(`player${index}-bet-button-div`).innerHTML = ''
   })
 }
 
