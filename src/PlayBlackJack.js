@@ -48,6 +48,10 @@ function setUpTable() {
     
     const playerCards = document.createElement('div')
     playerCards.setAttribute('id', `player${index}-cards`)
+
+    const playerHandValue = document.createElement('div')
+    playerHandValue.setAttribute('id', `player${index}-hand-value`)
+    playerHandValue.setAttribute('style', 'color:red')
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
@@ -63,6 +67,7 @@ function setUpTable() {
     playerDiv.appendChild(playerImage)
     playerDiv.appendChild(playerName)
     playerDiv.appendChild(playerCards)
+    playerDiv.appendChild(playerHandValue)
     playerDiv.appendChild(playerChips)
     playerDiv.appendChild(betInput)
     playerDiv.appendChild(betButtonDiv)
@@ -145,6 +150,7 @@ function drawCard(index) {
 window.drawCard = drawCard
 
 function stick(index) {
+  document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand())
   document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
   document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
 
@@ -172,6 +178,7 @@ function resetBets() {
 
 function playDealersHand() {
   game.playDealersHand()
+  document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   displayAllCards()
   game.payWinners()
   displayChips()
@@ -191,6 +198,7 @@ function nextRound() {
   })
   displayAllCards()
   document.getElementById('players-div').innerHTML = ''
+  document.getElementById('dealer-hand-value').innerHTML = ''
   document.getElementById('next-button').setAttribute('style', 'display:none')
   setUpTable()
 }
