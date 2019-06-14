@@ -9,8 +9,12 @@ class BlackJackGame {
     this.players = players || []
   }
 
-  createBlackJackDeck() {  
-    return new Deck(['♣','♦','♥','♠','♣','♦','♥','♠','♣','♦','♥','♠','♣','♦','♥','♠'])
+  createBlackJackDeck(decks = 4) {
+    const suits = []
+    for(decks; decks>0; decks--) {
+      suits.push('♣','♦','♥','♠')
+    }
+    return new Deck(suits)
   }
 
   dealCards(amountToDeal = 2) {
