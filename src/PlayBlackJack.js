@@ -112,7 +112,7 @@ function dealCards() {
 
     const stickButton = document.createElement('button')
     stickButton.setAttribute('id', `player${index}-stickButton`)
-    stickButton.setAttribute('onclick', 'stick()')
+    stickButton.setAttribute('onclick', `stick(${index})`)
     stickButton.innerHTML = 'Stick'
     if(index !== 0) stickButton.setAttribute('style', 'display:none')
 
@@ -147,6 +147,19 @@ function drawCard(index) {
   appendCards()
 }
 window.drawCard = drawCard
+
+function stick(index) {
+  document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
+  document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
+
+  if(index+1 === players.length) {
+    playDealersHand()
+  } else {
+    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
+    document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
+  }
+}
+window.stick = stick
 
 function createBlackJackGame() {
   setUpTable()
