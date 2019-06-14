@@ -163,10 +163,16 @@ window.stick = stick
 
 function refreshChips() {
   game.players.forEach((player, index) => {
-    console.log(game.dealer.showHand())
-    console.log(player.showHand())
-    console.log(player.getChips())
+    console.log('AR dealer hand', game.dealer.showHand())
+    console.log(`AR player${index} hand`, player.showHand())
+    console.log(`AR player${index} chips`, player.getChips())
     document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
+  })
+}
+
+function refreshBets() {
+  game.players.forEach((player, index) => {
+    document.getElementById(`player${index}-bet-button-div`).innerHTML = ''
   })
 }
 
@@ -174,7 +180,9 @@ function playDealersHand() {
   game.playDealersHand()
   appendCards()
   game.payWinners()
+  console.log('after paywinners', game.players)
   refreshChips()
+  refreshBets()
 }
 
 function createBlackJackGame() {
