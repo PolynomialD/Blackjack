@@ -5,7 +5,11 @@ const { app, BrowserWindow, Menu, ipcMain } = electron
 let mainWindow
 
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({})
+  mainWindow = new BrowserWindow({
+    width: 1000,
+    maxWidth: 1200,
+    maxHeight: 700
+  })
   mainWindow.loadURL(`file://${__dirname}/index.html`)
   const mainMenu = Menu.buildFromTemplate(menuTemplate)
   Menu.setApplicationMenu(mainMenu)
@@ -14,7 +18,6 @@ app.on('ready', () => {
     app.quit()
   })
 })
-
 
 const menuTemplate = [
   {

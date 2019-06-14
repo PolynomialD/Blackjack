@@ -37,10 +37,12 @@ function setUpTable() {
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
     playerImage.setAttribute('height', '50')
     playerImage.setAttribute('width', '50')
+
+    // todo betdiv
     
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
-    playerName.innerHTML = player.name //todo
+    playerName.innerHTML = player.name 
     
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
@@ -55,7 +57,7 @@ function setUpTable() {
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
-    
+    betInput.setAttribute('size', '10')  
     const betButtonDiv = document.createElement('div')
     betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
     const betButton = document.createElement('button')
@@ -65,9 +67,9 @@ function setUpTable() {
     betButtonDiv.appendChild(betButton)
     
     playerDiv.appendChild(playerImage)
-    playerDiv.appendChild(playerName)
     playerDiv.appendChild(playerCards)
     playerDiv.appendChild(playerHandValue)
+    playerDiv.appendChild(playerName)
     playerDiv.appendChild(playerChips)
     playerDiv.appendChild(betInput)
     playerDiv.appendChild(betButtonDiv)
@@ -88,8 +90,8 @@ function makeBet(index) {
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
-    betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
-    chips.innerHTML = `chips: ${game.players[index].getChips()}`
+    betButton.innerHTML = `${game.players[index].getBets()[0]}`
+    chips.innerHTML = `${game.players[index].getChips()}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
@@ -107,7 +109,7 @@ function dealCards() {
     const drawCardButton = document.createElement('button')
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
     drawCardButton.setAttribute('onclick', `drawCard(${index})`)
-    drawCardButton.innerHTML = 'Draw Card'
+    drawCardButton.innerHTML = 'Card'
     if(index !== 0) drawCardButton.setAttribute('style', 'display:none')
 
     const stickButton = document.createElement('button')
