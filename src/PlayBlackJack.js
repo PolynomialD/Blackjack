@@ -103,7 +103,6 @@ window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
-  // displayAllCards()
   displayDealerCard()
   displayPlayerCards()
 
@@ -129,30 +128,13 @@ function dealCards() {
 }
 window.dealCards = dealCards
 
-function displayAllCards() {
-  const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  dealerCardsDiv.innerHTML = ''
-  for(let i=0; i<game.dealer.handSize(); i++) {
-    const cardToAppend = document.createTextNode(game.dealer.showHand()[i].face)
-    dealerCardsDiv.appendChild(cardToAppend)
-  }
-  game.players.forEach((player, index) => {
-    const playerCardsDiv = document.getElementById(`player${index}-cards`)
-    playerCardsDiv.innerHTML = ''
-    player.hands[0].cards.forEach((card, i ) => {
-      const cardToAppend = document.createTextNode(player.showHand()[i].face)
-    playerCardsDiv.appendChild(cardToAppend)
-    })
-  })
-}
-
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
     playerCardsDiv.innerHTML = ''
     player.hands[0].cards.forEach((card, i ) => {
       const cardToAppend = document.createTextNode(player.showHand()[i].face)
-    playerCardsDiv.appendChild(cardToAppend)
+      playerCardsDiv.appendChild(cardToAppend)
     })
   })
 }
@@ -166,6 +148,16 @@ function displayDealerCard() {
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
   dealerCardsDiv.appendChild(document.createTextNode(game.dealer.showHand()[1].face))
+}
+
+function displayAllCards() {
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
+  dealerCardsDiv.innerHTML = ''
+  for(let i=0; i<game.dealer.handSize(); i++) {
+    const cardToAppend = document.createTextNode(game.dealer.showHand()[i].face)
+    dealerCardsDiv.appendChild(cardToAppend)
+  }
+  displayPlayerCards()
 }
 
 function drawCard(index) {
