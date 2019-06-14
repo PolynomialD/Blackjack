@@ -220,6 +220,7 @@ function playDealersHand() {
 function createBlackJackGame() {
   setUpTable()
   game = new BlackJackGame(null, players)
+  game.deck.shuffle()
 }
 window.createBlackJackGame = createBlackJackGame
 

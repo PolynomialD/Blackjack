@@ -4,9 +4,13 @@ const Player = require('./Player')
 
 class BlackJackGame {
   constructor (deck, players) {
-    this.deck = deck || new Deck()
+    this.deck = deck || this.createBlackJackDeck()
     this.dealer = new Dealer()
     this.players = players || []
+  }
+
+  createBlackJackDeck() {  
+    return new Deck(['♣','♦','♥','♠','♣','♦','♥','♠','♣','♦','♥','♠','♣','♦','♥','♠'])
   }
 
   dealCards(amountToDeal = 2) {
