@@ -6,20 +6,22 @@ let game
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
-  const player = new Player(name.value, chips.value)
-  name.value = ''
-  chips.value = ''
-  players.push(player)
-  const li = document.createElement('li')
-  li.setAttribute('style', 'list-style-type:none')
-  const nameNode = document.createTextNode(`${player.getName()}:  `)
-  const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
-  
-  li.appendChild(nameNode)
-  li.appendChild(chipsNode)
-  
-  document.getElementById('playersList').appendChild(li)
-  document.getElementById('createGameButton').setAttribute('style', 'display:inline-block') 
+  if(chips.value !== '') {
+    const player = new Player(name.value, chips.value)
+    name.value = ''
+    chips.value = ''
+    players.push(player)
+    const li = document.createElement('li')
+    li.setAttribute('style', 'list-style-type:none')
+    const nameNode = document.createTextNode(`${player.getName()}:  `)
+    const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
+    
+    li.appendChild(nameNode)
+    li.appendChild(chipsNode)
+    
+    document.getElementById('playersList').appendChild(li)
+    document.getElementById('createGameButton').setAttribute('style', 'display:inline-block')
+  } 
 }
 
 function setUpTable() {
