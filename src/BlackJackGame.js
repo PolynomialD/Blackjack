@@ -32,6 +32,8 @@ class BlackJackGame {
     return player
   }
 
+  // todo remove player
+
   getNumberOfPlayers() {
     return this.players.length
   }

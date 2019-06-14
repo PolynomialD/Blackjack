@@ -21,11 +21,10 @@ function addNewPlayer() {
   document.getElementById('playersList').appendChild(li)
   document.getElementById('createGameButton').setAttribute('style', 'display:inline-block') 
 }
-window.addNewPlayer = addNewPlayer
 
 function setUpTable() {
   document.getElementById('table-div').setAttribute('style', 'display:block')
-
+  document.getElementById('createGameForm').setAttribute('style', 'display:none')
   const playerRow = document.getElementById('players-div')
   const playerDivs = []
 
@@ -41,11 +40,11 @@ function setUpTable() {
     
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
-    playerName.innerHTML = player.name
+    playerName.innerHTML = player.name //todo
     
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
-    playerChips.innerHTML = `chips: ${player.chips}`
+    playerChips.innerHTML = `chips: ${player.getChips()}`
     
     const playerCards = document.createElement('div')
     playerCards.setAttribute('id', `player${index}-cards`)
@@ -78,7 +77,6 @@ function setUpTable() {
   playerDivs.reverse().forEach((playerDiv) => {
     playerRow.appendChild(playerDiv)
   })
-  document.getElementById('createGameForm').innerHTML = ''
 }
 
 let betCount = 0
@@ -99,7 +97,6 @@ function makeBet(index) {
     betCount = 0
   }
 }
-window.makeBet = makeBet
 
 function dealCards() {
   game.dealCards()
@@ -126,7 +123,6 @@ function dealCards() {
   })
   document.getElementById('dealCards-button').setAttribute('style', 'display:none')
 }
-window.dealCards = dealCards
 
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
@@ -154,8 +150,7 @@ function displayAllCards() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
-    const cardToAppend = document.createTextNode(game.dealer.showHand()[i].face)
-    dealerCardsDiv.appendChild(cardToAppend)
+    dealerCardsDiv.appendChild(document.createTextNode(game.dealer.showHand()[i].face))
   }
   displayPlayerCards()
 }
@@ -164,7 +159,6 @@ function drawCard(index) {
   game.players[index].receiveCard(game.deck.dealCard())
   displayPlayerCards()
 }
-window.drawCard = drawCard
 
 function stick(index) {
   document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand())
@@ -179,7 +173,6 @@ function stick(index) {
     document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
   }
 }
-window.stick = stick
 
 function displayChips() {
   game.players.forEach((player, index) => {
@@ -199,12 +192,8 @@ function getPlayersChips() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const betDiv =  document.getElementById(`player${index}-bet-button-div`)
-    if(difference > 0) {
-      betDiv.innerHTML = `Won: ${difference}`
-    } else {
-      betDiv.innerHTML = `Lost: ${difference}`
-    }
+    const betDiv =  document.getElementById(`player${index}-bet-button-div`)   
+    difference > 0 ? betDiv.innerHTML = `Won: ${difference}` : betDiv.innerHTML = `Lost: ${difference}`
   })
 }
 
@@ -223,17 +212,28 @@ function createBlackJackGame() {
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
 }
-window.createBlackJackGame = createBlackJackGame
 
 function nextRound() {
   game.dealer.discardHand()
   game.players.forEach((player) => {
     player.discardHands()
   })
-  displayAllCards()
+  game.players.forEach((player, index) => {
+    if(player.getChips() === 0) {
+      game.players.splice(index,1)
+    }
+  })
+  document.getElementById('dealer-cards-div').innerHTML = ''
   document.getElementById('players-div').innerHTML = ''
   document.getElementById('dealer-hand-value').innerHTML = ''
   document.getElementById('next-button').setAttribute('style', 'display:none')
   setUpTable()
 }
+
+window.makeBet = makeBet
+window.dealCards = dealCards
+window.drawCard = drawCard
+window.stick = stick
+window.createBlackJackGame = createBlackJackGame
+window.addNewPlayer = addNewPlayer
 window.nextRound = nextRound
