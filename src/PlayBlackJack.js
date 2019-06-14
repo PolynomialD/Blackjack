@@ -11,6 +11,7 @@ function addNewPlayer() {
   chips.value = ''
   players.push(player)
   const li = document.createElement('li')
+  li.setAttribute('style', 'list-style-type:none')
   const nameNode = document.createTextNode(`${player.getName()}:  `)
   const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
   
@@ -176,13 +177,34 @@ function resetBets() {
   })
 }
 
+function getPlayersChips() {
+  const playersChips = []
+    game.players.forEach((player) => {
+      const chips = player.getChips() + player.getBets()[0]
+      playersChips.push(chips)
+    })
+    return playersChips
+}
+
+function showChipsDiff(playersChips) {
+  game.players.forEach((player, index) => {
+    const difference = player.getChips() - playersChips[index]
+    if(difference > 0) {
+      document.getElementById(`player${index}-bet-button-div`).innerHTML = `Won: ${difference}`
+    } else {
+      document.getElementById(`player${index}-bet-button-div`).innerHTML = `Lost: ${difference}`
+    }
+  })
+}
+
 function playDealersHand() {
   game.playDealersHand()
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   displayAllCards()
+  const playersCurrentChips = getPlayersChips()
   game.payWinners()
   displayChips()
-  resetBets()
+  showChipsDiff(playersCurrentChips)
 }
 
 function createBlackJackGame() {
