@@ -92,8 +92,8 @@ function makeBet(index) {
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
-    betButton.innerHTML = `${game.players[index].getBets()[0]}`
-    chips.innerHTML = `${game.players[index].getChips()}`
+    betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
+    chips.innerHTML = `chips: ${game.players[index].getChips()}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
