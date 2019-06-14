@@ -17,7 +17,8 @@ function addNewPlayer() {
   li.appendChild(nameNode)
   li.appendChild(chipsNode)
   
-  document.getElementById('playersList').appendChild(li) 
+  document.getElementById('playersList').appendChild(li)
+  document.getElementById('createGameButton').setAttribute('style', 'display:inline-block') 
 }
 window.addNewPlayer = addNewPlayer
 
