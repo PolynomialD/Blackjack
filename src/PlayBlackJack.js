@@ -25,7 +25,7 @@ window.addNewPlayer = addNewPlayer
 function setUpTable() {
   document.getElementById('table-div').setAttribute('style', 'display:block')
 
-  const playerRow = document.getElementById('players')
+  const playerRow = document.getElementById('players-div')
   const playerDivs = []
 
   players.forEach((player, index) => {
@@ -108,11 +108,14 @@ function dealCards() {
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
     drawCardButton.setAttribute('onclick', `drawCard(${index})`)
     drawCardButton.innerHTML = 'Draw Card'
+    if(index !== 0) drawCardButton.setAttribute('style', 'display:none')
 
     const stickButton = document.createElement('button')
     stickButton.setAttribute('id', `player${index}-stickButton`)
     stickButton.setAttribute('onclick', 'stick()')
     stickButton.innerHTML = 'Stick'
+    if(index !== 0) stickButton.setAttribute('style', 'display:none')
+
 
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
