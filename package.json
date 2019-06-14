@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "prestart": "scripts/test-with-coverage.sh webpack",
+    "prestart": "scripts/test-with-coverage.sh; webpack",
     "start": "electron .",
     "test": "scripts/test-with-coverage.sh"
   },
