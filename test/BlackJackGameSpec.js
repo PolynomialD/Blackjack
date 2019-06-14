@@ -6,7 +6,7 @@ function createTestGame(players = 8) {
   const testGame = new BlackJackGame()
   for(let i=0; i<players; i++) {
     const name = Gen.stringWithLength(6)()
-    const chips = Gen.integerBetween(0,9000)()
+    const chips = Gen.integerBetween(1,9000)()
     testGame.addPlayer(name,chips)
   }
   return testGame
@@ -15,7 +15,7 @@ function createTestGame(players = 8) {
 function createTestBets(game) {
   const testBets = new Array()
   game.players.forEach((player) => {
-    const bet = Gen.integerBetween(0,player.getChips())()
+    const bet = Gen.integerBetween(1,player.getChips())()
     testBets.push(bet)
   })
   return testBets
@@ -118,14 +118,13 @@ describe('BlackJackGame', () => {
         if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
           expectedChips.push(startingChips[index] + testBets[index])
         } else if(playerHandValue < 22 && dealerHandValue > 21) {
-          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
-          player.receiveChips(player.removeBet())
+          expectedChips.push(startingChips[index] + testBets[index])
         } else {
           expectedChips.push(startingChips[index] - testBets[index])
         }
       })
       game.payWinners()
-
+   
       game.players.forEach((player, index) => {
         player.chips.should.eql(expectedChips[index])
       })
@@ -168,4 +167,5 @@ describe('BlackJackGame', () => {
       bob.chips.should.eql(11000)
     })
   })
+
 })
