@@ -196,13 +196,14 @@ function getPlayersChips() {
     return playersChips
 }
 
-function showChipsDiff(playersChips) {
+function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
+    const betDiv =  document.getElementById(`player${index}-bet-button-div`)
     if(difference > 0) {
-      document.getElementById(`player${index}-bet-button-div`).innerHTML = `Won: ${difference}`
+      betDiv.innerHTML = `Won: ${difference}`
     } else {
-      document.getElementById(`player${index}-bet-button-div`).innerHTML = `Lost: ${difference}`
+      betDiv.innerHTML = `Lost: ${difference}`
     }
   })
 }
@@ -214,7 +215,7 @@ function playDealersHand() {
   const playersCurrentChips = getPlayersChips()
   game.payWinners()
   displayChips()
-  showChipsDiff(playersCurrentChips)
+  showChipsDifference(playersCurrentChips)
 }
 
 function createBlackJackGame() {
