@@ -39,7 +39,8 @@ class BlackJackGame {
   }
 
   handValue(hand) {
-    return hand.sort((a, b) => a.value - b.value).reduce((total, card) => {
+    const clone = JSON.parse(JSON.stringify(hand))
+    return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
       if(card.face.includes('A') && total + card.value > 21) {
         return total + 1
       }
