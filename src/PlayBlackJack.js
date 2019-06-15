@@ -218,6 +218,7 @@ function createBlackJackGame() {
   setUpTable()
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
+  console.log(game.deck)
 }
 
 function nextRound() {

@@ -5,6 +5,7 @@ class Deck {
       ['2', 2],['3',3],['4', 4],['5', 5],['6', 6],['7', 7],['8', 8],['9', 9],['10', 10],['J', 10],['Q', 10],['K', 10],['A', 11]
     ]
     this.cards = this.buildCards()
+    this.dealtCards = []
   }
 
   buildCards () {
@@ -29,15 +30,21 @@ class Deck {
   }
 
   dealCard () {
+    this.dealtCards.push(this.cards[0])
     return this.cards.shift()
   }
 
   dealCards (amount) {
     const cardsToDeal = []
     for(amount; amount>0; amount--) {
+      this.dealtCards.push(this.cards[0])
       cardsToDeal.push(this.cards.shift())
     }
     return cardsToDeal
+  }
+
+  showDealtCards () {
+    return this.dealtCards
   }
 
   shuffle () {
