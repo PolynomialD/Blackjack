@@ -14,7 +14,7 @@ function addNewPlayer() {
     const li = document.createElement('li')
     li.setAttribute('style', 'list-style-type:none')
     const nameNode = document.createTextNode(`${player.getName()}:  `)
-    const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
+    const chipsNode = document.createTextNode(`chips:  ${player.getChips()}`)
     
     li.appendChild(nameNode)
     li.appendChild(chipsNode)
@@ -69,10 +69,10 @@ function setUpTable() {
     betButtonDiv.appendChild(betButton)
     
     playerDiv.appendChild(playerImage)
-    playerDiv.appendChild(playerCards)
-    playerDiv.appendChild(playerHandValue)
     playerDiv.appendChild(playerName)
     playerDiv.appendChild(playerChips)
+    playerDiv.appendChild(playerCards)
+    playerDiv.appendChild(playerHandValue)
     playerDiv.appendChild(betInput)
     playerDiv.appendChild(betButtonDiv)
     
@@ -120,10 +120,19 @@ function dealCards() {
     stickButton.innerHTML = 'Stick'
     if(index !== 0) stickButton.setAttribute('style', 'display:none')
 
+    const splitButton = document.createElement('button')
+    splitButton.setAttribute('id', `player${index}-splitButton`)
+    splitButton.setAttribute('onclick', `splitCards(${index})`)
+    splitButton.innerHTML = 'Split'
+    if(index !== 0) splitButton.setAttribute('style', 'display:none')
 
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton)
+
+    if(player.hands[0].isSplittable()) {
+      playerDiv.appendChild(splitButton)
+    }
   })
   document.getElementById('dealCards-button').setAttribute('style', 'display:none')
 }
@@ -178,6 +187,7 @@ function stick(index) {
   } else {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
+    document.getElementById(`player${index+1}-splitButton`).setAttribute('style', 'display:block')
   }
 }
 
