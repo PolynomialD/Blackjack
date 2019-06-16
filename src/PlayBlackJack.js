@@ -228,7 +228,7 @@ function nextRound() {
   })
   game.players.forEach((player, index) => {
     if(player.getChips() === 0) {
-      game.players.splice(index,1)
+      game.removePlayer(index)
     }
   })
   document.getElementById('dealer-cards-div').innerHTML = ''
