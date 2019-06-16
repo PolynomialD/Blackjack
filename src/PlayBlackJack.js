@@ -168,9 +168,9 @@ function displayAllCards() {
   displayPlayerCards()
 }
 
-function drawCard(index) {
-  game.players[index].receiveCard(game.deck.dealCard())
-  if(game.handValue(game.players[index].showHand()) > 21) {
+function drawCard(index, hand) {
+  game.players[index].receiveCard(game.deck.dealCard(), hand)
+  if(game.handValue(game.players[index].showHand(hand)) > 21) {
     stick(index)
   }
   displayPlayerCards()
@@ -187,8 +187,41 @@ function stick(index) {
   } else {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
-    document.getElementById(`player${index+1}-splitButton`).setAttribute('style', 'display:block')
+    if(document.getElementById(`player${index+1}-splitButton`)) {
+      document.getElementById(`player${index+1}-splitButton`).setAttribute('style', 'display:block')
+    }
   }
+}
+
+function splitCards(index) {
+  game.players[index].splitHand()
+  game.players[index].receiveCard(game.deck.dealCard())
+  game.players[index].receiveCard(game.deck.dealCard(), 2)
+
+  const playerCards = document.createElement('div')
+  playerCards.setAttribute('id', `player${index}-split-cards`)
+
+  const playerHandValue = document.createElement('div')
+  playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
+  playerHandValue.setAttribute('style', 'color:red')
+  
+  const drawCardButton = document.createElement('button')
+  drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
+  drawCardButton.setAttribute('onclick', `drawCard(${index})`)
+  drawCardButton.innerHTML = 'Card'
+
+  const stickButton = document.createElement('button')
+  stickButton.setAttribute('id', `player${index}-split-stickButton`)
+  stickButton.setAttribute('onclick', `stick(${index})`)
+  stickButton.innerHTML = 'Stick'
+
+  const chipsDiv = document.getElementById(`player${index}-chips`)
+  chipsDiv.appendChild(playerCards)
+  chipsDiv.appendChild(playerHandValue)
+  chipsDiv.appendChild(drawCardButton)
+  chipsDiv.appendChild(stickButton)
+
+  displayPlayerCards()
 }
 
 function displayChips() {
@@ -248,6 +281,7 @@ function nextRound() {
   setUpTable()
 }
 
+window.splitCards = splitCards
 window.makeBet = makeBet
 window.dealCards = dealCards
 window.drawCard = drawCard
