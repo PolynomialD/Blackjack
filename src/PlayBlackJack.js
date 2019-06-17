@@ -184,17 +184,32 @@ function drawCard(index, hand) {
   displayPlayerCards()
 }
 
-function stick(index) {
-  document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand())
-  document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
-  document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
-
-  if(index+1 === players.length) {
+let stickCounter = 0
+function stick(index, hand = 1) {
+  const handSize = game.players[index].hands.length
+  console.log('handsize', handSize)
+  if(hand === 1) {
+    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand())
+    document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
+    document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
+    stickCounter++
+    console.log('counter1', stickCounter)
+  }
+  if(hand === 2) {
+    document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
+    document.getElementById(`player${index}-split-drawCardButton`).setAttribute('style', 'display:none')
+    document.getElementById(`player${index}-split-stickButton`).setAttribute('style', 'display:none')
+    stickCounter++
+    console.log('counter2', stickCounter)
+  }
+  if(index+1 === players.length && stickCounter === handSize) {
     playDealersHand()
     document.getElementById('next-button').setAttribute('style', 'display:inline-block')
-  } else {
+    stickCounter = 0
+  } else if(stickCounter === handSize) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
+    stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
       document.getElementById(`player${index+1}-splitButton`).setAttribute('style', 'display:block')
     }
@@ -224,7 +239,7 @@ function splitCards(index) {
 
   const stickButton = document.createElement('button')
   stickButton.setAttribute('id', `player${index}-split-stickButton`)
-  stickButton.setAttribute('onclick', `stick(${index})`)
+  stickButton.setAttribute('onclick', `stick(${index},2)`)
   stickButton.innerHTML = 'Stick'
 
   const chipsDiv = document.getElementById(`player${index}-chips`)
