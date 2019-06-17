@@ -186,6 +186,9 @@ function drawCard(index, hand) {
 
 let stickCounter = 0
 function stick(index, hand = 1) {
+  if(document.getElementById(`player${index}-splitButton`)) {
+  document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
+  }
   const handSize = game.players[index].hands.length
   if(hand === 1) {
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
