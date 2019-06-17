@@ -56,7 +56,6 @@ function setUpTable() {
 
     const playerHandValue = document.createElement('div')
     playerHandValue.setAttribute('id', `player${index}-hand-value`)
-    playerHandValue.setAttribute('style', 'color:red')
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
@@ -229,7 +228,6 @@ function splitCards(index) {
 
   const playerHandValue = document.createElement('div')
   playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
-  playerHandValue.setAttribute('style', 'color:red')
 
   const playerBetDiv = document.createElement('div')
   playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
@@ -290,10 +288,47 @@ function refreshChipsTotals() {
   })
 }
 
+function setHandValueColours() {
+  const dealerHandValue = game.handValue(game.dealer.showHand())
+  game.players.forEach((player, index) => {
+    const valueDiv = document.getElementById(`player${index}-hand-value`)
+    const playerHandValue = game.handValue(player.hands[0].showCards())     
+    if(playerHandValue === 21 && player.hands[0].size() === 2){
+      valueDiv.setAttribute('style', 'color:yellow')
+    } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
+      valueDiv.setAttribute('style', 'color:yellow')
+    } else if(playerHandValue < 22 && dealerHandValue > 21) {
+      valueDiv.setAttribute('style', 'color:yellow')
+    } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
+      valueDiv.setAttribute('style', 'color:blue')
+    } else {
+      valueDiv.setAttribute('style', 'color:red')
+    }    
+  })
+  game.players.forEach((player, index) => {
+    if(player.hands.length === 2) {
+      const valueDiv = document.getElementById(`player${index}-split-hand-value`)
+      const playerHandValue = game.handValue(player.hands[1].showCards())     
+      if(playerHandValue === 21 && player.hands[1].size() === 2){
+        valueDiv.setAttribute('style', 'color:yellow')
+      } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
+        valueDiv.setAttribute('style', 'color:yellow')
+      } else if(playerHandValue < 22 && dealerHandValue > 21) {
+        valueDiv.setAttribute('style', 'color:yellow')
+      } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
+        valueDiv.setAttribute('style', 'color:blue')
+      } else {
+        valueDiv.setAttribute('style', 'color:red')
+      }
+    }
+  })
+}
+
 function playDealersHand() {
   game.playDealersHand()
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   displayAllCards()
+  setHandValueColours()  
   const playersChipsAndBets = getPlayersChipsAndBets()
   game.payWinners()
   refreshChipsTotals()
