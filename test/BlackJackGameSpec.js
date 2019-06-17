@@ -119,6 +119,8 @@ describe('BlackJackGame', () => {
           expectedChips.push(startingChips[index] + testBets[index])
         } else if(playerHandValue < 22 && dealerHandValue > 21) {
           expectedChips.push(startingChips[index] + testBets[index])
+        } else if(playerHandValue === dealerHandValue) {
+          expectedChips.push(startingChips[index])
         } else {
           expectedChips.push(startingChips[index] - testBets[index])
         }
@@ -165,6 +167,22 @@ describe('BlackJackGame', () => {
       game.payWinners()
       jim.chips.should.eql(10000)
       bob.chips.should.eql(11000)
+    })
+
+    verify.it('should pay 1.5 for a blackjack', () => {
+      const deck = new Deck(['♣', '♦'],[['A',11],['K',10],['Q',10],['J',10]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Bob', 9000)
+      game.addPlayer('Jim', 9000)
+      const bob = game.players[0]
+      const jim = game.players[1]
+
+      jim.placeBet(1000)
+      bob.placeBet(1000)
+      game.dealCards()
+      game.payWinners()
+      bob.chips.should.eql(11500)
+      jim.chips.should.eql(11500)
     })
   })
 
