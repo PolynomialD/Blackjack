@@ -187,20 +187,17 @@ function drawCard(index, hand) {
 let stickCounter = 0
 function stick(index, hand = 1) {
   const handSize = game.players[index].hands.length
-  console.log('handsize', handSize)
   if(hand === 1) {
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
     document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
     document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
     stickCounter++
-    console.log('counter1', stickCounter)
   }
   if(hand === 2) {
     document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
     document.getElementById(`player${index}-split-drawCardButton`).setAttribute('style', 'display:none')
     document.getElementById(`player${index}-split-stickButton`).setAttribute('style', 'display:none')
     stickCounter++
-    console.log('counter2', stickCounter)
   }
   if(index+1 === players.length && stickCounter === handSize) {
     playDealersHand()
