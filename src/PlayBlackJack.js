@@ -102,6 +102,7 @@ function makeBet(index) {
 }
 
 function dealCards() {
+  document.getElementById('hint-text').innerHTML = ''
   game.dealCards()
   displayDealerCard()
   displayPlayerCards()
@@ -356,9 +357,24 @@ function nextRound() {
   document.getElementById('players-div').innerHTML = ''
   document.getElementById('dealer-hand-value').innerHTML = ''
   document.getElementById('next-button').setAttribute('style', 'display:none')
+  document.getElementById('hint-button').setAttribute('style', 'display:block')
   setUpTable()
 }
 
+function displayTheCount() {
+  let count = 0
+  game.deck.dealtCards.forEach((card) => {
+    if(card.value < 7) {
+      count++
+    } else if(card.value > 9) {
+      count--
+    }
+  })
+  const hintText = document.getElementById('hint-text')
+  hintText.innerHTML = `The Count Is ${count}`
+}
+
+window.displayTheCount = displayTheCount
 window.splitCards = splitCards
 window.makeBet = makeBet
 window.dealCards = dealCards

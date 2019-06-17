@@ -6,10 +6,18 @@
   <script src='../dist/bundle.js'></script>
 </head>
 <body style="background-color:green">
-  <nav> 
-     <a href="../index.html">Back To Menu</a>
+  <nav id="nav"> 
+    <a href="../index.html">Back To Menu</a>
+    <div style="float:right">
+      <button id="hint-button" onclick="displayTheCount()" style="display:none">Hint</button>
+    </div>
   </nav>
-    <h1 style="text-align:center">&spades;&hearts; BlackJack &clubs;&diams;</h1>
+  <div id="hint-text" style="float:right"></div>
+  <div>
+    <header>
+      <h1 style="text-align:center">&spades;&hearts; BlackJack &clubs;&diams;</h1>
+    </header>
+  </div>
   <div id="createGameForm" style="text-align:center">
     <h2 style="text-align:center">Create Game</h2>
     <div>
