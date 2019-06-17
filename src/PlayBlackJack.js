@@ -39,16 +39,14 @@ function setUpTable() {
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
     playerImage.setAttribute('height', '50')
     playerImage.setAttribute('width', '50')
-
-    // todo betdiv
-    
+ 
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
     playerName.innerHTML = player.name 
     
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
-    playerChips.innerHTML = `chips: ${player.getChips()}`
+    playerChips.innerText = `chips: ${player.getChips()}`
     
     const playerCards = document.createElement('div')
     playerCards.setAttribute('id', `player${index}-cards`)
@@ -219,6 +217,9 @@ function splitCards(index) {
   game.players[index].receiveCard(game.deck.dealCard(), 2)
   betCount++
 
+  const chipsDiv = document.getElementById(`player${index}-chips`)
+  chipsDiv.innerText = `chips: ${game.players[index].getChips()}`
+
   const playerCards = document.createElement('div')
   playerCards.setAttribute('id', `player${index}-split-cards`)
 
@@ -240,7 +241,6 @@ function splitCards(index) {
   stickButton.setAttribute('onclick', `stick(${index},2)`)
   stickButton.innerHTML = 'Stick'
 
-  const chipsDiv = document.getElementById(`player${index}-chips`)
   chipsDiv.appendChild(playerCards)
   chipsDiv.appendChild(playerHandValue)
   chipsDiv.appendChild(playerBetDiv)
@@ -249,12 +249,6 @@ function splitCards(index) {
 
   document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
   displayPlayerCards()
-}
-
-function displayChips() {
-  game.players.forEach((player, index) => { // todo
-    document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
-  })
 }
 
 function getPlayersChipsAndBets() {
@@ -288,7 +282,6 @@ function playDealersHand() {
   displayAllCards()
   const playersCurrentChips = getPlayersChipsAndBets()
   game.payWinners()
-  displayChips()
   showChipsDifference(playersCurrentChips)
 }
 
