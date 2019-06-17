@@ -179,7 +179,7 @@ function displayAllCards() {
 function drawCard(index, hand) {
   game.players[index].receiveCard(game.deck.dealCard(), hand)
   if(game.handValue(game.players[index].showHand(hand)) > 21) {
-    stick(index)
+    stick(index, hand)
   }
   displayPlayerCards()
 }
