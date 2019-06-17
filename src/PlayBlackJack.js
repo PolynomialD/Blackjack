@@ -189,7 +189,7 @@ function stick(index, hand = 1) {
   const handSize = game.players[index].hands.length
   console.log('handsize', handSize)
   if(hand === 1) {
-    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand())
+    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
     document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
     document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
     stickCounter++
@@ -220,6 +220,7 @@ function splitCards(index) {
   game.players[index].splitHand()
   game.players[index].receiveCard(game.deck.dealCard())
   game.players[index].receiveCard(game.deck.dealCard(), 2)
+  betCount++
 
   const playerCards = document.createElement('div')
   playerCards.setAttribute('id', `player${index}-split-cards`)
@@ -254,7 +255,7 @@ function splitCards(index) {
 }
 
 function displayChips() {
-  game.players.forEach((player, index) => {
+  game.players.forEach((player, index) => { // todo
     document.getElementById(`player${index}-chips`).innerHTML = `chips: ${player.getChips()}`
   })
 }
@@ -262,7 +263,9 @@ function displayChips() {
 function getPlayersChips() {
   const playersChips = []
     game.players.forEach((player) => {
-      const chips = player.getChips() + player.getBets()[0]
+      const chips = player.getChips() + player.getBets().reduce((total,number) => {
+        return total + number
+      })
       playersChips.push(chips)
     })
     return playersChips
