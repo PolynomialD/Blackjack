@@ -98,6 +98,7 @@ function makeBet(index) {
     document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
     betCount = 0
   }
+  console.log(betCount)
   refreshChipsTotals()
 }
 
@@ -220,7 +221,6 @@ function splitCards(index) {
   game.players[index].splitHand()
   game.players[index].receiveCard(game.deck.dealCard())
   game.players[index].receiveCard(game.deck.dealCard(), 2)
-  betCount++
 
   refreshChipsTotals()
 
@@ -370,8 +370,10 @@ function displayTheCount() {
       count--
     }
   })
+  const cardsInDeck = game.deck.cards.length
+  const cardsTotal = game.deck.dealtCards.length + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  hintText.innerHTML = `The Count Is ${count}`
+  hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
 }
 
 window.displayTheCount = displayTheCount
