@@ -59,7 +59,9 @@ function setUpTable() {
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
-    betInput.setAttribute('size', '10')  
+    betInput.setAttribute('type', 'number')
+    betInput.setAttribute('step', '500')
+    betInput.setAttribute('value', '1000')
     const betButtonDiv = document.createElement('div')
     betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
     const betButton = document.createElement('button')
@@ -98,7 +100,6 @@ function makeBet(index) {
     document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
     betCount = 0
   }
-  console.log(betCount)
   refreshChipsTotals()
 }
 
