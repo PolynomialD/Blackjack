@@ -145,6 +145,14 @@ function displayPlayerCards() {
       const cardToAppend = document.createTextNode(player.showHand()[i].face)
       playerCardsDiv.appendChild(cardToAppend)
     })
+    if(document.getElementById(`player${index}-split-cards`)) {
+      const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
+      playerCardsSplitDiv.innerHTML = ''
+      player.hands[1].cards.forEach((card, i ) => {
+        const cardToAppend = document.createTextNode(player.showHand(2)[i].face)
+        playerCardsSplitDiv.appendChild(cardToAppend)
+      })
+    }
   })
 }
 
@@ -204,10 +212,14 @@ function splitCards(index) {
   const playerHandValue = document.createElement('div')
   playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
   playerHandValue.setAttribute('style', 'color:red')
+
+  const playerBetDiv = document.createElement('div')
+  playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
+  playerBetDiv.innerHTML = `bet: ${game.players[index].getBets()[0]}`
   
   const drawCardButton = document.createElement('button')
   drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
-  drawCardButton.setAttribute('onclick', `drawCard(${index})`)
+  drawCardButton.setAttribute('onclick', `drawCard(${index},2)`)
   drawCardButton.innerHTML = 'Card'
 
   const stickButton = document.createElement('button')
@@ -218,9 +230,11 @@ function splitCards(index) {
   const chipsDiv = document.getElementById(`player${index}-chips`)
   chipsDiv.appendChild(playerCards)
   chipsDiv.appendChild(playerHandValue)
+  chipsDiv.appendChild(playerBetDiv)
   chipsDiv.appendChild(drawCardButton)
   chipsDiv.appendChild(stickButton)
 
+  document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
   displayPlayerCards()
 }
 
