@@ -257,7 +257,7 @@ function displayChips() {
   })
 }
 
-function getPlayersChips() {
+function getPlayersChipsAndBets() {
   const playersChips = []
     game.players.forEach((player) => {
       const chips = player.getChips() + player.getBets().reduce((total,number) => {
@@ -271,8 +271,14 @@ function getPlayersChips() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const betDiv =  document.getElementById(`player${index}-bet-button-div`)   
-    difference > 0 ? betDiv.innerHTML = `Won: ${difference}` : betDiv.innerHTML = `Lost: ${difference}`
+    const betDiv =  document.getElementById(`player${index}-bet-button-div`)
+    if(difference < 0) {
+      betDiv.innerHTML = `Lost: ${difference}`
+    } else if(difference > 0) {
+      betDiv.innerHTML = `Won: ${difference}`
+    } else {
+      betDiv.innerHTML = 'Break Even'
+    }
   })
 }
 
@@ -280,7 +286,7 @@ function playDealersHand() {
   game.playDealersHand()
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   displayAllCards()
-  const playersCurrentChips = getPlayersChips()
+  const playersCurrentChips = getPlayersChipsAndBets()
   game.payWinners()
   displayChips()
   showChipsDifference(playersCurrentChips)
