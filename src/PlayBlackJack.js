@@ -44,9 +44,12 @@ function setUpTable() {
     playerName.setAttribute('id', `player${index}-name`)
     playerName.innerHTML = player.name 
     
+    const playerChipsText =  document.createElement('div')
+    playerChipsText.setAttribute('id', `player${index}-chips-text`)
+    playerChipsText.innerHTML = `${player.getChips()}`
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
-    playerChips.innerText = `chips: ${player.getChips()}`
+    playerChips.appendChild(playerChipsText)
     
     const playerCards = document.createElement('div')
     playerCards.setAttribute('id', `player${index}-cards`)
@@ -85,19 +88,18 @@ let betCount = 0
 function makeBet(index) {
   const betInput = document.getElementById(`player${index}-bet-input`)
   const betButton = document.getElementById(`player${index}-bet-button-div`)
-  const chips = document.getElementById(`player${index}-chips`)
 
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
     betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
-    chips.innerHTML = `chips: ${game.players[index].getChips()}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
     document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
     betCount = 0
   }
+  refreshChipsTotals()
 }
 
 function dealCards() {
@@ -217,8 +219,7 @@ function splitCards(index) {
   game.players[index].receiveCard(game.deck.dealCard(), 2)
   betCount++
 
-  const chipsDiv = document.getElementById(`player${index}-chips`)
-  chipsDiv.innerText = `chips: ${game.players[index].getChips()}`
+  refreshChipsTotals()
 
   const playerCards = document.createElement('div')
   playerCards.setAttribute('id', `player${index}-split-cards`)
@@ -241,6 +242,7 @@ function splitCards(index) {
   stickButton.setAttribute('onclick', `stick(${index},2)`)
   stickButton.innerHTML = 'Stick'
 
+  const chipsDiv = document.getElementById(`player${index}-chips`)
   chipsDiv.appendChild(playerCards)
   chipsDiv.appendChild(playerHandValue)
   chipsDiv.appendChild(playerBetDiv)
@@ -266,13 +268,22 @@ function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
     const betDiv =  document.getElementById(`player${index}-bet-button-div`)
+    const playerDiffDiv = document.createElement('div')
     if(difference < 0) {
-      betDiv.innerHTML = `Lost: ${difference}`
+      playerDiffDiv.innerHTML = `Lost: ${difference}`
     } else if(difference > 0) {
-      betDiv.innerHTML = `Won: ${difference}`
+      playerDiffDiv.innerHTML = `Won: ${difference}`
     } else {
-      betDiv.innerHTML = 'Break Even'
+      playerDiffDiv.innerHTML = 'Break Even'
     }
+    betDiv.appendChild(playerDiffDiv)
+  })
+}
+
+function refreshChipsTotals() {
+  game.players.forEach((player, index) => {
+    const chipsDivText = document.getElementById(`player${index}-chips-text`)
+  chipsDivText.innerHTML = `${player.getChips()}`
   })
 }
 
@@ -280,9 +291,10 @@ function playDealersHand() {
   game.playDealersHand()
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   displayAllCards()
-  const playersCurrentChips = getPlayersChipsAndBets()
+  const playersChipsAndBets = getPlayersChipsAndBets()
   game.payWinners()
-  showChipsDifference(playersCurrentChips)
+  refreshChipsTotals()
+  showChipsDifference(playersChipsAndBets)
 }
 
 function createBlackJackGame() {
