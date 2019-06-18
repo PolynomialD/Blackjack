@@ -144,14 +144,20 @@ function displayPlayerCards() {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
     playerCardsDiv.innerHTML = ''
     player.hands[0].cards.forEach((card, i ) => {
-      const cardToAppend = document.createTextNode(player.showHand()[i].face)
+      const cardToAppend = document.createElement('img')
+      cardToAppend.setAttribute('src', `${player.showHand()[i].image}`)
+      cardToAppend.setAttribute('height', '80')
+      cardToAppend.setAttribute('width', '60')
       playerCardsDiv.appendChild(cardToAppend)
     })
     if(document.getElementById(`player${index}-split-cards`)) {
       const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
       playerCardsSplitDiv.innerHTML = ''
       player.hands[1].cards.forEach((card, i ) => {
-        const cardToAppend = document.createTextNode(player.showHand(2)[i].face)
+        const cardToAppend = document.createElement('img')
+        cardToAppend.setAttribute('src', `${player.showHand(2)[i].image}`)
+        cardToAppend.setAttribute('height', '80')
+        cardToAppend.setAttribute('width', '60')
         playerCardsSplitDiv.appendChild(cardToAppend)
       })
     }
@@ -162,18 +168,26 @@ function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   const cardBack = document.createElement('img')
   cardBack.setAttribute('src', '../assets/cards/card_back.png')
-  cardBack.setAttribute('style', 'height:20px')
-  cardBack.setAttribute('style', 'width:20px')
+  cardBack.setAttribute('height', '80')
+  cardBack.setAttribute('width', '85')
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
-  dealerCardsDiv.appendChild(document.createTextNode(game.dealer.showHand()[1].face))
+  const cardToAppend = document.createElement('img')
+  cardToAppend.setAttribute('src', `${game.dealer.showHand()[1].image}`)
+  cardToAppend.setAttribute('height', '80')
+  cardToAppend.setAttribute('width', '60')
+  dealerCardsDiv.appendChild(cardToAppend)
 }
 
 function displayAllCards() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
-    dealerCardsDiv.appendChild(document.createTextNode(game.dealer.showHand()[i].face))
+    const cardToAppend = document.createElement('img')
+    cardToAppend.setAttribute('src', `${game.dealer.showHand()[i].image}`)
+    cardToAppend.setAttribute('height', '80')
+    cardToAppend.setAttribute('width', '60')
+    dealerCardsDiv.appendChild(cardToAppend)
   }
   displayPlayerCards()
 }
