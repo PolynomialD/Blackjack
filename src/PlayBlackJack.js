@@ -9,7 +9,7 @@ function addNewPlayer() {
   if(chips.value !== '') {
     const player = new Player(name.value, chips.value)
     name.value = ''
-    chips.value = ''
+    chips.value = 10000
     players.push(player)
     const li = document.createElement('li')
     li.setAttribute('style', 'list-style-type:none')
