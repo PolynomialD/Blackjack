@@ -2,6 +2,7 @@ const Player = require('./Player')
 const BlackJackGame = require('./BlackJackGame.js')
 const players = []
 let game
+let roundCount
 
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
@@ -64,6 +65,7 @@ function setUpTable() {
     betInput.setAttribute('type', 'number')
     betInput.setAttribute('step', '500')
     betInput.setAttribute('value', '1000')
+    betInput.setAttribute('style', 'width: 7em')
     const betButtonDiv = document.createElement('div')
     betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
     const betButton = document.createElement('button')
@@ -230,8 +232,7 @@ function stick(index, hand = 1) {
   }
   if(index+1 === players.length && stickCounter === handSize) {
     playDealersHand()
-    document.getElementById('deck-button').setAttribute('style', 'display:inline-block;height:80px;width:80px;')
-    document.getElementById('deck-button').setAttribute('onclick', 'nextRound()')
+    document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
     stickCounter = 0
   } else if(stickCounter === handSize) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
@@ -365,9 +366,13 @@ function playDealersHand() {
   game.payWinners()
   refreshChipsTotals()
   showChipsDifference(playersChipsAndBets)
+  if(roundCount === 1) {
+    document.getElementById('hint-button').setAttribute('style', 'display:block')
+  }
 }
 
 function createBlackJackGame() {
+  roundCount = 1
   setUpTable()
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
@@ -375,6 +380,7 @@ function createBlackJackGame() {
 }
 
 function nextRound() {
+  roundCount++
   game.dealer.discardHand()
   game.players.forEach((player) => {
     player.discardHands()
@@ -387,9 +393,11 @@ function nextRound() {
   document.getElementById('dealer-cards-div').innerHTML = ''
   document.getElementById('players-div').innerHTML = ''
   document.getElementById('dealer-hand-value').innerHTML = ''
+  document.getElementById('hint-text').innerHTML = ''
   document.getElementById('deck-button').setAttribute('style', 'display:inline-block;height:80px;width:80px;')
   document.getElementById('deck-button').setAttribute('onclick', '')
   document.getElementById('hint-button').setAttribute('style', 'display:block')
+  document.getElementById('dealer-img').setAttribute('onclick', '')
   setUpTable()
 }
 
@@ -405,10 +413,12 @@ function displayTheCount() {
   const cardsInDeck = game.deck.cards.length
   const cardsTotal = game.deck.dealtCards.length + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(count === 0) {
+  if(roundCount === 1 && cardsInDeck === cardsTotal) {
     hintText.innerHTML = 'Click the deck to continue'
+  } else if(roundCount === 1) {
+    hintText.innerHTML = 'Click the dealer to continue'
   } else {
-  hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
+    hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
   }
 }
 
