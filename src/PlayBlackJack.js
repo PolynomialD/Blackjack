@@ -13,8 +13,8 @@ function addNewPlayer() {
     players.push(player)
     const li = document.createElement('li')
     li.setAttribute('style', 'list-style-type:none')
-    const nameNode = document.createTextNode(`${player.getName()}:  `)
-    const chipsNode = document.createTextNode(`chips:  ${player.getChips()}`)
+    const nameNode = document.createTextNode(`${player.getName()}: `)
+    const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
     
     li.appendChild(nameNode)
     li.appendChild(chipsNode)
@@ -93,10 +93,11 @@ function makeBet(index) {
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
     betInput.setAttribute('style', 'display:none')
-    betButton.innerHTML = `bet: ${game.players[index].getBets()[0]}`
+    betButton.innerHTML = `bet:${game.players[index].getBets()[0]}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
+    document.getElementById('hint-text').innerHTML = ''
     document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
     betCount = 0
   }
@@ -104,7 +105,6 @@ function makeBet(index) {
 }
 
 function dealCards() {
-  document.getElementById('hint-text').innerHTML = ''
   game.dealCards()
   displayDealerCard()
   displayPlayerCards()
@@ -233,7 +233,7 @@ function splitCards(index) {
 
   const playerBetDiv = document.createElement('div')
   playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
-  playerBetDiv.innerHTML = `bet: ${game.players[index].getBets()[0]}`
+  playerBetDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
   
   const drawCardButton = document.createElement('button')
   drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
@@ -273,9 +273,9 @@ function showChipsDifference(playersChips) {
     const betDiv =  document.getElementById(`player${index}-bet-button-div`)
     const playerDiffDiv = document.createElement('div')
     if(difference < 0) {
-      playerDiffDiv.innerHTML = `Lost: ${difference}`
+      playerDiffDiv.innerHTML = `Lost:${difference}`
     } else if(difference > 0) {
-      playerDiffDiv.innerHTML = `Won: ${difference}`
+      playerDiffDiv.innerHTML = `Won:${difference}`
     } else {
       playerDiffDiv.innerHTML = 'Break Even'
     }

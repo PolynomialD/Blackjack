@@ -8,13 +8,27 @@ class Deck {
     this.dealtCards = []
   }
 
+
+
   buildCards () {
     const cards = this.suits.map((suit) => {
       return this.values.map((value) => {
+        let suitString
+        let valueString
+        if(suit === '♣') {suitString = 'clubs'}
+        else if(suit === '♦') {suitString = 'diamonds'}
+        else if(suit === '♥') {suitString = 'hearts'}
+        else if(suit === '♠') {suitString = 'spades'}
+        if(value[0] === 'J') {valueString = 'jack'}
+        else if(value[0] === 'Q') {valueString = 'queen'}
+        else if(value[0] === 'K') {valueString = 'king'}
+        else if(value[0] === 'A') {valueString = 'ace'}
+        else {valueString = value[1]}
         return {
           'suit': suit,
           'face': suit+`${value[0]}`,
-          'value': value[1]
+          'value': value[1],
+          'image': `../assets/cards/${valueString}_of_${suitString}.png`
         }
       })      
     })
