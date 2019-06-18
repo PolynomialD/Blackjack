@@ -98,10 +98,15 @@ function makeBet(index) {
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
-    document.getElementById('hint-text').innerHTML = ''
-    document.getElementById('hint-button').setAttribute('style', 'display: none')
-    document.getElementById('dealCards-button').setAttribute('style', 'display:inline-block')
+    if(game.deck.dealtCards.length === 0) {
+      document.getElementById('hint-button').setAttribute('style', 'display:inline-block')
+    } else {
+      document.getElementById('hint-button').setAttribute('style', 'display: none')
+      document.getElementById('hint-text').innerHTML = ''
+    }
+    document.getElementById('deck-button').setAttribute('onclick', 'dealCards()')
     betCount = 0
+   
   }
   refreshChipsTotals()
 }
@@ -138,7 +143,9 @@ function dealCards() {
       playerDiv.appendChild(splitButton)
     }
   })
-  document.getElementById('dealCards-button').setAttribute('style', 'display:none')
+  document.getElementById('deck-button').setAttribute('style', 'display: none')
+  document.getElementById('hint-button').setAttribute('style', 'display: none')
+  document.getElementById('hint-text').innerHTML = ''
 }
 
 function displayPlayerCards() {
@@ -222,7 +229,8 @@ function stick(index, hand = 1) {
   }
   if(index+1 === players.length && stickCounter === handSize) {
     playDealersHand()
-    document.getElementById('next-button').setAttribute('style', 'display:inline-block')
+    document.getElementById('deck-button').setAttribute('style', 'display:inline-block;height:80px;width:80px;')
+    document.getElementById('deck-button').setAttribute('onclick', 'nextRound()')
     stickCounter = 0
   } else if(stickCounter === handSize) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
@@ -373,7 +381,8 @@ function nextRound() {
   document.getElementById('dealer-cards-div').innerHTML = ''
   document.getElementById('players-div').innerHTML = ''
   document.getElementById('dealer-hand-value').innerHTML = ''
-  document.getElementById('next-button').setAttribute('style', 'display:none')
+  document.getElementById('deck-button').setAttribute('style', 'display:inline-block;height:80px;width:80px;')
+  document.getElementById('deck-button').setAttribute('onclick', '')
   document.getElementById('hint-button').setAttribute('style', 'display:block')
   setUpTable()
 }
@@ -390,7 +399,11 @@ function displayTheCount() {
   const cardsInDeck = game.deck.cards.length
   const cardsTotal = game.deck.dealtCards.length + cardsInDeck
   const hintText = document.getElementById('hint-text')
+  if(count === 0) {
+    hintText.innerHTML = 'Click the deck to continue'
+  } else {
   hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
+  }
 }
 
 window.displayTheCount = displayTheCount
