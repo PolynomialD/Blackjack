@@ -18,7 +18,8 @@ function addNewPlayer() {
     
     li.appendChild(nameNode)
     li.appendChild(chipsNode)
-    
+
+    document.getElementById('nameInput').focus()
     document.getElementById('playersList').appendChild(li)
     document.getElementById('createGameButton').setAttribute('style', 'display:inline-block')
   } 
