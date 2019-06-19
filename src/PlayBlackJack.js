@@ -245,43 +245,44 @@ function stick(index, hand = 1) {
 }
 
 function splitCards(index) {
-  game.players[index].splitHand()
-  game.players[index].receiveCard(game.deck.dealCard())
-  game.players[index].receiveCard(game.deck.dealCard(), 2)
+  if(game.players[index].getChips() >= game.players[index].getBets()[0]) {
+    game.players[index].splitHand()
+    game.players[index].receiveCard(game.deck.dealCard())
+    game.players[index].receiveCard(game.deck.dealCard(), 2)
 
-  refreshChipsTotals()
+    refreshChipsTotals()
 
-  const playerCards = document.createElement('div')
-  playerCards.setAttribute('id', `player${index}-split-cards`)
+    const playerCards = document.createElement('div')
+    playerCards.setAttribute('id', `player${index}-split-cards`)
 
-  const playerHandValue = document.createElement('div')
-  playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
-  playerHandValue.setAttribute('style', 'font-size:18px')
+    const playerHandValue = document.createElement('div')
+    playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
+    playerHandValue.setAttribute('style', 'font-size:18px')
 
+    const playerBetDiv = document.createElement('div')
+    playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
+    playerBetDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
+    
+    const drawCardButton = document.createElement('button')
+    drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
+    drawCardButton.setAttribute('onclick', `drawCard(${index},2)`)
+    drawCardButton.innerHTML = 'Card'
 
-  const playerBetDiv = document.createElement('div')
-  playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
-  playerBetDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
-  
-  const drawCardButton = document.createElement('button')
-  drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
-  drawCardButton.setAttribute('onclick', `drawCard(${index},2)`)
-  drawCardButton.innerHTML = 'Card'
+    const stickButton = document.createElement('button')
+    stickButton.setAttribute('id', `player${index}-split-stickButton`)
+    stickButton.setAttribute('onclick', `stick(${index},2)`)
+    stickButton.innerHTML = 'Stick'
 
-  const stickButton = document.createElement('button')
-  stickButton.setAttribute('id', `player${index}-split-stickButton`)
-  stickButton.setAttribute('onclick', `stick(${index},2)`)
-  stickButton.innerHTML = 'Stick'
+    const chipsDiv = document.getElementById(`player${index}-chips`)
+    chipsDiv.appendChild(playerCards)
+    chipsDiv.appendChild(playerHandValue)
+    chipsDiv.appendChild(playerBetDiv)
+    chipsDiv.appendChild(drawCardButton)
+    chipsDiv.appendChild(stickButton)
 
-  const chipsDiv = document.getElementById(`player${index}-chips`)
-  chipsDiv.appendChild(playerCards)
-  chipsDiv.appendChild(playerHandValue)
-  chipsDiv.appendChild(playerBetDiv)
-  chipsDiv.appendChild(drawCardButton)
-  chipsDiv.appendChild(stickButton)
-
-  document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
-  displayPlayerCards()
+    document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
+    displayPlayerCards()
+  }
 }
 
 function getPlayersChipsAndBets() {
