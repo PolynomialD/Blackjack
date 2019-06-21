@@ -4,22 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src='../dist/bundle.js'></script>
+  <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
-<body style="background-color:green">
+<body>
   <nav id="nav"> 
-    <a href="../index.html">Back To Menu</a>
-    <div style="float:right">
-      <button id="hint-button" onclick="displayTheCount()" style="display:none">Hint</button>
+    <a href="../index.html">Main Menu</a>
+    <div class="hint">
+      <button id="hint-button" onclick="displayTheCount()" class="hidden">Hint</button>
     </div>
   </nav>
-  <div id="hint-text" style="float:right"></div>
+  <div id="hint-text" class="hint"></div>
   <div>
     <header>
-      <h1 style="text-align:center">&spades;&hearts; BlackJack &clubs;&diams;</h1>
+      <h1>&spades;&hearts; BlackJack &clubs;&diams;</h1>
     </header>
   </div>
   <div id="createGameForm" style="text-align:center">
-    <h2 style="text-align:center">Create Game</h2>
+    <h2>Create Game</h2>
     <div>
       <label>Enter Player Name</label>
       <input id="nameInput" type="text" autofocus /> </br>
@@ -27,19 +28,19 @@
       <input id="chipsInput" type="number" value="10000" step="5000"/>
     </div>
     <button id="addNewPlayerButton" onclick="addNewPlayer()">AddPlayer</button>
-    <button id="createGameButton" onclick="createBlackJackGame()" style="display:none">Create Game</button>
+    <button id="createGameButton" onclick="createBlackJackGame()" class="hidden">Create Game</button>
     <ul id="playersList"></ul>
   </div>
-  <div id="table-div" style="display:none">
+  <div id="table-div" class="hidden">
     <div id="dealer" style="text-align:center">
-      <img id="dealer-img" type="button" src="../assets/avatars/dealer_avatar.png" style="height:80px;width:80px;">
+      <img id="dealer-img"  class="buttonImage" type="button" src="../assets/avatars/dealer_avatar.png">
       <div id="dealer-cards-div"></div>
       <div id="dealCards-div" style="text-align:center">
-        <div id="dealer-hand-value" style="font-size:20px"></div>
+        <div id="dealer-hand-value"></div>
       </div>
     </div>
     <div id="deck-div" style="text-align:center">
-      <img id="deck-button" type="button" src="../assets/cards/card_deck.png" style="height:80px;width:80px;">
+      <img id="deck-button"  class="buttonImage" type="button" src="../assets/cards/card_deck.png">
     </div>
     <div style="text-align: center">
     </div>

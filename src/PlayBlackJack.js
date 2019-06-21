@@ -13,7 +13,6 @@ function addNewPlayer() {
     chips.value = 10000
     players.push(player)
     const li = document.createElement('li')
-    li.setAttribute('style', 'list-style-type:none')
     const nameNode = document.createTextNode(`${player.getName()}: `)
     const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
     
@@ -22,25 +21,24 @@ function addNewPlayer() {
 
     document.getElementById('nameInput').focus()
     document.getElementById('playersList').appendChild(li)
-    document.getElementById('createGameButton').setAttribute('style', 'display:inline-block')
+    document.getElementById('createGameButton').setAttribute('class', 'displayInline')
   } 
 }
 
 function setUpTable() {
-  document.getElementById('table-div').setAttribute('style', 'display:block')
-  document.getElementById('createGameForm').setAttribute('style', 'display:none')
+  document.getElementById('table-div').setAttribute('class', 'displayBlock')
+  document.getElementById('createGameForm').setAttribute('class', 'hidden')
   const playerRow = document.getElementById('players-div')
   const playerDivs = []
 
   players.forEach((player, index) => {
     const playerDiv = document.createElement('div')
     playerDiv.setAttribute('id', `player${index}-div`)
-    playerDiv.setAttribute('style', 'display: inline-block;margin:20px;')
+    playerDiv.setAttribute('class', 'playerDiv displayInline')
     
     const playerImage = document.createElement('img')
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
-    playerImage.setAttribute('height', '50')
-    playerImage.setAttribute('width', '50')
+    playerImage.setAttribute('class', 'playerImage')
  
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
@@ -96,15 +94,15 @@ function makeBet(index) {
 
   if(betInput.value !== '') {
     game.players[index].placeBet(Number(betInput.value))
-    betInput.setAttribute('style', 'display:none')
+    betInput.setAttribute('class', 'hidden')
     betButton.innerHTML = `bet:${game.players[index].getBets()[0]}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
     if(game.deck.dealtCards.length === 0) {
-      document.getElementById('hint-button').setAttribute('style', 'display:inline-block')
+      document.getElementById('hint-button').setAttribute('class', 'displayInline')
     } else {
-      document.getElementById('hint-button').setAttribute('style', 'display: none')
+      document.getElementById('hint-button').setAttribute('class', 'hidden')
       document.getElementById('hint-text').innerHTML = ''
     }
     document.getElementById('deck-button').setAttribute('onclick', 'dealCards()')
@@ -124,19 +122,19 @@ function dealCards() {
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
     drawCardButton.setAttribute('onclick', `drawCard(${index})`)
     drawCardButton.innerHTML = 'Card'
-    if(index !== 0) drawCardButton.setAttribute('style', 'display:none')
+    if(index !== 0) drawCardButton.setAttribute('class', 'hidden')
 
     const stickButton = document.createElement('button')
     stickButton.setAttribute('id', `player${index}-stickButton`)
     stickButton.setAttribute('onclick', `stick(${index})`)
     stickButton.innerHTML = 'Stick'
-    if(index !== 0) stickButton.setAttribute('style', 'display:none')
+    if(index !== 0) stickButton.setAttribute('class', 'hidden')
 
     const splitButton = document.createElement('button')
     splitButton.setAttribute('id', `player${index}-splitButton`)
     splitButton.setAttribute('onclick', `splitCards(${index})`)
     splitButton.innerHTML = 'Split'
-    if(index !== 0) splitButton.setAttribute('style', 'display:none')
+    if(index !== 0) splitButton.setAttribute('class', 'hidden')
 
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
@@ -146,8 +144,8 @@ function dealCards() {
       playerDiv.appendChild(splitButton)
     }
   })
-  document.getElementById('deck-button').setAttribute('style', 'display: none')
-  document.getElementById('hint-button').setAttribute('style', 'display: none')
+  document.getElementById('deck-button').setAttribute('class', 'hidden')
+  document.getElementById('hint-button').setAttribute('class', 'hidden')
   document.getElementById('hint-text').innerHTML = ''
 }
 
@@ -215,19 +213,19 @@ function drawCard(index, hand) {
 let stickCounter = 0
 function stick(index, hand = 1) {
   if(document.getElementById(`player${index}-splitButton`)) {
-  document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
+  document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   }
   const handSize = game.players[index].hands.length
   if(hand === 1) {
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
-    document.getElementById(`player${index}-drawCardButton`).setAttribute('style', 'display:none')
-    document.getElementById(`player${index}-stickButton`).setAttribute('style', 'display:none')
+    document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
+    document.getElementById(`player${index}-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
   }
   if(hand === 2) {
     document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
-    document.getElementById(`player${index}-split-drawCardButton`).setAttribute('style', 'display:none')
-    document.getElementById(`player${index}-split-stickButton`).setAttribute('style', 'display:none')
+    document.getElementById(`player${index}-split-drawCardButton`).setAttribute('class', 'hidden')
+    document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
   }
   if(index+1 === players.length && stickCounter === handSize) {
@@ -235,11 +233,11 @@ function stick(index, hand = 1) {
     document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
     stickCounter = 0
   } else if(stickCounter === handSize) {
-    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('style', 'display:inline-block')
-    document.getElementById(`player${index+1}-stickButton`).setAttribute('style', 'display:inline-block')
+    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'displayInline')
+    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'displayInline')
     stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
-      document.getElementById(`player${index+1}-splitButton`).setAttribute('style', 'display:block')
+      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'displayBlock')
     }
   }
 }
@@ -280,7 +278,7 @@ function splitCards(index) {
   chipsDiv.appendChild(drawCardButton)
   chipsDiv.appendChild(stickButton)
 
-  document.getElementById(`player${index}-splitButton`).setAttribute('style', 'display:none')
+  document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   displayPlayerCards()
 }
 
@@ -321,21 +319,21 @@ function refreshChipsTotals() {
 function setHandValueColours() {
   const dealerHandValue = game.handValue(game.dealer.showHand())
   if(dealerHandValue > 21) {
-    document.getElementById('dealer-hand-value').setAttribute('style', 'color:red;font-size:20px;')
+    document.getElementById('dealer-hand-value').setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {
     const valueDiv = document.getElementById(`player${index}-hand-value`)
     const playerHandValue = game.handValue(player.hands[0].showCards())     
     if(playerHandValue === 21 && player.hands[0].size() === 2){
-      valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+      valueDiv.setAttribute('class', 'playerHandValue winColour')
     } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-      valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+      valueDiv.setAttribute('class', 'playerHandValue winColour')
     } else if(playerHandValue < 22 && dealerHandValue > 21) {
-      valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+      valueDiv.setAttribute('class', 'playerHandValue winColour')
     } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-      valueDiv.setAttribute('style', 'color:blue;font-size:18px;')
+      valueDiv.setAttribute('class', 'playerHandValue drawColour')
     } else {
-      valueDiv.setAttribute('style', 'color:red;font-size:18px;')
+      valueDiv.setAttribute('class', 'playerHandValue loseColour')
     }    
   })
   game.players.forEach((player, index) => {
@@ -343,15 +341,15 @@ function setHandValueColours() {
       const valueDiv = document.getElementById(`player${index}-split-hand-value`)
       const playerHandValue = game.handValue(player.hands[1].showCards())     
       if(playerHandValue === 21 && player.hands[1].size() === 2){
-        valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+        valueDiv.setAttribute('class', 'playerHandValuewinColour')
       } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-        valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+        valueDiv.setAttribute('class', 'playerHandValuewinColour')
       } else if(playerHandValue < 22 && dealerHandValue > 21) {
-        valueDiv.setAttribute('style', 'color:yellow;font-size:18px;')
+        valueDiv.setAttribute('class', 'playerHandValuewinColour')
       } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-        valueDiv.setAttribute('style', 'color:blue;font-size:18px;')
+        valueDiv.setAttribute('class', 'playerHandValuedrawColour')
       } else {
-        valueDiv.setAttribute('style', 'color:red;font-size:18px;')
+        valueDiv.setAttribute('class', 'playerHandValueloseColour')
       }
     }
   })
@@ -367,7 +365,7 @@ function playDealersHand() {
   refreshChipsTotals()
   showChipsDifference(playersChipsAndBets)
   if(roundCount === 1) {
-    document.getElementById('hint-button').setAttribute('style', 'display:block')
+    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   }
 }
 
@@ -394,9 +392,9 @@ function nextRound() {
   document.getElementById('players-div').innerHTML = ''
   document.getElementById('dealer-hand-value').innerHTML = ''
   document.getElementById('hint-text').innerHTML = ''
-  document.getElementById('deck-button').setAttribute('style', 'display:inline-block;height:80px;width:80px;')
+  document.getElementById('deck-button').setAttribute('class', 'buttonImage displayInline')
   document.getElementById('deck-button').setAttribute('onclick', '')
-  document.getElementById('hint-button').setAttribute('style', 'display:block')
+  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   document.getElementById('dealer-img').setAttribute('onclick', '')
   setUpTable()
 }

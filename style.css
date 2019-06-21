@@ -1,0 +1,65 @@
+body {
+  background-color: darkgreen
+}
+
+li {
+  list-style-type: none
+}
+
+h1, h2 {
+  text-align: center
+}
+
+.hint {
+  float: right
+}
+
+.hidden {
+  display: none
+}
+
+.displayBlock {
+  display: block
+}
+
+.displayInline {
+  display: inline-block
+}
+
+#dealer-hand-value {
+  font-size: 20px
+}
+
+.playerHandValue {
+  font-size: 18px
+}
+
+.winColour {
+  color: yellow;
+}
+
+.drawColour {
+  color: blue;
+}
+
+.loseColour {
+  color: red;
+}
+
+.playerDiv {
+  margin: 20px
+}
+
+.playerImage {
+  height: 50px;
+  width: 50px
+}
+
+.buttonImage {
+  height: 80px;
+  width: 80px
+}
+
+#choose-game-div {
+  text-align: center
+}
