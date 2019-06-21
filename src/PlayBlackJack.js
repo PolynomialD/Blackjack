@@ -137,13 +137,21 @@ function dealCards() {
     splitButton.innerHTML = 'Split'
     if(index !== 0) splitButton.setAttribute('class', 'hidden')
 
+    const doubleButton = document.createElement('button')
+    doubleButton.setAttribute('id', `player${index}-doubleButton`)
+    doubleButton.setAttribute('onclick', `doubleDown(${index})`)
+    doubleButton.innerHTML = 'Double'
+    if(index !== 0) doubleButton.setAttribute('class', 'hidden')
+
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton)
+    playerDiv.appendChild(doubleButton)
 
     if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
     }
+
   })
   document.getElementById('deck-button').setAttribute('class', 'hidden')
   document.getElementById('hint-button').setAttribute('class', 'hidden')
@@ -230,6 +238,7 @@ function stick(index, hand = 1) {
   } else if(stickCounter === handSize) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'displayInline')
+    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'displayInline')
     stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
       document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'displayBlock')
@@ -351,6 +360,16 @@ function setHandValueColours() {
   })
 }
 
+function doubleDown(index) {
+  const bet =  game.players[index].removeBet() * 2
+  game.players[index].placeBet(bet)
+  game.players[index].receiveCard(game.deck.dealCard())
+  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${game.players[index].getBets()[0]}`
+  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  stick(index)
+  displayPlayerCards()
+}
+
 function playDealersHand() {
   game.playDealersHand()
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
@@ -416,6 +435,7 @@ function displayTheCount() {
   }
 }
 
+window.doubleDown = doubleDown
 window.displayTheCount = displayTheCount
 window.splitCards = splitCards
 window.makeBet = makeBet
