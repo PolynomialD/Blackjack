@@ -158,6 +158,48 @@ function dealCards() {
   document.getElementById('hint-text').innerHTML = ''
 }
 
+function drawCard(index, hand) {
+  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  game.players[index].receiveCard(game.deck.dealCard(), hand)
+  if(game.handValue(game.players[index].showHand(hand)) > 21) {
+    stick(index, hand)
+  }
+  displayPlayerCards()
+}
+
+function stick(index, hand = 1) {
+  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  if(document.getElementById(`player${index}-splitButton`)) {
+  document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
+  }
+  const handSize = game.players[index].hands.length
+  if(hand === 1) {
+    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
+    document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
+    document.getElementById(`player${index}-stickButton`).setAttribute('class', 'hidden')
+    stickCounter++
+  }
+  if(hand === 2) {
+    document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
+    document.getElementById(`player${index}-split-drawCardButton`).setAttribute('class', 'hidden')
+    document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
+    stickCounter++
+  }
+  if(index+1 === players.length && stickCounter === handSize) {
+    playDealersHand()
+    document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
+    stickCounter = 0
+  } else if(stickCounter === handSize) {
+    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'displayInline')
+    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'displayInline')
+    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'displayInline')
+    stickCounter = 0
+    if(document.getElementById(`player${index+1}-splitButton`)) {
+      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'displayBlock')
+    }
+  }
+}
+
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
@@ -206,53 +248,10 @@ function displayAllCards() {
   displayPlayerCards()
 }
 
-function drawCard(index, hand) {
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
-  game.players[index].receiveCard(game.deck.dealCard(), hand)
-  if(game.handValue(game.players[index].showHand(hand)) > 21) {
-    stick(index, hand)
-  }
-  displayPlayerCards()
-}
-
-function stick(index, hand = 1) {
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
-  if(document.getElementById(`player${index}-splitButton`)) {
-  document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
-  }
-  const handSize = game.players[index].hands.length
-  if(hand === 1) {
-    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
-    document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
-    document.getElementById(`player${index}-stickButton`).setAttribute('class', 'hidden')
-    stickCounter++
-  }
-  if(hand === 2) {
-    document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
-    document.getElementById(`player${index}-split-drawCardButton`).setAttribute('class', 'hidden')
-    document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
-    stickCounter++
-  }
-  if(index+1 === players.length && stickCounter === handSize) {
-    playDealersHand()
-    document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
-    stickCounter = 0
-  } else if(stickCounter === handSize) {
-    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'displayInline')
-    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'displayInline')
-    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'displayInline')
-    stickCounter = 0
-    if(document.getElementById(`player${index+1}-splitButton`)) {
-      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'displayBlock')
-    }
-  }
-}
-
 function splitCards(index) {
   game.players[index].splitHand()
   game.players[index].receiveCard(game.deck.dealCard())
   game.players[index].receiveCard(game.deck.dealCard(), 2)
-
   refreshChipsTotals()
 
   const playerCards = document.createElement('div')
@@ -285,6 +284,63 @@ function splitCards(index) {
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   displayPlayerCards()  
+}
+
+function doubleDown(index) {
+  const player = game.players[index]
+  const bet = player.removeBet()
+  player.receiveChips(bet)
+  player.placeBet(Number(bet * 2))
+  player.receiveCard(game.deck.dealCard())
+  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${player.getBets()[0]}`
+  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  stick(index)
+  displayPlayerCards()
+  refreshChipsTotals()
+}
+
+function playDealersHand() {
+  game.playDealersHand()
+  document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
+  displayAllCards()
+  setHandValueColours()  
+  const playersChipsAndBets = getPlayersChipsAndBets()
+  game.payWinners()
+  refreshChipsTotals()
+  showChipsDifference(playersChipsAndBets)
+  if(roundCount === 1) {
+    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
+  }
+}
+
+function createBlackJackGame() {
+  roundCount = 1
+  setUpTable()
+  game = new BlackJackGame(null, players)
+  game.deck.shuffle()
+  console.log(game.deck)
+}
+
+function nextRound() {
+  roundCount++
+  game.dealer.discardHand()
+  game.players.forEach((player) => {
+    player.discardHands()
+  })
+  game.players.forEach((player, index) => {
+    if(player.getChips() === 0) {
+      game.removePlayer(index)
+    }
+  })
+  document.getElementById('dealer-cards-div').innerHTML = ''
+  document.getElementById('players-div').innerHTML = ''
+  document.getElementById('dealer-hand-value').innerHTML = ''
+  document.getElementById('hint-text').innerHTML = ''
+  document.getElementById('deck-button').setAttribute('class', 'buttonImage displayInline')
+  document.getElementById('deck-button').setAttribute('onclick', '')
+  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
+  document.getElementById('dealer-img').setAttribute('onclick', '')
+  setUpTable()
 }
 
 function getPlayersChipsAndBets() {
@@ -358,63 +414,6 @@ function setHandValueColours() {
       }
     }
   })
-}
-
-function doubleDown(index) {
-  const player = game.players[index]
-  const bet = player.removeBet()
-  player.receiveChips(bet)
-  player.placeBet(Number(bet * 2))
-  player.receiveCard(game.deck.dealCard())
-  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${player.getBets()[0]}`
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
-  stick(index)
-  displayPlayerCards()
-  refreshChipsTotals()
-}
-
-function playDealersHand() {
-  game.playDealersHand()
-  document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
-  displayAllCards()
-  setHandValueColours()  
-  const playersChipsAndBets = getPlayersChipsAndBets()
-  game.payWinners()
-  refreshChipsTotals()
-  showChipsDifference(playersChipsAndBets)
-  if(roundCount === 1) {
-    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
-  }
-}
-
-function createBlackJackGame() {
-  roundCount = 1
-  setUpTable()
-  game = new BlackJackGame(null, players)
-  game.deck.shuffle()
-  console.log(game.deck)
-}
-
-function nextRound() {
-  roundCount++
-  game.dealer.discardHand()
-  game.players.forEach((player) => {
-    player.discardHands()
-  })
-  game.players.forEach((player, index) => {
-    if(player.getChips() === 0) {
-      game.removePlayer(index)
-    }
-  })
-  document.getElementById('dealer-cards-div').innerHTML = ''
-  document.getElementById('players-div').innerHTML = ''
-  document.getElementById('dealer-hand-value').innerHTML = ''
-  document.getElementById('hint-text').innerHTML = ''
-  document.getElementById('deck-button').setAttribute('class', 'buttonImage displayInline')
-  document.getElementById('deck-button').setAttribute('onclick', '')
-  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
-  document.getElementById('dealer-img').setAttribute('onclick', '')
-  setUpTable()
 }
 
 function displayTheCount() {
