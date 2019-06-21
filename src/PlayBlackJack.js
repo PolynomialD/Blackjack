@@ -133,7 +133,7 @@ function dealCards() {
     const drawCardButton = document.createElement('button')
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
     drawCardButton.setAttribute('class', 'button')
-    drawCardButton.setAttribute('onclick', `drawCard(${index})`)
+    drawCardButton.setAttribute('onclick', `drawCard(${index}, 1)`)
     drawCardButton.innerHTML = 'Card'
     if(index !== 0) drawCardButton.setAttribute('class', 'hidden')
 
@@ -190,7 +190,7 @@ function drawCard(index, hand = 1) {
     const handOne = document.getElementById(`player${index}-hand-value`)
     handOne.innerHTML = game.handValue(game.players[index].showHand(1))
   }
-  if(hand ===2) {
+  if(hand === 2) {
     const handTwo = document.getElementById(`player${index}-split-hand-value`)
     handTwo.innerHTML = game.handValue(game.players[index].showHand(2))
   }
@@ -206,13 +206,15 @@ function stick(index, hand = 1) {
   }
   const handAmount = game.players[index].hands.length
   if(hand === 1) {
-    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
+    const handValue = document.getElementById(`player${index}-hand-value`)
+    handValue.innerHTML = game.handValue(game.players[index].showHand(1))
     document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
     document.getElementById(`player${index}-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
   }
   if(hand === 2) {
-    document.getElementById(`player${index}-split-hand-value`).innerHTML = game.handValue(game.players[index].showHand(2))
+     const splitHandValue = document.getElementById(`player${index}-split-hand-value`)
+     splitHandValue.innerHTML = game.handValue(game.players[index].showHand(2)) 
     document.getElementById(`player${index}-split-drawCardButton`).setAttribute('class', 'hidden')
     document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
@@ -290,10 +292,13 @@ function splitCards(index) {
   const playerCards = document.createElement('div')
   playerCards.setAttribute('id', `player${index}-split-cards`)
 
-  const playerHandValue = document.createElement('div')
-  playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
-  playerHandValue.setAttribute('class', 'playerHandValue')
-  playerHandValue.innerHTML = game.handValue(game.players[index].showHand(2))
+  const playerHandValue = document.getElementById(`player${index}-hand-value`)
+  playerHandValue.innerText = game.handValue(game.players[index].showHand(1))
+
+  const playerSplitHandValue = document.createElement('div')
+  playerSplitHandValue.setAttribute('id', `player${index}-split-hand-value`)
+  playerSplitHandValue.setAttribute('class', 'playerHandValue')
+  playerSplitHandValue.innerText = game.handValue(game.players[index].showHand(2))
 
   const playerBetDiv = document.createElement('div')
   playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
@@ -313,7 +318,7 @@ function splitCards(index) {
 
   const chipsDiv = document.getElementById(`player${index}-chips`)
   chipsDiv.appendChild(playerCards)
-  chipsDiv.appendChild(playerHandValue)
+  chipsDiv.appendChild(playerSplitHandValue)
   chipsDiv.appendChild(playerBetDiv)
   chipsDiv.appendChild(drawCardButton)
   chipsDiv.appendChild(stickButton)

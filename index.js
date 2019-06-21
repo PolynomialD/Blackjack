@@ -7,7 +7,7 @@ let mainWindow
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 1100,
-    height: 720
+    height: 770
   })
   mainWindow.loadURL(`file://${__dirname}/index.html`)
   const mainMenu = Menu.buildFromTemplate(menuTemplate)
