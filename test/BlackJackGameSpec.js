@@ -145,7 +145,7 @@ describe('BlackJackGame', () => {
       game.payWinners()
       
       jim.chips.should.eql(10000)
-      bob.chips.should.eql(12000)
+      bob.chips.should.eql(11000)
     })
   })
 })

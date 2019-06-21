@@ -6,13 +6,13 @@ const Gen = require('verify-it').Gen
 describe('Dealer', () => {
   describe('hand', () => {
     it('should store a number of cards', () => {
-      const deck = new Deck(['A','B'], [['J',10]])
+      const deck = new Deck(['♣', '♦'], [['J',10]])
       const dealer = new Dealer()
       dealer.receiveCard(deck.dealCard())
       dealer.receiveCard(deck.dealCard())
       dealer.hand.cards.should.eql(
-       [{'face': 'AJ', 'suit': 'A','value': 10},
-        {'face': 'BJ', 'suit': 'B', 'value': 10}]
+       [{'face': '♣J', 'image': '../assets/cards/jack_of_clubs.png', 'suit': '♣','value': 10},
+        {'face': '♦J', 'image': '../assets/cards/jack_of_diamonds.png', 'suit':'♦', 'value': 10}]
       )
     })
   })
