@@ -51,6 +51,7 @@ function setUpTable() {
     
     const playerChipsText =  document.createElement('div')
     playerChipsText.setAttribute('id', `player${index}-chips-text`)
+    playerChipsText.setAttribute('class', 'chipsText')
     playerChipsText.innerHTML = `${player.getChips()}`
     const playerChips = document.createElement('div')
     playerChips.setAttribute('id', `player${index}-chips`)
