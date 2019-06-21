@@ -82,7 +82,13 @@ h1, h2 {
 }
 
 .chipsText {
-  font-size: 18px
+  font-size: 18px;
+  margin: 5px;
+}
+
+.bet-div {
+  font-size: 16px;
+  margin: 5px;
 }
 
 .cursor {

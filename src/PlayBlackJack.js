@@ -6,6 +6,13 @@ let betCount = 0
 let game
 let roundCount
 
+function addPlayerByClick(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault()
+    addNewPlayer()
+  }
+}
+
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
@@ -72,6 +79,7 @@ function setUpTable() {
     betInput.setAttribute('value', '1000')
     const betDiv = document.createElement('div')
     betDiv.setAttribute('id', `player${index}-bet-div`)
+    betDiv.setAttribute('class', 'bet-div')
      
     playerDiv.appendChild(playerImage)
     playerDiv.appendChild(playerName)
@@ -160,13 +168,14 @@ function dealCards() {
     if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
     }
+    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
   })
   document.getElementById('deck-button').setAttribute('class', 'hidden')
   document.getElementById('hint-button').setAttribute('class', 'hidden')
   document.getElementById('hint-text').innerHTML = ''
 }
 
-function drawCard(index, hand) {
+function drawCard(index, hand = 1) {
   if(document.getElementById(`player${index}-doubleButton`)) {
     document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   }
@@ -176,6 +185,14 @@ function drawCard(index, hand) {
   game.players[index].receiveCard(game.deck.dealCard(), hand)
   if(game.handValue(game.players[index].showHand(hand)) > 21) {
     stick(index, hand)
+  }
+  if(hand === 1) {
+    const handOne = document.getElementById(`player${index}-hand-value`)
+    handOne.innerHTML = game.handValue(game.players[index].showHand(1))
+  }
+  if(hand ===2) {
+    const handTwo = document.getElementById(`player${index}-split-hand-value`)
+    handTwo.innerHTML = game.handValue(game.players[index].showHand(2))
   }
   displayPlayerCards()
 }
@@ -276,6 +293,7 @@ function splitCards(index) {
   const playerHandValue = document.createElement('div')
   playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
   playerHandValue.setAttribute('class', 'playerHandValue')
+  playerHandValue.innerHTML = game.handValue(game.players[index].showHand(2))
 
   const playerBetDiv = document.createElement('div')
   playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
@@ -459,6 +477,7 @@ function displayTheCount() {
   }
 }
 
+window.addPlayerByClick = addPlayerByClick
 window.doubleDown = doubleDown
 window.displayTheCount = displayTheCount
 window.splitCards = splitCards
