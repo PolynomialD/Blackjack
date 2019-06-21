@@ -141,7 +141,7 @@ function dealCards() {
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton)
 
-    if(player.hands[0].isSplittable()) {
+    if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
     }
   })
