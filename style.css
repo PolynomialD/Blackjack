@@ -26,6 +26,16 @@ h1, h2 {
   display: inline-block
 }
 
+.card {
+  height: 75px;
+  width: 55px
+}
+
+.cardBack {
+  height: 77px;
+  width: 85px
+}
+
 #dealer-hand-value {
   font-size: 20px
 }
@@ -62,4 +72,8 @@ h1, h2 {
 
 #choose-game-div {
   text-align: center
+}
+
+.betInput {
+  width: 7em
 }

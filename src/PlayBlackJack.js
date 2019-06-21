@@ -1,6 +1,8 @@
 const Player = require('./Player')
 const BlackJackGame = require('./BlackJackGame.js')
 const players = []
+let stickCounter = 0
+let betCount = 0
 let game
 let roundCount
 
@@ -56,14 +58,14 @@ function setUpTable() {
 
     const playerHandValue = document.createElement('div')
     playerHandValue.setAttribute('id', `player${index}-hand-value`)
-    playerHandValue.setAttribute('style', 'font-size:18px')
+    playerHandValue.setAttribute('class', 'playerHandValue')
     
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
+    betInput.setAttribute('class', 'betInput')
     betInput.setAttribute('type', 'number')
     betInput.setAttribute('step', '500')
     betInput.setAttribute('value', '1000')
-    betInput.setAttribute('style', 'width: 7em')
     const betButtonDiv = document.createElement('div')
     betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
     const betButton = document.createElement('button')
@@ -87,7 +89,6 @@ function setUpTable() {
   })
 }
 
-let betCount = 0
 function makeBet(index) {
   const betInput = document.getElementById(`player${index}-bet-input`)
   const betButton = document.getElementById(`player${index}-bet-button-div`)
@@ -155,9 +156,8 @@ function displayPlayerCards() {
     playerCardsDiv.innerHTML = ''
     player.hands[0].cards.forEach((card, i ) => {
       const cardToAppend = document.createElement('img')
+      cardToAppend.setAttribute('class', 'card')
       cardToAppend.setAttribute('src', `${player.showHand()[i].image}`)
-      cardToAppend.setAttribute('height', '75')
-      cardToAppend.setAttribute('width', '50')
       playerCardsDiv.appendChild(cardToAppend)
     })
     if(document.getElementById(`player${index}-split-cards`)) {
@@ -165,9 +165,8 @@ function displayPlayerCards() {
       playerCardsSplitDiv.innerHTML = ''
       player.hands[1].cards.forEach((card, i ) => {
         const cardToAppend = document.createElement('img')
+        cardToAppend.setAttribute('class', 'card')
         cardToAppend.setAttribute('src', `${player.showHand(2)[i].image}`)
-        cardToAppend.setAttribute('height', '75')
-        cardToAppend.setAttribute('width', '50')
         playerCardsSplitDiv.appendChild(cardToAppend)
       })
     }
@@ -177,15 +176,13 @@ function displayPlayerCards() {
 function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   const cardBack = document.createElement('img')
+  cardBack.setAttribute('class', 'cardBack')
   cardBack.setAttribute('src', '../assets/cards/card_back.png')
-  cardBack.setAttribute('height', '75')
-  cardBack.setAttribute('width', '70')
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
   const cardToAppend = document.createElement('img')
+  cardToAppend.setAttribute('class', 'card')
   cardToAppend.setAttribute('src', `${game.dealer.showHand()[1].image}`)
-  cardToAppend.setAttribute('height', '75')
-  cardToAppend.setAttribute('width', '50')
   dealerCardsDiv.appendChild(cardToAppend)
 }
 
@@ -194,9 +191,8 @@ function displayAllCards() {
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
     const cardToAppend = document.createElement('img')
+    cardToAppend.setAttribute('class', 'card')
     cardToAppend.setAttribute('src', `${game.dealer.showHand()[i].image}`)
-    cardToAppend.setAttribute('height', '75')
-    cardToAppend.setAttribute('width', '50')
     dealerCardsDiv.appendChild(cardToAppend)
   }
   displayPlayerCards()
@@ -210,7 +206,6 @@ function drawCard(index, hand) {
   displayPlayerCards()
 }
 
-let stickCounter = 0
 function stick(index, hand = 1) {
   if(document.getElementById(`player${index}-splitButton`)) {
   document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
@@ -342,15 +337,15 @@ function setHandValueColours() {
       const valueDiv = document.getElementById(`player${index}-split-hand-value`)
       const playerHandValue = game.handValue(player.hands[1].showCards())     
       if(playerHandValue === 21 && player.hands[1].size() === 2){
-        valueDiv.setAttribute('class', 'playerHandValuewinColour')
+        valueDiv.setAttribute('class', 'playerHandValue winColour')
       } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-        valueDiv.setAttribute('class', 'playerHandValuewinColour')
+        valueDiv.setAttribute('class', 'playerHandValue winColour')
       } else if(playerHandValue < 22 && dealerHandValue > 21) {
-        valueDiv.setAttribute('class', 'playerHandValuewinColour')
+        valueDiv.setAttribute('class', 'playerHandValue winColour')
       } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-        valueDiv.setAttribute('class', 'playerHandValuedrawColour')
+        valueDiv.setAttribute('class', 'playerHandValue drawColour')
       } else {
-        valueDiv.setAttribute('class', 'playerHandValueloseColour')
+        valueDiv.setAttribute('class', 'playerHandValue loseColour')
       }
     }
   })
