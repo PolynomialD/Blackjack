@@ -361,13 +361,16 @@ function setHandValueColours() {
 }
 
 function doubleDown(index) {
-  const bet =  game.players[index].removeBet() * 2
-  game.players[index].placeBet(bet)
-  game.players[index].receiveCard(game.deck.dealCard())
-  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${game.players[index].getBets()[0]}`
+  const player = game.players[index]
+  const bet = player.removeBet()
+  player.receiveChips(bet)
+  player.placeBet(Number(bet * 2))
+  player.receiveCard(game.deck.dealCard())
+  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${player.getBets()[0]}`
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   stick(index)
   displayPlayerCards()
+  refreshChipsTotals()
 }
 
 function playDealersHand() {
