@@ -15,7 +15,7 @@ function addNewPlayer() {
     chips.value = 10000
     players.push(player)
     const li = document.createElement('li')
-    const nameNode = document.createTextNode(`${player.getName()}: `)
+    const nameNode = document.createTextNode(`${player.getName()}  `)
     const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
     
     li.appendChild(nameNode)
@@ -39,6 +39,9 @@ function setUpTable() {
     playerDiv.setAttribute('class', 'playerDiv displayInline')
     
     const playerImage = document.createElement('img')
+    playerImage.setAttribute('id', `player${index}-img`)
+    playerImage.setAttribute('type', 'button')
+    playerImage.setAttribute('onclick', `makeBet(${index})`)
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
     playerImage.setAttribute('class', 'playerImage')
  
@@ -66,21 +69,16 @@ function setUpTable() {
     betInput.setAttribute('type', 'number')
     betInput.setAttribute('step', '500')
     betInput.setAttribute('value', '1000')
-    const betButtonDiv = document.createElement('div')
-    betButtonDiv.setAttribute('id', `player${index}-bet-button-div`)
-    const betButton = document.createElement('button')
-    betButton.setAttribute('id', `player${index}-bet-button`)
-    betButton.setAttribute('onclick', `makeBet(${index})`)
-    betButton.innerHTML = 'Place Bet'
-    betButtonDiv.appendChild(betButton)
-    
+    const betDiv = document.createElement('div')
+    betDiv.setAttribute('id', `player${index}-bet-div`)
+     
     playerDiv.appendChild(playerImage)
     playerDiv.appendChild(playerName)
     playerDiv.appendChild(playerChips)
     playerDiv.appendChild(playerCards)
     playerDiv.appendChild(playerHandValue)
     playerDiv.appendChild(betInput)
-    playerDiv.appendChild(betButtonDiv)
+    playerDiv.appendChild(betDiv)
     
     playerDivs.push(playerDiv)
   })
@@ -91,12 +89,14 @@ function setUpTable() {
 
 function makeBet(index) {
   const betInput = document.getElementById(`player${index}-bet-input`)
-  const betButton = document.getElementById(`player${index}-bet-button-div`)
+  const betDiv = document.getElementById(`player${index}-bet-div`)
 
-  if(betInput.value !== '') {
+  if(betInput.value !== '' && betInput.value > 0) {
     game.players[index].placeBet(Number(betInput.value))
+    document.getElementById('hint-text').innerHTML = ''
+    document.getElementById(`player${index}-img`).setAttribute('onclick', '')
     betInput.setAttribute('class', 'hidden')
-    betButton.innerHTML = `bet:${game.players[index].getBets()[0]}`
+    betDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
@@ -292,7 +292,7 @@ function doubleDown(index) {
   player.receiveChips(bet)
   player.placeBet(Number(bet * 2))
   player.receiveCard(game.deck.dealCard())
-  document.getElementById(`player${index}-bet-button-div`).innerHTML = `bet:${player.getBets()[0]}`
+  document.getElementById(`player${index}-bet-div`).innerHTML = `bet:${player.getBets()[0]}`
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   stick(index)
   displayPlayerCards()
@@ -318,6 +318,7 @@ function createBlackJackGame() {
   setUpTable()
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
+  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   console.log(game.deck)
 }
 
@@ -357,7 +358,7 @@ function getPlayersChipsAndBets() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const betDiv =  document.getElementById(`player${index}-bet-button-div`)
+    const betDiv =  document.getElementById(`player${index}-bet-div`)
     const playerDiffDiv = document.createElement('div')
     if(difference < 0) {
       playerDiffDiv.innerHTML = `Lost:${difference}`
@@ -428,10 +429,12 @@ function displayTheCount() {
   const cardsInDeck = game.deck.cards.length
   const cardsTotal = game.deck.dealtCards.length + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(roundCount === 1 && cardsInDeck === cardsTotal) {
-    hintText.innerHTML = 'Click the deck to continue'
-  } else if(roundCount === 1) {
+  if(roundCount === 1 && cardsInDeck !== cardsTotal) {
     hintText.innerHTML = 'Click the dealer to continue'
+  } else if(roundCount === 1 && game.players[0].getBets()[0]) {
+    hintText.innerHTML = 'Click the deck to continue'
+  } else if(roundCount === 1 && game.players[0].getBets() !== []) {
+    hintText.innerHTML = 'Click a player to place a bet'
   } else {
     hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
   }
