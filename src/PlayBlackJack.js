@@ -43,7 +43,7 @@ function setUpTable() {
     playerImage.setAttribute('type', 'button')
     playerImage.setAttribute('onclick', `makeBet(${index})`)
     playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
-    playerImage.setAttribute('class', 'playerImage')
+    playerImage.setAttribute('class', 'playerImage cursor')
  
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
@@ -95,6 +95,7 @@ function makeBet(index) {
     game.players[index].placeBet(Number(betInput.value))
     document.getElementById('hint-text').innerHTML = ''
     document.getElementById(`player${index}-img`).setAttribute('onclick', '')
+    document.getElementById(`player${index}-img`).setAttribute('class', 'playerImage')
     betInput.setAttribute('class', 'hidden')
     betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     betCount++
@@ -107,6 +108,7 @@ function makeBet(index) {
       document.getElementById('hint-text').innerHTML = ''
     }
     document.getElementById('deck-button').setAttribute('onclick', 'dealCards()')
+    document.getElementById('deck-button').setAttribute('class', 'buttonImage cursor')
     betCount = 0
    
   }
@@ -196,6 +198,7 @@ function stick(index, hand = 1) {
   if(index+1 === players.length && stickCounter === handSize) {
     playDealersHand()
     document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
+    document.getElementById('dealer-img').setAttribute('class', 'buttonImage cursor')
     stickCounter = 0
   } else if(stickCounter === handSize) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
@@ -351,6 +354,7 @@ function nextRound() {
   document.getElementById('deck-button').setAttribute('onclick', '')
   document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   document.getElementById('dealer-img').setAttribute('onclick', '')
+  document.getElementById('dealer-img').setAttribute('class', 'buttonImage')
   setUpTable()
 }
 

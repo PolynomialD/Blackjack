@@ -82,9 +82,13 @@ h1, h2 {
   width: 50px
 }
 
+.cursor {
+  cursor: pointer
+}
+
 .buttonImage {
   height: 80px;
-  width: 80px
+  width: 80px;
 }
 
 #choose-game-div {
