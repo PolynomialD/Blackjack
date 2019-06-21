@@ -96,7 +96,7 @@ function makeBet(index) {
     document.getElementById('hint-text').innerHTML = ''
     document.getElementById(`player${index}-img`).setAttribute('onclick', '')
     betInput.setAttribute('class', 'hidden')
-    betDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
+    betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
@@ -121,37 +121,42 @@ function dealCards() {
   game.players.forEach((player, index) => {
     const drawCardButton = document.createElement('button')
     drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
+    drawCardButton.setAttribute('class', 'button')
     drawCardButton.setAttribute('onclick', `drawCard(${index})`)
     drawCardButton.innerHTML = 'Card'
     if(index !== 0) drawCardButton.setAttribute('class', 'hidden')
 
     const stickButton = document.createElement('button')
     stickButton.setAttribute('id', `player${index}-stickButton`)
+    stickButton.setAttribute('class', 'button')
     stickButton.setAttribute('onclick', `stick(${index})`)
     stickButton.innerHTML = 'Stick'
     if(index !== 0) stickButton.setAttribute('class', 'hidden')
 
     const splitButton = document.createElement('button')
     splitButton.setAttribute('id', `player${index}-splitButton`)
+    splitButton.setAttribute('class', 'button')
     splitButton.setAttribute('onclick', `splitCards(${index})`)
     splitButton.innerHTML = 'Split'
     if(index !== 0) splitButton.setAttribute('class', 'hidden')
 
     const doubleButton = document.createElement('button')
     doubleButton.setAttribute('id', `player${index}-doubleButton`)
+    doubleButton.setAttribute('class', 'button')
     doubleButton.setAttribute('onclick', `doubleDown(${index})`)
     doubleButton.innerHTML = 'Double'
     if(index !== 0) doubleButton.setAttribute('class', 'hidden')
 
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
-    playerDiv.appendChild(stickButton)
-    playerDiv.appendChild(doubleButton)
+    playerDiv.appendChild(stickButton) 
 
+    if(player.getBets()[0] <= player.getChips()) {
+      playerDiv.appendChild(doubleButton)
+    }
     if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
     }
-
   })
   document.getElementById('deck-button').setAttribute('class', 'hidden')
   document.getElementById('hint-button').setAttribute('class', 'hidden')
@@ -160,6 +165,9 @@ function dealCards() {
 
 function drawCard(index, hand) {
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  if(document.getElementById(`player${index}-splitButton`)) {
+    document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
+  }
   game.players[index].receiveCard(game.deck.dealCard(), hand)
   if(game.handValue(game.players[index].showHand(hand)) > 21) {
     stick(index, hand)
@@ -190,12 +198,12 @@ function stick(index, hand = 1) {
     document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
     stickCounter = 0
   } else if(stickCounter === handSize) {
-    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'displayInline')
-    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'displayInline')
-    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'displayInline')
+    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
+    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
+    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')
     stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
-      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'displayBlock')
+      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'button displayBlock')
     }
   }
 }
@@ -259,7 +267,7 @@ function splitCards(index) {
 
   const playerHandValue = document.createElement('div')
   playerHandValue.setAttribute('id', `player${index}-split-hand-value`)
-  playerHandValue.setAttribute('style', 'font-size:18px')
+  playerHandValue.setAttribute('class', 'playerHandValue')
 
   const playerBetDiv = document.createElement('div')
   playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
@@ -267,11 +275,13 @@ function splitCards(index) {
   
   const drawCardButton = document.createElement('button')
   drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
+  drawCardButton.setAttribute('class', 'button')
   drawCardButton.setAttribute('onclick', `drawCard(${index},2)`)
   drawCardButton.innerHTML = 'Card'
 
   const stickButton = document.createElement('button')
   stickButton.setAttribute('id', `player${index}-split-stickButton`)
+  stickButton.setAttribute('class', 'button')
   stickButton.setAttribute('onclick', `stick(${index},2)`)
   stickButton.innerHTML = 'Stick'
 
@@ -292,7 +302,7 @@ function doubleDown(index) {
   player.receiveChips(bet)
   player.placeBet(Number(bet * 2))
   player.receiveCard(game.deck.dealCard())
-  document.getElementById(`player${index}-bet-div`).innerHTML = `bet:${player.getBets()[0]}`
+  document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${player.getBets()[0]}`
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   stick(index)
   displayPlayerCards()
@@ -374,7 +384,7 @@ function showChipsDifference(playersChips) {
 function refreshChipsTotals() {
   game.players.forEach((player, index) => {
     const chipsDivText = document.getElementById(`player${index}-chips-text`)
-  chipsDivText.innerHTML = `${player.getChips()}`
+    chipsDivText.innerHTML = `${player.getChips()}`
   })
 }
 
