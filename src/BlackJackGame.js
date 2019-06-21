@@ -61,8 +61,11 @@ class BlackJackGame {
     this.players.forEach((player) => {
       player.hands.forEach((hand) => {
         const playerHandValue = this.handValue(hand.showCards())
-        if(playerHandValue === 21 && hand.size() === 2) {
+        if(playerHandValue === 21 && hand.size() === 2 && player.hands.length === 1) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0] + player.getBets()[0]/2))
+          player.receiveChips(player.removeBet())
+        } else if(playerHandValue === 21 && hand.size() === 2 ) {
+          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
           player.receiveChips(player.removeBet())
         } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
           player.receiveChips(player.removeBet())

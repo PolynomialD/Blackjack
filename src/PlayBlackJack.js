@@ -23,7 +23,7 @@ function addNewPlayer() {
 
     document.getElementById('nameInput').focus()
     document.getElementById('playersList').appendChild(li)
-    document.getElementById('createGameButton').setAttribute('class', 'displayInline')
+    document.getElementById('createGameButton').setAttribute('class', 'displayInline inputButton')
   } 
 }
 
@@ -167,7 +167,9 @@ function dealCards() {
 }
 
 function drawCard(index, hand) {
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  if(document.getElementById(`player${index}-doubleButton`)) {
+    document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  }
   if(document.getElementById(`player${index}-splitButton`)) {
     document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   }
@@ -179,11 +181,13 @@ function drawCard(index, hand) {
 }
 
 function stick(index, hand = 1) {
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  if( document.getElementById(`player${index}-doubleButton`)) {
+    document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
+  }
   if(document.getElementById(`player${index}-splitButton`)) {
   document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   }
-  const handSize = game.players[index].hands.length
+  const handAmount = game.players[index].hands.length
   if(hand === 1) {
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
     document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
@@ -196,12 +200,12 @@ function stick(index, hand = 1) {
     document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
   }
-  if(index+1 === players.length && stickCounter === handSize) {
+  if(index+1 === players.length && stickCounter === handAmount) {
     playDealersHand()
     document.getElementById('dealer-img').setAttribute('onclick', 'nextRound()')
     document.getElementById('dealer-img').setAttribute('class', 'buttonImage cursor')
     stickCounter = 0
-  } else if(stickCounter === handSize) {
+  } else if(stickCounter === handAmount) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')

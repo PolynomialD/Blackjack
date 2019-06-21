@@ -37,7 +37,7 @@ h1, h2 {
 }
 
 .button {
-  background-color: #92aa29e5;
+  background-color: #e0e2d9e5;
   border: none;
   padding: 4px 8px;
   text-align: center;
@@ -110,5 +110,29 @@ h1, h2 {
 }
 
 .betInput {
-  width: 4em
+  width: 4em;
+  background-color: #e0e2d9e5;
+  border: none
+}
+
+.input {
+  background-color: #e0e2d9e5;
+  border: 1px solid black
+}
+
+.inputButton {
+  background-color: #e0e2d9e5;
+  border: none;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: 15px;
+  margin: 2px 1px;
+  opacity: 0.8;
+  transition: 0.3s;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.inputButton:hover {
+  opacity: 1
 }

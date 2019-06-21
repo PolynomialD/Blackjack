@@ -23,12 +23,12 @@
     <h2>Create Game</h2>
     <div>
       <label>Enter Player Name</label>
-      <input id="nameInput" type="text" autofocus /> </br>
+      <input id="nameInput" class="input" type="text" autofocus /> </br>
       <label>Enter Player Chips</label>
-      <input id="chipsInput" type="number" value="10000" step="5000"/>
+      <input id="chipsInput" class="input" type="number" value="10000" step="5000"/>
     </div>
-    <button id="addNewPlayerButton" onclick="addNewPlayer()">AddPlayer</button>
-    <button id="createGameButton" onclick="createBlackJackGame()" class="hidden">Create Game</button>
+    <button id="addNewPlayerButton" class="inputButton" onclick="addNewPlayer()">AddPlayer</button>
+    <button id="createGameButton" class="inputButton hidden" onclick="createBlackJackGame()">Create Game</button>
     <ul id="playersList"></ul>
   </div>
   <div id="table-div" class="hidden">
