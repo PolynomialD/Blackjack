@@ -7,6 +7,37 @@ class BlackJackGame {
     this.deck = deck || this.createBlackJackDeck()
     this.dealer = new Dealer()
     this.players = players || []
+    this.currentPlayer = 0
+  }
+
+  getCurrentPlayer() {
+    return this.currentPlayer
+  }
+
+  nextPlayer() {
+    if(this.currentPlayer === this.players.length-1) {
+      this.currentPlayer = 0
+    } else {
+      this.currentPlayer++
+    }
+  }
+
+  splitHand() {
+    this.players[this.currentPlayer].splitHand()
+    this.players[this.currentPlayer].receiveCard(this.deck.dealCard())
+    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(), 2)
+  }
+
+  getPlayersChipsAndBets() {
+    return this.players.map((player) => {
+      return player.getChips() + player.getBets().reduce((total,number) => {
+        return total + number
+      })
+    })
+  }
+
+  changeCardColour() {
+    this.deck.changeCardColour()
   }
 
   createBlackJackDeck(decks = 6) {
@@ -64,19 +95,25 @@ class BlackJackGame {
         if(playerHandValue === 21 && hand.size() === 2 && player.hands.length === 1) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0] + player.getBets()[0]/2))
           player.receiveChips(player.removeBet())
+          hand.setResult('win')
         } else if(playerHandValue === 21 && hand.size() === 2 ) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
           player.receiveChips(player.removeBet())
+          hand.setResult('win')
         } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
           player.receiveChips(player.removeBet())
+          hand.setResult('draw')
         } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
-          player.receiveChips(player.removeBet())            
+          player.receiveChips(player.removeBet())
+          hand.setResult('win')
         } else if(playerHandValue < 22 && dealerHandValue > 21) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
           player.receiveChips(player.removeBet())
+          hand.setResult('win')
         } else {
           this.dealer.receiveChips(player.removeBet())
+          hand.setResult('lose')
         }
       })
     })

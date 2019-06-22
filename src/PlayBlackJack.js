@@ -1,8 +1,6 @@
 const Player = require('./Player')
-const HtmlFactory = require('./HtmlFactory')
+const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame.js')
-const colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
-let colourIndex = 0
 const players = []
 let stickCounter = 0
 let betCount = 0
@@ -24,83 +22,127 @@ function addNewPlayer() {
     name.value = ''
     chips.value = 10000
     players.push(player)
-    const li = document.createElement('li')
-    const nameNode = document.createTextNode(`${player.getName()}  `)
-    const chipsNode = document.createTextNode(`chips: ${player.getChips()}`)
-    
-    li.appendChild(nameNode)
-    li.appendChild(chipsNode)
 
-    document.getElementById('nameInput').focus()
-    document.getElementById('playersList').appendChild(li)
-    document.getElementById('createGameButton').setAttribute('class', 'inputButton')
-    document.getElementById('createGameButton').setAttribute('onclick', 'createBlackJackGame()')
+    const li = Html.li()
+    Html.appendChildren(li, [
+      Html.textNode(`${player.getName()}  `),
+      Html.textNode(`chips: ${player.getChips()}`)
+    ])
+
+    Html.setFocus('nameInput')
+    Html.getAndAppendChild('playersList', li)
+    Html.getAndSetAttributes('createGameButton', {
+      class: 'inputButton',
+      onclick: 'createBlackJackGame()'
+    })
   } 
 }
 
 function setUpTable() {
-  document.getElementById('table-div').setAttribute('class', 'displayBlock')
-  document.getElementById('createGameForm').setAttribute('class', 'hidden')
+  Html.getAndSetAttributes('table-div', { class: 'displayBlock' })
+  Html.getAndSetAttributes('createGameForm', { class: 'hidden' })
+
   const playerRow = document.getElementById('players-div')
 
-   const playerDivs = players.map((player, index) => {
-    
-    const playerDiv = document.createElement('div')
-    playerDiv.setAttribute('id', `player${index}-div`)
-    playerDiv.setAttribute('class', 'playerDiv displayInline')
-    
-    const playerImage = HtmlFactory.img({
-      id: `player${index}-img`,
-      type: 'button',
-      onClick: `makeBet(${index})`,
-      src: '../assets/avatars/player_avatar.png',
-      class: 'playerImage cursor'
+  const playerDivs = players.map((player, index) => {
+    const playerChips = Html.div({
+      id: `player${index}-chips`
     })
- 
-    const playerName = document.createElement('div')
-    playerName.setAttribute('id', `player${index}-name`)
-    playerName.innerHTML = player.name 
-    
-    const playerChipsText =  document.createElement('div')
-    playerChipsText.setAttribute('id', `player${index}-chips-text`)
-    playerChipsText.setAttribute('class', 'chipsText')
-    playerChipsText.innerHTML = `${player.getChips()}`
-    const playerChips = document.createElement('div')
-    playerChips.setAttribute('id', `player${index}-chips`)
-    playerChips.appendChild(playerChipsText)
-    
-    const playerCards = document.createElement('div')
-    playerCards.setAttribute('id', `player${index}-cards`)
+    playerChips.appendChild(Html.div({
+      id: `player${index}-chips-text`,
+      class: 'chipsText'
+    }, `${player.getChips()}`))
 
-    const playerHandValue = document.createElement('div')
-    playerHandValue.setAttribute('id', `player${index}-hand-value`)
-    playerHandValue.setAttribute('class', 'playerHandValue')
+    const elements = [
+      Html.img({
+        id: `player${index}-img`,
+        type: 'button',
+        onClick: `makeBet(${index})`,
+        src: '../assets/avatars/player_avatar.png',
+        class: 'playerImage cursor'
+      }),
 
-    const betInput = HtmlFactory.input({
-      id: `player${index}-bet-input`,
-      class: 'betInput',
-      type: 'number',
-      step: 500,
-      value: 1000
+      Html.div({
+        id: `player${index}-name`
+      }, player.getName()),
+
+      playerChips,
+
+      Html.div({
+        id: `player${index}-cards`
+      }),
+      Html.div({
+        id: `player${index}-hand-value`,
+        class: 'playerHandValue'
+      }),
+
+      Html.input({
+        id: `player${index}-bet-input`,
+        class: 'betInput',
+        type: 'number',
+        step: 500,
+        value: 1000
+      }),
+
+      Html.div({
+        id: `player${index}-bet-div`,
+        class: 'bet-div'
+      })
+    ]
+    
+    const playerDiv = Html.div({
+      id: `player${index}-div`,
+      class: 'playerDiv displayInline'
     })
-  
-    const betDiv = document.createElement('div')
-    betDiv.setAttribute('id', `player${index}-bet-div`)
-    betDiv.setAttribute('class', 'bet-div')
-     
-    playerDiv.appendChild(playerImage)
-    playerDiv.appendChild(playerName)
-    playerDiv.appendChild(playerChips)
-    playerDiv.appendChild(playerCards)
-    playerDiv.appendChild(playerHandValue)
-    playerDiv.appendChild(betInput)
-    playerDiv.appendChild(betDiv)
-    
+    Html.appendChildren(playerDiv, elements)
     return playerDiv
   })
   playerDivs.reverse().forEach((playerDiv) => {
     playerRow.appendChild(playerDiv)
   })
+}
+
+function splitCards() {
+  game.splitHand()
+  refreshChipsTotals()
+
+  const player = game.getCurrentPlayer()
+  const hand = game.players[player].showHand(1)
+  document.getElementById(`player${player}-hand-value`).innerText = game.handValue(hand)
+
+  const elements = [
+    Html.div({
+      id: `player${player}-split-cards`
+    }),
+
+    Html.div({
+      id: `player${player}-split-hand-value`,
+      class: 'playerHandValue'
+    }, game.handValue(game.players[player].showHand(2))),
+
+    Html.div({
+      id: `player${player}-split-bet-div`
+    }, `bet:${game.players[player].getBets()[0]}`),
+
+    Html.button({
+      id: `player${player}-split-drawCardButton`,
+      class: 'button',
+      onclick: `drawCard(${player},2)`
+    }, 'Card'),
+
+    Html.button({
+      id: `player${player}-split-stickButton`,
+      class: 'button',
+      onclick: `stick(${player},2)`
+    }, 'Stick')
+  ]
+
+  const chipsDiv = document.getElementById(`player${player}-chips`)
+  Html.appendChildren(chipsDiv, elements)
+
+  document.getElementById(`player${player}-doubleButton`).setAttribute('class', 'hidden')
+  document.getElementById(`player${player}-splitButton`).setAttribute('class', 'hidden')
+  displayPlayerCards()  
 }
 
 function makeBet(index) {
@@ -109,24 +151,31 @@ function makeBet(index) {
 
   if(betInput.value !== '' && betInput.value > 0) {
     game.players[index].placeBet(Number(betInput.value))
+    
     document.getElementById('hint-text').innerHTML = ''
-    document.getElementById(`player${index}-img`).setAttribute('onclick', '')
-    document.getElementById(`player${index}-img`).setAttribute('class', 'playerImage')
+
+    Html.getAndSetAttributes(`player${index}-img`, {
+      onclick: '',
+      class: 'playerImage'
+    })
+
     betInput.setAttribute('class', 'hidden')
     betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     betCount++
   }
   if(betCount === game.getNumberOfPlayers()) {
     if(game.deck.dealtCards.length === 0) {
-      document.getElementById('hint-button').setAttribute('class', 'displayInline')
+      Html.getAndSetAttributes('hint-button', { class: 'displayInline'})
     } else {
-      document.getElementById('hint-button').setAttribute('class', 'hidden')
+      Html.getAndSetAttributes('hint-button', { class: 'hidden'})
       document.getElementById('hint-text').innerHTML = ''
     }
-    document.getElementById('deck-button').setAttribute('onclick', 'dealCards()')
-    document.getElementById('deck-button').setAttribute('class', 'buttonImage cursor')
+    Html.getAndSetAttributes(`deck-button`, {
+      onclick: 'dealCards()',
+      class: 'buttonImage cursor'
+    })
+
     betCount = 0
-   
   }
   refreshChipsTotals()
 }
@@ -148,31 +197,35 @@ function dealCards() {
   displayPlayerCards()
 
   game.players.forEach((player, index) => {
-    const drawCardButton = document.createElement('button')
-    drawCardButton.setAttribute('id', `player${index}-drawCardButton`)
-    drawCardButton.setAttribute('class', 'button')
-    drawCardButton.setAttribute('onclick', `drawCard(${index}, 1)`)
+    const drawCardButton = Html.button({
+      id: `player${index}-drawCardButton`,
+      class: 'button',
+      onclick: `drawCard(${index}, 1)`
+    })
     drawCardButton.innerHTML = 'Card'
     if(index !== 0) drawCardButton.setAttribute('class', 'hidden')
 
-    const stickButton = document.createElement('button')
-    stickButton.setAttribute('id', `player${index}-stickButton`)
-    stickButton.setAttribute('class', 'button')
-    stickButton.setAttribute('onclick', `stick(${index})`)
+    const stickButton = Html.button({
+      id: `player${index}-stickButton`,
+      class: 'button',
+      onclick: `stick(${index})`
+    })
     stickButton.innerHTML = 'Stick'
     if(index !== 0) stickButton.setAttribute('class', 'hidden')
 
-    const splitButton = document.createElement('button')
-    splitButton.setAttribute('id', `player${index}-splitButton`)
-    splitButton.setAttribute('class', 'button')
-    splitButton.setAttribute('onclick', `splitCards(${index})`)
+    const splitButton = Html.button({
+      id: `player${index}-splitButton`,
+      class: 'button',
+      onclick: `splitCards()`
+    })
     splitButton.innerHTML = 'Split'
     if(index !== 0) splitButton.setAttribute('class', 'hidden')
 
-    const doubleButton = document.createElement('button')
-    doubleButton.setAttribute('id', `player${index}-doubleButton`)
-    doubleButton.setAttribute('class', 'button')
-    doubleButton.setAttribute('onclick', `doubleDown(${index})`)
+    const doubleButton = Html.button({
+      id: `player${index}-doubleButton`,
+      class: 'button',
+      onclick: `doubleDown(${index})`
+    })
     doubleButton.innerHTML = 'Double'
     if(index !== 0) doubleButton.setAttribute('class', 'hidden')
 
@@ -243,6 +296,7 @@ function stick(index, hand = 1) {
     document.getElementById('dealer-img').setAttribute('class', 'buttonImage cursor')
     stickCounter = 0
   } else if(stickCounter === handAmount) {
+    game.nextPlayer()
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
     if(document.getElementById(`player${index+1}-doubleButton`)) {
@@ -253,50 +307,6 @@ function stick(index, hand = 1) {
       document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'button displayBlock')
     }
   }
-}
-
-function splitCards(index) {
-  game.players[index].splitHand()
-  game.players[index].receiveCard(game.deck.dealCard())
-  game.players[index].receiveCard(game.deck.dealCard(), 2)
-  refreshChipsTotals()
-
-  const playerCards = document.createElement('div')
-  playerCards.setAttribute('id', `player${index}-split-cards`)
-
-  const playerHandValue = document.getElementById(`player${index}-hand-value`)
-  playerHandValue.innerText = game.handValue(game.players[index].showHand(1))
-
-  const playerSplitHandValue = document.createElement('div')
-  playerSplitHandValue.setAttribute('id', `player${index}-split-hand-value`)
-  playerSplitHandValue.setAttribute('class', 'playerHandValue')
-  playerSplitHandValue.innerText = game.handValue(game.players[index].showHand(2))
-
-  const playerBetDiv = document.createElement('div')
-  playerBetDiv.setAttribute('id', `player${index}-split-bet-div`)
-  playerBetDiv.innerHTML = `bet:${game.players[index].getBets()[0]}`
-  
-  const drawCardButton = document.createElement('button')
-  drawCardButton.setAttribute('id', `player${index}-split-drawCardButton`)
-  drawCardButton.setAttribute('class', 'button')
-  drawCardButton.setAttribute('onclick', `drawCard(${index},2)`)
-  drawCardButton.innerHTML = 'Card'
-
-  const stickButton = document.createElement('button')
-  stickButton.setAttribute('id', `player${index}-split-stickButton`)
-  stickButton.setAttribute('class', 'button')
-  stickButton.setAttribute('onclick', `stick(${index},2)`)
-  stickButton.innerHTML = 'Stick'
-
-  const chipsDiv = document.getElementById(`player${index}-chips`)
-  chipsDiv.appendChild(playerCards)
-  chipsDiv.appendChild(playerSplitHandValue)
-  chipsDiv.appendChild(playerBetDiv)
-  chipsDiv.appendChild(drawCardButton)
-  chipsDiv.appendChild(stickButton)
-  document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
-  document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
-  displayPlayerCards()  
 }
 
 function doubleDown(index) {
@@ -320,11 +330,28 @@ function playDealersHand() {
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   document.getElementById('dealer-hand-value').setAttribute('class', '')
   displayAllCards()
-  setHandValueColours()  
-  const playersChipsAndBets = getPlayersChipsAndBets()
+  const playersChips = game.getPlayersChipsAndBets()
+
   game.payWinners()
+  setHandValueColours()
   refreshChipsTotals()
-  showChipsDifference(playersChipsAndBets)
+  showChipsDifference(playersChips)
+}
+
+function showChipsDifference(playersChips) {
+  game.players.forEach((player, index) => {
+    const difference = player.getChips() - playersChips[index]
+    const betDiv =  document.getElementById(`player${index}-bet-div`)
+    const playerDiffDiv = document.createElement('div')
+    if(difference < 0) {
+      playerDiffDiv.innerHTML = `Lost:${difference}`
+    } else if(difference > 0) {
+      playerDiffDiv.innerHTML = `Won:${difference}`
+    } else {
+      playerDiffDiv.innerHTML = 'Break Even'
+    }
+    betDiv.appendChild(playerDiffDiv)
+  })
 }
 
 function createBlackJackGame() {
@@ -351,10 +378,8 @@ function nextRound() {
       game.removePlayer(index)
     }
   })
-  document.getElementById('dealer-cards-div').innerHTML = ''
-  document.getElementById('players-div').innerHTML = ''
-  document.getElementById('dealer-hand-value').innerHTML = ''
-  document.getElementById('hint-text').innerHTML = ''
+  Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
+
   document.getElementById('deck-button').setAttribute('class', 'buttonImage displayInline')
   document.getElementById('deck-button').setAttribute('onclick', '')
   document.getElementById('hint-button').setAttribute('class', 'displayBlock')
@@ -368,7 +393,7 @@ function displayPlayerCards() {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
     playerCardsDiv.innerHTML = ''
     player.hands[0].cards.forEach((_, i ) => {
-      const cardToAppend = HtmlFactory.img({
+      const cardToAppend = Html.img({
         class: 'card',
         src: `${player.showHand()[i].image}`
       })
@@ -378,7 +403,7 @@ function displayPlayerCards() {
       const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
       playerCardsSplitDiv.innerHTML = ''
       player.hands[1].cards.forEach((_, i ) => {
-        const cardToAppend = HtmlFactory.img({
+        const cardToAppend = Html.img({
           class: 'card',
           src: `${player.showHand(2)[i].image}`
         })
@@ -390,16 +415,16 @@ function displayPlayerCards() {
 
 function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  const cardBack = HtmlFactory.img({
+  const cardBack = Html.img({
     id: 'dealer-card-back',
     class: 'card',
-    src: `../assets/cards/card_back_${colours[colourIndex]}.png`,
+    src: game.deck.cardBackPath,
     onclick: 'changeCardColour()'
   })
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
 
-  const cardToAppend = HtmlFactory.img({
+  const cardToAppend = Html.img({
     class: 'card',
     src: `${game.dealer.showHand()[1].image}`
   })
@@ -410,7 +435,7 @@ function displayAllCards() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
-    const cardToAppend = HtmlFactory.img({
+    const cardToAppend = Html.img({
       class: 'card',
       src: `${game.dealer.showHand()[i].image}`
     })
@@ -420,32 +445,6 @@ function displayAllCards() {
   displayPlayerCards()
 }
 
-function getPlayersChipsAndBets() {
-  const playersChips = []
-    game.players.forEach((player) => {
-      const chips = player.getChips() + player.getBets().reduce((total,number) => {
-        return total + number
-      })
-      playersChips.push(chips)
-    })
-    return playersChips
-}
-
-function showChipsDifference(playersChips) {
-  game.players.forEach((player, index) => {
-    const difference = player.getChips() - playersChips[index]
-    const betDiv =  document.getElementById(`player${index}-bet-div`)
-    const playerDiffDiv = document.createElement('div')
-    if(difference < 0) {
-      playerDiffDiv.innerHTML = `Lost:${difference}`
-    } else if(difference > 0) {
-      playerDiffDiv.innerHTML = `Won:${difference}`
-    } else {
-      playerDiffDiv.innerHTML = 'Break Even'
-    }
-    betDiv.appendChild(playerDiffDiv)
-  })
-}
 
 function refreshChipsTotals() {
   game.players.forEach((player, index) => {
@@ -455,12 +454,7 @@ function refreshChipsTotals() {
 }
 
 function changeCardColour() {
-  if(colourIndex === 5) {
-    colourIndex = 0
-  } else {
-    colourIndex++
-  }
-  document.getElementById('dealer-card-back').setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
+  game.changeCardColour()
 }
 
 function setHandValueColours() {
@@ -470,34 +464,12 @@ function setHandValueColours() {
   }
   game.players.forEach((player, index) => {
     const valueDiv = document.getElementById(`player${index}-hand-value`)
-    const playerHandValue = game.handValue(player.hands[0].showCards())     
-    if(playerHandValue === 21 && player.hands[0].size() === 2){
-      valueDiv.setAttribute('class', 'playerHandValue winColour')
-    } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-      valueDiv.setAttribute('class', 'playerHandValue winColour')
-    } else if(playerHandValue < 22 && dealerHandValue > 21) {
-      valueDiv.setAttribute('class', 'playerHandValue winColour')
-    } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-      valueDiv.setAttribute('class', 'playerHandValue drawColour')
-    } else {
-      valueDiv.setAttribute('class', 'playerHandValue loseColour')
-    }    
+    valueDiv.setAttribute('class', `playerHandValue ${player.getHandResult()}Colour`)
   })
   game.players.forEach((player, index) => {
     if(player.hands.length === 2) {
       const valueDiv = document.getElementById(`player${index}-split-hand-value`)
-      const playerHandValue = game.handValue(player.hands[1].showCards())     
-      if(playerHandValue === 21 && player.hands[1].size() === 2){
-        valueDiv.setAttribute('class', 'playerHandValue winColour')
-      } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-        valueDiv.setAttribute('class', 'playerHandValue winColour')
-      } else if(playerHandValue < 22 && dealerHandValue > 21) {
-        valueDiv.setAttribute('class', 'playerHandValue winColour')
-      } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-        valueDiv.setAttribute('class', 'playerHandValue drawColour')
-      } else {
-        valueDiv.setAttribute('class', 'playerHandValue loseColour')
-      }
+      valueDiv.setAttribute('class', `playerHandValue ${player.getSecondHandResult()}Colour`)
     }
   })
 }

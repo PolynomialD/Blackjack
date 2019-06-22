@@ -6,6 +6,9 @@ class Deck {
     ]
     this.cards = this.buildCards()
     this.dealtCards = []
+    this.cardColour = 0
+    this.colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
+    this.cardBackPath = `../assets/cards/card_back_${this.colours[this.cardColour]}.png`
   }
 
   buildCards () {
@@ -31,6 +34,12 @@ class Deck {
       })      
     })
     return [].concat.apply([], cards)
+  }
+
+  changeCardColour() {
+    this.cardColour = (this.cardColour === 5) ? 0 : this.cardColour + 1
+    this.cardBackPath = `../assets/cards/card_back_${this.colours[this.cardColour]}.png`
+    document.getElementById('dealer-card-back').setAttribute('src', this.cardBackPath)
   }
 
   size () {

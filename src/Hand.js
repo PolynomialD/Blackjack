@@ -1,6 +1,15 @@
 class Hand {
   constructor (cards) {
-    this.cards = cards || []
+    this.cards = cards || [],
+    this.result = ''
+  }
+
+  setResult(state) {
+    this.result = state
+  }
+
+  getResult() {
+    return this.result
   }
 
   takeCard(card) {

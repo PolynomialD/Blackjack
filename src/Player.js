@@ -8,6 +8,14 @@ class Player {
     this.bets = []
   }
 
+  getHandResult () {
+    return this.hands[0].getResult()
+  }
+
+  getSecondHandResult () {
+    return this.hands[1].getResult()
+  }
+
   getBets() {
     return this.bets
   }
