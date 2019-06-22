@@ -8,8 +8,6 @@ class Deck {
     this.dealtCards = []
   }
 
-
-
   buildCards () {
     const cards = this.suits.map((suit) => {
       return this.values.map((value) => {
@@ -59,6 +57,10 @@ class Deck {
 
   showDealtCards () {
     return this.dealtCards
+  }
+
+  dealtCardsSize() {
+    return this.dealtCards.length
   }
 
   shuffle () {

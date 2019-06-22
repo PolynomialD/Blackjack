@@ -4,7 +4,7 @@ const players = []
 let stickCounter = 0
 let betCount = 0
 let game
-let roundCount
+let roundNumber
 
 function addPlayerByClick(event) {
   if (event.keyCode === 13) {
@@ -235,54 +235,6 @@ function stick(index, hand = 1) {
   }
 }
 
-function displayPlayerCards() {
-  game.players.forEach((player, index) => {
-    const playerCardsDiv = document.getElementById(`player${index}-cards`)
-    playerCardsDiv.innerHTML = ''
-    player.hands[0].cards.forEach((card, i ) => {
-      const cardToAppend = document.createElement('img')
-      cardToAppend.setAttribute('class', 'card')
-      cardToAppend.setAttribute('src', `${player.showHand()[i].image}`)
-      playerCardsDiv.appendChild(cardToAppend)
-    })
-    if(document.getElementById(`player${index}-split-cards`)) {
-      const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
-      playerCardsSplitDiv.innerHTML = ''
-      player.hands[1].cards.forEach((card, i ) => {
-        const cardToAppend = document.createElement('img')
-        cardToAppend.setAttribute('class', 'card')
-        cardToAppend.setAttribute('src', `${player.showHand(2)[i].image}`)
-        playerCardsSplitDiv.appendChild(cardToAppend)
-      })
-    }
-  })
-}
-
-function displayDealerCard() {
-  const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  const cardBack = document.createElement('img')
-  cardBack.setAttribute('class', 'cardBack')
-  cardBack.setAttribute('src', '../assets/cards/card_back.png')
-  dealerCardsDiv.innerHTML = ''
-  dealerCardsDiv.appendChild(cardBack)
-  const cardToAppend = document.createElement('img')
-  cardToAppend.setAttribute('class', 'card')
-  cardToAppend.setAttribute('src', `${game.dealer.showHand()[1].image}`)
-  dealerCardsDiv.appendChild(cardToAppend)
-}
-
-function displayAllCards() {
-  const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  dealerCardsDiv.innerHTML = ''
-  for(let i=0; i<game.dealer.handSize(); i++) {
-    const cardToAppend = document.createElement('img')
-    cardToAppend.setAttribute('class', 'card')
-    cardToAppend.setAttribute('src', `${game.dealer.showHand()[i].image}`)
-    dealerCardsDiv.appendChild(cardToAppend)
-  }
-  displayPlayerCards()
-}
-
 function splitCards(index) {
   game.players[index].splitHand()
   game.players[index].receiveCard(game.deck.dealCard())
@@ -342,20 +294,21 @@ function doubleDown(index) {
 
 function playDealersHand() {
   game.playDealersHand()
+  if(roundNumber === 1) {
+    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
+  }
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
+  document.getElementById('dealer-hand-value').setAttribute('class', '')
   displayAllCards()
   setHandValueColours()  
   const playersChipsAndBets = getPlayersChipsAndBets()
   game.payWinners()
   refreshChipsTotals()
   showChipsDifference(playersChipsAndBets)
-  if(roundCount === 1) {
-    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
-  }
 }
 
 function createBlackJackGame() {
-  roundCount = 1
+  roundNumber = 1
   setUpTable()
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
@@ -364,7 +317,11 @@ function createBlackJackGame() {
 }
 
 function nextRound() {
-  roundCount++
+  if(game.deck.size() < (game.getNumberOfPlayers()+1) * 8) {
+    game.deck = game.createBlackJackDeck()
+    window.alert('new cards!')
+  }
+  roundNumber++
   game.dealer.discardHand()
   game.players.forEach((player) => {
     player.discardHands()
@@ -384,6 +341,54 @@ function nextRound() {
   document.getElementById('dealer-img').setAttribute('onclick', '')
   document.getElementById('dealer-img').setAttribute('class', 'buttonImage')
   setUpTable()
+}
+
+function displayPlayerCards() {
+  game.players.forEach((player, index) => {
+    const playerCardsDiv = document.getElementById(`player${index}-cards`)
+    playerCardsDiv.innerHTML = ''
+    player.hands[0].cards.forEach((card, i ) => {
+      const cardToAppend = document.createElement('img')
+      cardToAppend.setAttribute('class', 'card')
+      cardToAppend.setAttribute('src', `${player.showHand()[i].image}`)
+      playerCardsDiv.appendChild(cardToAppend)
+    })
+    if(document.getElementById(`player${index}-split-cards`)) {
+      const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
+      playerCardsSplitDiv.innerHTML = ''
+      player.hands[1].cards.forEach((card, i ) => {
+        const cardToAppend = document.createElement('img')
+        cardToAppend.setAttribute('class', 'card')
+        cardToAppend.setAttribute('src', `${player.showHand(2)[i].image}`)
+        playerCardsSplitDiv.appendChild(cardToAppend)
+      })
+    }
+  })
+}
+
+function displayDealerCard() {
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
+  const cardBack = document.createElement('img')
+  cardBack.setAttribute('class', 'cardBack')
+  cardBack.setAttribute('src', '../assets/cards/card_back.png')
+  dealerCardsDiv.innerHTML = ''
+  dealerCardsDiv.appendChild(cardBack)
+  const cardToAppend = document.createElement('img')
+  cardToAppend.setAttribute('class', 'card')
+  cardToAppend.setAttribute('src', `${game.dealer.showHand()[1].image}`)
+  dealerCardsDiv.appendChild(cardToAppend)
+}
+
+function displayAllCards() {
+  const dealerCardsDiv = document.getElementById('dealer-cards-div')
+  dealerCardsDiv.innerHTML = ''
+  for(let i=0; i<game.dealer.handSize(); i++) {
+    const cardToAppend = document.createElement('img')
+    cardToAppend.setAttribute('class', 'card')
+    cardToAppend.setAttribute('src', `${game.dealer.showHand()[i].image}`)
+    dealerCardsDiv.appendChild(cardToAppend)
+  }
+  displayPlayerCards()
 }
 
 function getPlayersChipsAndBets() {
@@ -468,14 +473,14 @@ function displayTheCount() {
       count--
     }
   })
-  const cardsInDeck = game.deck.cards.length
-  const cardsTotal = game.deck.dealtCards.length + cardsInDeck
+  const cardsInDeck = game.deck.size()
+  const cardsTotal = game.deck.dealtCardsSize() + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(roundCount === 1 && cardsInDeck !== cardsTotal) {
+  if(roundNumber === 1 && cardsInDeck !== cardsTotal) {
     hintText.innerHTML = 'Click the dealer to continue'
-  } else if(roundCount === 1 && game.players[0].getBets()[0]) {
+  } else if(roundNumber === 1 && game.players[0].getBets()[0]) {
     hintText.innerHTML = 'Click the deck to continue'
-  } else if(roundCount === 1 && game.players[0].getBets() !== []) {
+  } else if(roundNumber === 1 && game.players[0].getBets() !== []) {
     hintText.innerHTML = 'Click a player to place a bet'
   } else {
     hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
