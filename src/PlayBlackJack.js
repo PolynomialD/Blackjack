@@ -227,8 +227,10 @@ function stick(index, hand = 1) {
   } else if(stickCounter === handAmount) {
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
-    document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')
-    stickCounter = 0
+    if(document.getElementById(`player${index+1}-doubleButton`)) {
+      document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')
+    }
+      stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
       document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'button displayBlock')
     }
