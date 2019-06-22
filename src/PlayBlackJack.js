@@ -1,5 +1,7 @@
 const Player = require('./Player')
 const BlackJackGame = require('./BlackJackGame.js')
+const colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
+let colourIndex = 0
 const players = []
 let stickCounter = 0
 let betCount = 0
@@ -382,22 +384,12 @@ function displayPlayerCards() {
   })
 }
 
-function changeCardColour() {
-  if(colourIndex === 5) {
-    colourIndex = 0
-  } else {
-    colourIndex++
-  }
-  const colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
-  document.getElementById('dealer-card-back').setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
-}
-let colourIndex = 0
 function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   const cardBack = document.createElement('img')
   cardBack.setAttribute('id', 'dealer-card-back')
   cardBack.setAttribute('class', 'card')
-  cardBack.setAttribute('src', `../assets/cards/card_back_red.png`)
+  cardBack.setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
   cardBack.setAttribute('onclick', 'changeCardColour()')
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
@@ -451,6 +443,15 @@ function refreshChipsTotals() {
     const chipsDivText = document.getElementById(`player${index}-chips-text`)
     chipsDivText.innerHTML = `${player.getChips()}`
   })
+}
+
+function changeCardColour() {
+  if(colourIndex === 5) {
+    colourIndex = 0
+  } else {
+    colourIndex++
+  }
+  document.getElementById('dealer-card-back').setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
 }
 
 function setHandValueColours() {
