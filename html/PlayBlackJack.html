@@ -28,7 +28,7 @@
       <input id="chipsInput" class="input" type="number" value="10000" step="5000"/>
     </div>
     <button id="addNewPlayerButton" class="inputButton" onclick="addNewPlayer()">AddPlayer</button>
-    <button id="createGameButton" class="inputButton hidden" onclick="createBlackJackGame()">Create Game</button>
+    <button id="createGameButton" class="fadedButton">Create Game</button>
     <ul id="playersList"></ul>
   </div>
   <div id="table-div" class="hidden">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div id="deck-div" style="text-align:center">
-      <img id="deck-button"  class="buttonImage" type="button" src="../assets/cards/card_deck.png">
+      <img id="deck-button"  class="buttonImage" type="button" onmousedown="makeBets(event)" src="../assets/cards/card_deck.png">
     </div>
     <div style="text-align: center">
     </div>

@@ -30,7 +30,8 @@ function addNewPlayer() {
 
     document.getElementById('nameInput').focus()
     document.getElementById('playersList').appendChild(li)
-    document.getElementById('createGameButton').setAttribute('class', 'displayInline inputButton')
+    document.getElementById('createGameButton').setAttribute('class', 'inputButton')
+    document.getElementById('createGameButton').setAttribute('onclick', 'createBlackJackGame()')
   } 
 }
 
@@ -122,6 +123,17 @@ function makeBet(index) {
    
   }
   refreshChipsTotals()
+}
+
+function makeBets(event) {
+  if(event.button === 2) {
+    game.players.forEach((player, index) => {
+      if(player.getBets().length === 0) {
+        makeBet(index)
+      }
+    })
+    dealCards()
+  }
 }
 
 function dealCards() {
@@ -483,12 +495,13 @@ function displayTheCount() {
   } else if(roundNumber === 1 && game.players[0].getBets()[0]) {
     hintText.innerHTML = 'Click the deck to continue'
   } else if(roundNumber === 1 && game.players[0].getBets() !== []) {
-    hintText.innerHTML = 'Click a player to place a bet'
+    hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
   } else {
     hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
   }
 }
 
+window.makeBets = makeBets
 window.addPlayerByClick = addPlayerByClick
 window.doubleDown = doubleDown
 window.displayTheCount = displayTheCount

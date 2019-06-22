@@ -74,6 +74,17 @@ h1, h2 {
   color: red;
 }
 
+.fadedButton{
+  background-color: #e0e2d9e5;
+  border: none;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: 15px;
+  margin: 2px 1px;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
 .playerDiv {
   margin: 20px
 }
