@@ -382,11 +382,23 @@ function displayPlayerCards() {
   })
 }
 
+function changeCardColour() {
+  if(colourIndex === 5) {
+    colourIndex = 0
+  } else {
+    colourIndex++
+  }
+  const colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
+  document.getElementById('dealer-card-back').setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
+}
+let colourIndex = 0
 function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   const cardBack = document.createElement('img')
-  cardBack.setAttribute('class', 'cardBack')
-  cardBack.setAttribute('src', '../assets/cards/card_back.png')
+  cardBack.setAttribute('id', 'dealer-card-back')
+  cardBack.setAttribute('class', 'card')
+  cardBack.setAttribute('src', `../assets/cards/card_back_red.png`)
+  cardBack.setAttribute('onclick', 'changeCardColour()')
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
   const cardToAppend = document.createElement('img')
@@ -503,6 +515,7 @@ function displayTheCount() {
   }
 }
 
+window.changeCardColour = changeCardColour
 window.makeBets = makeBets
 window.addPlayerByClick = addPlayerByClick
 window.doubleDown = doubleDown
