@@ -50,11 +50,11 @@ function setUpTable() {
     playerDiv.setAttribute('class', 'playerDiv displayInline')
     
     const playerImage = HtmlFactory.img({
-      'id': `player${index}-img`,
-      'type': 'button',
-      'onClick': `makeBet(${index})`,
-      'src': '../assets/avatars/player_avatar.png',
-      'class': 'playerImage cursor'
+      id: `player${index}-img`,
+      type: 'button',
+      onClick: `makeBet(${index})`,
+      src: '../assets/avatars/player_avatar.png',
+      class: 'playerImage cursor'
     })
  
     const playerName = document.createElement('div')
@@ -76,12 +76,13 @@ function setUpTable() {
     playerHandValue.setAttribute('id', `player${index}-hand-value`)
     playerHandValue.setAttribute('class', 'playerHandValue')
 
-    const betInput = document.createElement('input')
-    betInput.setAttribute('id', `player${index}-bet-input`)
-    betInput.setAttribute('class', 'betInput')
-    betInput.setAttribute('type', 'number')
-    betInput.setAttribute('step', '500')
-    betInput.setAttribute('value', '1000')
+    const betInput = HtmlFactory.input({
+      id: `player${index}-bet-input`,
+      class: 'betInput',
+      type: 'number',
+      step: 500,
+      value: 1000
+    })
   
     const betDiv = document.createElement('div')
     betDiv.setAttribute('id', `player${index}-bet-div`)
