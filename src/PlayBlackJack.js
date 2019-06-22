@@ -42,6 +42,7 @@ function setUpTable() {
   const playerDivs = []
 
   players.forEach((player, index) => {
+    
     const playerDiv = document.createElement('div')
     playerDiv.setAttribute('id', `player${index}-div`)
     playerDiv.setAttribute('class', 'playerDiv displayInline')
@@ -71,13 +72,14 @@ function setUpTable() {
     const playerHandValue = document.createElement('div')
     playerHandValue.setAttribute('id', `player${index}-hand-value`)
     playerHandValue.setAttribute('class', 'playerHandValue')
-    
+
     const betInput = document.createElement('input')
     betInput.setAttribute('id', `player${index}-bet-input`)
     betInput.setAttribute('class', 'betInput')
     betInput.setAttribute('type', 'number')
     betInput.setAttribute('step', '500')
     betInput.setAttribute('value', '1000')
+  
     const betDiv = document.createElement('div')
     betDiv.setAttribute('id', `player${index}-bet-div`)
     betDiv.setAttribute('class', 'bet-div')
