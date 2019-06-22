@@ -30,12 +30,14 @@ h1, h2 {
 
 .card {
   height: 75px;
-  width: 55px
+  width: 55px;
+  box-shadow: 2px 2px;
+  margin: 3px
 }
 
 .cardBack {
   height: 77px;
-  width: 85px
+  width: 85px;
 }
 
 .button {
@@ -118,7 +120,7 @@ h1, h2 {
 }
 
 #hint-button {
-  background-color: rgb(2, 134, 2);
+  background-color: rgba(23, 114, 23, 0.486);
   border: none;
   padding: 4px 8px;
   text-align: center;
