@@ -64,7 +64,7 @@ class Player {
 
   removeCard(cardPos, handNumber = 1) {
     return this.hands[handNumber-1].getCard(cardPos-1)
-  }
+  }  
 }
 
 module.exports = Player

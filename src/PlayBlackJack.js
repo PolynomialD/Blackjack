@@ -1,4 +1,5 @@
 const Player = require('./Player')
+const HtmlFactory = require('./HtmlFactory')
 const BlackJackGame = require('./BlackJackGame.js')
 const colours = ['red', 'blue', 'black', 'green', 'orange', 'purple']
 let colourIndex = 0
@@ -41,20 +42,20 @@ function setUpTable() {
   document.getElementById('table-div').setAttribute('class', 'displayBlock')
   document.getElementById('createGameForm').setAttribute('class', 'hidden')
   const playerRow = document.getElementById('players-div')
-  const playerDivs = []
 
-  players.forEach((player, index) => {
+   const playerDivs = players.map((player, index) => {
     
     const playerDiv = document.createElement('div')
     playerDiv.setAttribute('id', `player${index}-div`)
     playerDiv.setAttribute('class', 'playerDiv displayInline')
     
-    const playerImage = document.createElement('img')
-    playerImage.setAttribute('id', `player${index}-img`)
-    playerImage.setAttribute('type', 'button')
-    playerImage.setAttribute('onclick', `makeBet(${index})`)
-    playerImage.setAttribute('src', '../assets/avatars/player_avatar.png')
-    playerImage.setAttribute('class', 'playerImage cursor')
+    const playerImage = HtmlFactory.img({
+      'id': `player${index}-img`,
+      'type': 'button',
+      'onClick': `makeBet(${index})`,
+      'src': '../assets/avatars/player_avatar.png',
+      'class': 'playerImage cursor'
+    })
  
     const playerName = document.createElement('div')
     playerName.setAttribute('id', `player${index}-name`)
@@ -94,7 +95,7 @@ function setUpTable() {
     playerDiv.appendChild(betInput)
     playerDiv.appendChild(betDiv)
     
-    playerDivs.push(playerDiv)
+    return playerDiv
   })
   playerDivs.reverse().forEach((playerDiv) => {
     playerRow.appendChild(playerDiv)
@@ -365,19 +366,21 @@ function displayPlayerCards() {
   game.players.forEach((player, index) => {
     const playerCardsDiv = document.getElementById(`player${index}-cards`)
     playerCardsDiv.innerHTML = ''
-    player.hands[0].cards.forEach((card, i ) => {
-      const cardToAppend = document.createElement('img')
-      cardToAppend.setAttribute('class', 'card')
-      cardToAppend.setAttribute('src', `${player.showHand()[i].image}`)
+    player.hands[0].cards.forEach((_, i ) => {
+      const cardToAppend = HtmlFactory.img({
+        class: 'card',
+        src: `${player.showHand()[i].image}`
+      })
       playerCardsDiv.appendChild(cardToAppend)
     })
     if(document.getElementById(`player${index}-split-cards`)) {
       const playerCardsSplitDiv = document.getElementById(`player${index}-split-cards`)
       playerCardsSplitDiv.innerHTML = ''
-      player.hands[1].cards.forEach((card, i ) => {
-        const cardToAppend = document.createElement('img')
-        cardToAppend.setAttribute('class', 'card')
-        cardToAppend.setAttribute('src', `${player.showHand(2)[i].image}`)
+      player.hands[1].cards.forEach((_, i ) => {
+        const cardToAppend = HtmlFactory.img({
+          class: 'card',
+          src: `${player.showHand(2)[i].image}`
+        })
         playerCardsSplitDiv.appendChild(cardToAppend)
       })
     }
@@ -386,16 +389,19 @@ function displayPlayerCards() {
 
 function displayDealerCard() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  const cardBack = document.createElement('img')
-  cardBack.setAttribute('id', 'dealer-card-back')
-  cardBack.setAttribute('class', 'card')
-  cardBack.setAttribute('src', `../assets/cards/card_back_${colours[colourIndex]}.png`)
-  cardBack.setAttribute('onclick', 'changeCardColour()')
+  const cardBack = HtmlFactory.img({
+    id: 'dealer-card-back',
+    class: 'card',
+    src: `../assets/cards/card_back_${colours[colourIndex]}.png`,
+    onclick: 'changeCardColour()'
+  })
   dealerCardsDiv.innerHTML = ''
   dealerCardsDiv.appendChild(cardBack)
-  const cardToAppend = document.createElement('img')
-  cardToAppend.setAttribute('class', 'card')
-  cardToAppend.setAttribute('src', `${game.dealer.showHand()[1].image}`)
+
+  const cardToAppend = HtmlFactory.img({
+    class: 'card',
+    src: `${game.dealer.showHand()[1].image}`
+  })
   dealerCardsDiv.appendChild(cardToAppend)
 }
 
@@ -403,9 +409,11 @@ function displayAllCards() {
   const dealerCardsDiv = document.getElementById('dealer-cards-div')
   dealerCardsDiv.innerHTML = ''
   for(let i=0; i<game.dealer.handSize(); i++) {
-    const cardToAppend = document.createElement('img')
-    cardToAppend.setAttribute('class', 'card')
-    cardToAppend.setAttribute('src', `${game.dealer.showHand()[i].image}`)
+    const cardToAppend = HtmlFactory.img({
+      class: 'card',
+      src: `${game.dealer.showHand()[i].image}`
+    })
+    
     dealerCardsDiv.appendChild(cardToAppend)
   }
   displayPlayerCards()
