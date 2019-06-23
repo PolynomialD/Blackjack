@@ -102,7 +102,6 @@ function setUpTable() {
 }
 
 function splitCards() {
-  console.log(game.getCurrentPlayer())
   game.splitHand()
   refreshChipsTotals()
 
@@ -448,18 +447,15 @@ function changeCardColour() {
 }
 
 function setHandValueColours() {
-  const dealerHandValue = game.handValue(game.dealer.showHand())
-  if(dealerHandValue > 21) {
+  if(game.handValue(game.dealer.showHand()) > 21) {
     document.getElementById('dealer-hand-value').setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {
-    const valueDiv = document.getElementById(`player${index}-hand-value`)
-    valueDiv.setAttribute('class', `playerHandValue ${player.getHandResult()}Colour`)
+    Html.getAndSetAttributes(`player${index}-hand-value`, {class: `playerHandValue ${player.getHandResult()}Colour`})
   })
   game.players.forEach((player, index) => {
     if(player.hands.length === 2) {
-      const valueDiv = document.getElementById(`player${index}-split-hand-value`)
-      valueDiv.setAttribute('class', `playerHandValue ${player.getSecondHandResult()}Colour`)
+      Html.getAndSetAttributes(`player${index}-split-hand-value`, {class: `playerHandValue ${player.getSecondHandResult()}Colour`})
     }
   })
 }

@@ -23,17 +23,13 @@ class BlackJackGame {
     this.currentPlayer++
   }
 
-  resetCurrentPlayer() {
-    this.currentPlayer = 0
-  }
-
   nextRound() {
     this.round++
+    this.currentPlayer = 0
     if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
       this.deck = this.createBlackJackDeck()
       window.alert('new cards!')
     }
-    this.resetCurrentPlayer()
     this.dealer.discardHand()
     this.players.forEach((player) => {
       player.discardHands()
