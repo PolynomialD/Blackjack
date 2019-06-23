@@ -15,17 +15,17 @@ class BlackJackGame {
   }
 
   nextPlayer() {
-    if(this.currentPlayer === this.players.length-1) {
-      this.currentPlayer = 0
-    } else {
-      this.currentPlayer++
-    }
+    this.currentPlayer++
+  }
+
+  resetCurrentPlayer() {
+    this.currentPlayer = 0
   }
 
   splitHand() {
     this.players[this.currentPlayer].splitHand()
-    this.players[this.currentPlayer].receiveCard(this.deck.dealCard())
-    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(), 2)
+    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),0)
+    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),1)
   }
 
   getPlayersChipsAndBets() {

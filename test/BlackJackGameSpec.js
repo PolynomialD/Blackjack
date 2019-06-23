@@ -140,8 +140,8 @@ describe('BlackJackGame', () => {
       game.dealCards()
       jim.receiveCard(game.deck.dealCard())
       bob.splitHand()
+      bob.receiveCard(game.deck.dealCard(),0)
       bob.receiveCard(game.deck.dealCard(),1)
-      bob.receiveCard(game.deck.dealCard(),2)
       game.payWinners()
       
       jim.chips.should.eql(10000)

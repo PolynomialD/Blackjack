@@ -103,11 +103,12 @@ function setUpTable() {
 }
 
 function splitCards() {
+  console.log(game.getCurrentPlayer())
   game.splitHand()
   refreshChipsTotals()
 
   const player = game.getCurrentPlayer()
-  const hand = game.players[player].showHand(1)
+  const hand = game.players[player].showHand(0)
   document.getElementById(`player${player}-hand-value`).innerText = game.handValue(hand)
 
   const elements = [
@@ -118,7 +119,7 @@ function splitCards() {
     Html.div({
       id: `player${player}-split-hand-value`,
       class: 'playerHandValue'
-    }, game.handValue(game.players[player].showHand(2))),
+    }, game.handValue(game.players[player].showHand(1))),
 
     Html.div({
       id: `player${player}-split-bet-div`
@@ -127,13 +128,13 @@ function splitCards() {
     Html.button({
       id: `player${player}-split-drawCardButton`,
       class: 'button',
-      onclick: `drawCard(${player},2)`
+      onclick: `drawCard(${player},1)`
     }, 'Card'),
 
     Html.button({
       id: `player${player}-split-stickButton`,
       class: 'button',
-      onclick: `stick(${player},2)`
+      onclick: `stick(${player},1)`
     }, 'Stick')
   ]
 
@@ -200,7 +201,7 @@ function dealCards() {
     const drawCardButton = Html.button({
       id: `player${index}-drawCardButton`,
       class: 'button',
-      onclick: `drawCard(${index}, 1)`
+      onclick: `drawCard(${index}, 0)`
     })
     drawCardButton.innerHTML = 'Card'
     if(index !== 0) drawCardButton.setAttribute('class', 'hidden')
@@ -208,7 +209,7 @@ function dealCards() {
     const stickButton = Html.button({
       id: `player${index}-stickButton`,
       class: 'button',
-      onclick: `stick(${index})`
+      onclick: `stick(${index}, 0)`
     })
     stickButton.innerHTML = 'Stick'
     if(index !== 0) stickButton.setAttribute('class', 'hidden')
@@ -239,14 +240,14 @@ function dealCards() {
     if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
     }
-    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(1))
+    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(0))
   })
   document.getElementById('deck-button').setAttribute('class', 'hidden')
   document.getElementById('hint-button').setAttribute('class', 'hidden')
   document.getElementById('hint-text').innerHTML = ''
 }
 
-function drawCard(index, hand = 1) {
+function drawCard(index, hand) {
   if(document.getElementById(`player${index}-doubleButton`)) {
     document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   }
@@ -257,18 +258,20 @@ function drawCard(index, hand = 1) {
   if(game.handValue(game.players[index].showHand(hand)) > 21) {
     stick(index, hand)
   }
-  if(hand === 1) {
+  if(hand === 0) {
     const handOne = document.getElementById(`player${index}-hand-value`)
-    handOne.innerHTML = game.handValue(game.players[index].showHand(1))
+    handOne.innerHTML = game.handValue(game.players[index].showHand(0))
   }
-  if(hand === 2) {
+  if(hand === 1) {
     const handTwo = document.getElementById(`player${index}-split-hand-value`)
-    handTwo.innerHTML = game.handValue(game.players[index].showHand(2))
+    handTwo.innerHTML = game.handValue(game.players[index].showHand(1))
   }
   displayPlayerCards()
 }
 
-function stick(index, hand = 1) {
+function stick(index, hand) {
+  console.log(game.getCurrentPlayer())
+
   if( document.getElementById(`player${index}-doubleButton`)) {
     document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
   }
@@ -276,16 +279,16 @@ function stick(index, hand = 1) {
   document.getElementById(`player${index}-splitButton`).setAttribute('class', 'hidden')
   }
   const handAmount = game.players[index].hands.length
-  if(hand === 1) {
+  if(hand === 0) {
     const handValue = document.getElementById(`player${index}-hand-value`)
-    handValue.innerHTML = game.handValue(game.players[index].showHand(1))
+    handValue.innerHTML = game.handValue(game.players[index].showHand(0))
     document.getElementById(`player${index}-drawCardButton`).setAttribute('class', 'hidden')
     document.getElementById(`player${index}-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
   }
-  if(hand === 2) {
+  if(hand === 1) {
      const splitHandValue = document.getElementById(`player${index}-split-hand-value`)
-     splitHandValue.innerHTML = game.handValue(game.players[index].showHand(2)) 
+     splitHandValue.innerHTML = game.handValue(game.players[index].showHand(1)) 
     document.getElementById(`player${index}-split-drawCardButton`).setAttribute('class', 'hidden')
     document.getElementById(`player${index}-split-stickButton`).setAttribute('class', 'hidden')
     stickCounter++
@@ -296,7 +299,9 @@ function stick(index, hand = 1) {
     document.getElementById('dealer-img').setAttribute('class', 'buttonImage cursor')
     stickCounter = 0
   } else if(stickCounter === handAmount) {
+    console.log(game.getCurrentPlayer())
     game.nextPlayer()
+    console.log(game.getCurrentPlayer())
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
     if(document.getElementById(`player${index+1}-doubleButton`)) {
@@ -317,7 +322,7 @@ function doubleDown(index) {
   player.receiveCard(game.deck.dealCard())
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${player.getBets()[0]}`
   document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
-  stick(index)
+  stick(index,0)
   displayPlayerCards()
   refreshChipsTotals()
 }
@@ -368,6 +373,7 @@ function nextRound() {
     game.deck = game.createBlackJackDeck()
     window.alert('new cards!')
   }
+  game.resetCurrentPlayer()
   roundNumber++
   game.dealer.discardHand()
   game.players.forEach((player) => {
@@ -395,7 +401,7 @@ function displayPlayerCards() {
     player.hands[0].cards.forEach((_, i ) => {
       const cardToAppend = Html.img({
         class: 'card',
-        src: `${player.showHand()[i].image}`
+        src: `${player.showHand(0)[i].image}`
       })
       playerCardsDiv.appendChild(cardToAppend)
     })
@@ -405,7 +411,7 @@ function displayPlayerCards() {
       player.hands[1].cards.forEach((_, i ) => {
         const cardToAppend = Html.img({
           class: 'card',
-          src: `${player.showHand(2)[i].image}`
+          src: `${player.showHand(1)[i].image}`
         })
         playerCardsSplitDiv.appendChild(cardToAppend)
       })
