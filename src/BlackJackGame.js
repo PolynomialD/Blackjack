@@ -8,10 +8,15 @@ class BlackJackGame {
     this.dealer = new Dealer()
     this.players = players || []
     this.currentPlayer = 0
+    this.round = 1
   }
 
   getCurrentPlayer() {
     return this.currentPlayer
+  }
+
+  getRound() {
+    return this.round
   }
 
   nextPlayer() {
@@ -20,6 +25,24 @@ class BlackJackGame {
 
   resetCurrentPlayer() {
     this.currentPlayer = 0
+  }
+
+  nextRound() {
+    this.round++
+    if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
+      this.deck = this.createBlackJackDeck()
+      window.alert('new cards!')
+    }
+    this.resetCurrentPlayer()
+    this.dealer.discardHand()
+    this.players.forEach((player) => {
+      player.discardHands()
+    })
+    this.players.forEach((player, index) => {
+      if(player.getChips() === 0) {
+        this.removePlayer(index)
+      }
+    })
   }
 
   splitHand() {

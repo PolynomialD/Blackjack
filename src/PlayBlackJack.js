@@ -5,7 +5,6 @@ const players = []
 let stickCounter = 0
 let betCount = 0
 let game
-let roundNumber
 
 function addPlayerByClick(event) {
   if (event.keyCode === 13) {
@@ -270,7 +269,6 @@ function drawCard(index, hand) {
 }
 
 function stick(index, hand) {
-  console.log(game.getCurrentPlayer())
 
   if( document.getElementById(`player${index}-doubleButton`)) {
     document.getElementById(`player${index}-doubleButton`).setAttribute('class', 'hidden')
@@ -299,9 +297,7 @@ function stick(index, hand) {
     document.getElementById('dealer-img').setAttribute('class', 'buttonImage cursor')
     stickCounter = 0
   } else if(stickCounter === handAmount) {
-    console.log(game.getCurrentPlayer())
     game.nextPlayer()
-    console.log(game.getCurrentPlayer())
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
     if(document.getElementById(`player${index+1}-doubleButton`)) {
@@ -329,7 +325,7 @@ function doubleDown(index) {
 
 function playDealersHand() {
   game.playDealersHand()
-  if(roundNumber === 1) {
+  if(game.getRound() === 1) {
     document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   }
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
@@ -360,7 +356,6 @@ function showChipsDifference(playersChips) {
 }
 
 function createBlackJackGame() {
-  roundNumber = 1
   setUpTable()
   game = new BlackJackGame(null, players)
   game.deck.shuffle()
@@ -369,28 +364,17 @@ function createBlackJackGame() {
 }
 
 function nextRound() {
-  if(game.deck.size() < (game.getNumberOfPlayers()+1) * 8) {
-    game.deck = game.createBlackJackDeck()
-    window.alert('new cards!')
-  }
-  game.resetCurrentPlayer()
-  roundNumber++
-  game.dealer.discardHand()
-  game.players.forEach((player) => {
-    player.discardHands()
-  })
-  game.players.forEach((player, index) => {
-    if(player.getChips() === 0) {
-      game.removePlayer(index)
-    }
-  })
+  game.nextRound()
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
-
-  document.getElementById('deck-button').setAttribute('class', 'buttonImage displayInline')
-  document.getElementById('deck-button').setAttribute('onclick', '')
-  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
-  document.getElementById('dealer-img').setAttribute('onclick', '')
-  document.getElementById('dealer-img').setAttribute('class', 'buttonImage')
+  Html.getAndSetAttributes('deck-button', {
+    class: 'buttonImage displayInline',
+    onclick: ''
+  })
+  Html.getAndSetAttributes('dealer-img', {
+    class: 'buttonImage',
+    onclick: ''
+  })
+  Html.getAndSetAttributes('hint-button', {class: 'displayBlock'})
   setUpTable()
 }
 
@@ -492,11 +476,11 @@ function displayTheCount() {
   const cardsInDeck = game.deck.size()
   const cardsTotal = game.deck.dealtCardsSize() + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(roundNumber === 1 && cardsInDeck !== cardsTotal) {
+  if(game.getRound() === 1 && cardsInDeck !== cardsTotal) {
     hintText.innerHTML = 'Click the dealer to continue'
-  } else if(roundNumber === 1 && game.players[0].getBets()[0]) {
+  } else if(game.getRound() === 1 && game.players[0].getBets()[0]) {
     hintText.innerHTML = 'Click the deck to continue'
-  } else if(roundNumber === 1 && game.players[0].getBets() !== []) {
+  } else if(game.getRound() === 1 && game.players[0].getBets() !== []) {
     hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
   } else {
     hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
