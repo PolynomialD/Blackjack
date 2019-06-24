@@ -1,7 +1,6 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame.js')
 const players = []
-let stickCounter = 0
 const game = new BlackJackGame()
 
 function addPlayerByClick(event) {
@@ -144,7 +143,7 @@ function makeBet(index) {
   if(betInput.value !== '' && betInput.value > 0) {
     game.players[index].placeBet(Number(betInput.value))
 
-    document.getElementById('hint-text').innerHTML = ''
+    Html.clearHtml('hint-text')
 
     Html.getAndSetAttributes(`player${index}-img`, {
       onclick: '',
@@ -160,7 +159,7 @@ function makeBet(index) {
       Html.getAndSetAttributes('hint-button', { class: 'displayInline'})
     } else {
       Html.getAndHideElement('hint-button')
-      document.getElementById('hint-text').innerHTML = ''
+      Html.clearHtml('hint-text')
     }
     Html.getAndSetAttributes(`deck-button`, {
       onclick: 'dealCards()',
@@ -232,7 +231,7 @@ function dealCards() {
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(0))
   })
   Html.getAndHideElement('deck-button','hint-button')
-  document.getElementById('hint-text').innerHTML = ''
+  Html.clearHtml('hint-text')
 }
 
 function drawCard(index, hand) {
@@ -256,9 +255,8 @@ function drawCard(index, hand) {
   }
   displayPlayerCards()
 }
-
+let stickCounter = 0
 function stick(index, hand) {
-
   if(document.getElementById(`player${index}-doubleButton`)) {
     Html.getAndHideElement(`player${index}-doubleButton`)
   }
@@ -267,34 +265,40 @@ function stick(index, hand) {
   }
   const handAmount = game.players[index].hands.length
   if(hand === 0) {
-    const handValue = document.getElementById(`player${index}-hand-value`)
-    handValue.innerHTML = game.handValue(game.players[index].showHand(0))
+    const handValue = game.handValue(game.players[index].showHand(0))
+    document.getElementById(`player${index}-hand-value`).innerHTML = handValue
+    if(handValue > 21) {
+      Html.getAndSetAttributes(`player${index}-hand-value`, { class: 'loseColour' })
+    }
     Html.getAndHideElement(`player${index}-drawCardButton`)
     Html.getAndHideElement(`player${index}-stickButton`)
     stickCounter++
   }
   if(hand === 1) {
-     const splitHandValue = document.getElementById(`player${index}-split-hand-value`)
-     splitHandValue.innerHTML = game.handValue(game.players[index].showHand(1)) 
+     const splitHandValue = game.handValue(game.players[index].showHand(1))
+     document.getElementById(`player${index}-split-hand-value`).innerHTML = splitHandValue
+     if(splitHandValue > 21) {
+      Html.getAndSetAttributes(`player${index}-split-hand-value`, { class: 'loseColour' })
+     }
      Html.getAndHideElement(`player${index}-split-drawCardButton`)
      Html.getAndHideElement(`player${index}-split-stickButton`)
     stickCounter++
   }
   if(index+1 === players.length && stickCounter === handAmount) {
     playDealersHand()
+    stickCounter = 0
     Html.getAndSetAttributes('dealer-img', {
       onclick: 'nextRound()',
       class: 'buttonImage cursor'
     })
-    stickCounter = 0
   } else if(stickCounter === handAmount) {
     game.nextPlayer()
+    stickCounter = 0
     document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
     document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
     if(document.getElementById(`player${index+1}-doubleButton`)) {
       document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')
     }
-      stickCounter = 0
     if(document.getElementById(`player${index+1}-splitButton`)) {
       document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'button displayBlock')
     }
@@ -333,7 +337,6 @@ function playDealersHand() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const betDiv =  document.getElementById(`player${index}-bet-div`)
     const playerDiffDiv = document.createElement('div')
     if(difference < 0) {
       playerDiffDiv.innerHTML = `Lost:${difference}`
@@ -342,7 +345,7 @@ function showChipsDifference(playersChips) {
     } else {
       playerDiffDiv.innerHTML = 'Break Even'
     }
-    betDiv.appendChild(playerDiffDiv)
+    Html.getAndAppendChild(`player${index}-bet-div`, playerDiffDiv)
   })
 }
 
@@ -370,7 +373,7 @@ function nextRound() {
 
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
-    document.getElementById(`player${index}-cards`).innerHTML = ''
+    Html.clearHtml(`player${index}-cards`)
     player.hands[0].cards.forEach((_, i ) => {
       const cardToAppend = Html.img({
         class: 'card',
@@ -379,7 +382,7 @@ function displayPlayerCards() {
       Html.getAndAppendChild(`player${index}-cards`, cardToAppend)
     })
     if(document.getElementById(`player${index}-split-cards`)) {
-      document.getElementById(`player${index}-split-cards`).innerHTML = ''
+      Html.clearHtml(`player${index}-split-cards`)
       player.hands[1].cards.forEach((_, i ) => {
         const cardToAppend = Html.img({
           class: 'card',
@@ -406,20 +409,18 @@ function displayDealerCard() {
     })
   ]
 
-  document.getElementById('dealer-cards-div').innerHTML = ''
+  Html.clearHtml('dealer-cards-div')
   Html.getAndAppendChildren('dealer-cards-div', cards)
 }
 
 function displayAllCards() {
-  const dealerCardsDiv = document.getElementById('dealer-cards-div')
-  dealerCardsDiv.innerHTML = ''
+  Html.clearHtml('dealer-cards-div')
   for(let i=0; i<game.dealer.handSize(); i++) {
     const cardToAppend = Html.img({
       class: 'card',
       src: `${game.dealer.showHand()[i].image}`
     })
-    
-    dealerCardsDiv.appendChild(cardToAppend)
+    Html.getAndAppendChild('dealer-cards-div', cardToAppend)
   }
   displayPlayerCards()
 }

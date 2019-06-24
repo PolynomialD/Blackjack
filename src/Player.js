@@ -32,6 +32,10 @@ class Player {
     return this.name
   }
 
+  getHandAmount() {
+    return this.hands.length
+  }
+
   receiveChips(amount) {
     this.chips += amount
   }
