@@ -64,7 +64,7 @@ class Deck {
     return cardsToDeal
   }
 
-  showDealtCards () {
+  showDealtCards() {
     return this.dealtCards
   }
 
