@@ -43,6 +43,14 @@ class Html {
     })
   }
 
+  static hideElement(...ids) {
+    ids.forEach((id) => {
+      if(id) {
+        document.getElementById(id).setAttribute('class', 'hidden')
+      }
+    })
+  }
+
   static getAndSetAttributes(id, attributes) {
     const element = document.getElementById(id)
     this._setAttributes(element, attributes)

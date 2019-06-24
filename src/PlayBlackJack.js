@@ -240,8 +240,7 @@ function dealCards() {
     }
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(0))
   })
-  document.getElementById('deck-button').setAttribute('class', 'hidden')
-  document.getElementById('hint-button').setAttribute('class', 'hidden')
+  Html.hideElement('deck-button','hint-button')
   document.getElementById('hint-text').innerHTML = ''
 }
 
