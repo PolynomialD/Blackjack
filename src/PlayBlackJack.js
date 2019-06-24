@@ -129,6 +129,7 @@ function splitCards() {
   ]
 
   Html.getAndAppendChildren(`player${player}-chips`, elements)
+
   Html.getAndHideElement(`player${player}-doubleButton`)
   Html.getAndHideElement(`player${player}-splitButton`)
   displayPlayerCards()
@@ -153,16 +154,16 @@ function makeBet(index) {
     game.addBetToCount()
   }
   if(game.getBetCount() === game.getNumberOfPlayers()) {
-    if(game.deck.dealtCardsSize() === 0) {
-      Html.getAndSetAttributes('hint-button', { class: 'displayInline'})
-    } else {
-      Html.getAndHideElement('hint-button')
-      Html.clearHtml('hint-text')
-    }
     Html.getAndSetAttributes(`deck-button`, {
       onclick: 'dealCards()',
       class: 'buttonImage cursor'
     })
+    if(game.deck.dealtCardsSize() === 0) {
+      Html.showHintButton()
+    } else {
+      Html.getAndHideElement('hint-button')
+      Html.clearHtml('hint-text')
+    }
   }
   refreshChipsTotals()
 }
@@ -445,7 +446,7 @@ function displayTheCount() {
   const cardsInDeck = game.deck.size()
   const cardsTotal = game.deck.dealtCardsSize() + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(game.getRound() === 1 && cardsInDeck !== cardsTotal) {
+  if(game.getRound() === 1 && game.deck.dealtCardsSize() === 0) {
     hintText.innerHTML = 'Click the dealer to continue'
   } else if(game.getRound() === 1 && game.players[0].getBets()[0]) {
     hintText.innerHTML = 'Click the deck to continue'
