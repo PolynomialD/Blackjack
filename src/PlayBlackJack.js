@@ -250,7 +250,7 @@ function drawCard(index, hand) {
   }
   displayPlayerCards()
 }
-let stickCounter = 0
+let stickCount = 0   // todo
 function stick(index, hand) {
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
@@ -264,7 +264,7 @@ function stick(index, hand) {
     }
     Html.getAndHideElement(`player${index}-drawCardButton`)
     Html.getAndHideElement(`player${index}-stickButton`)
-    stickCounter++
+    stickCount++
   }
   if(hand === 1) {
      const splitHandValue = game.handValue(game.players[index].showHand(1))
@@ -274,18 +274,18 @@ function stick(index, hand) {
      }
      Html.getAndHideElement(`player${index}-split-drawCardButton`)
      Html.getAndHideElement(`player${index}-split-stickButton`)
-    stickCounter++
+    stickCount++
   }
-  if(index+1 === game.players.length && stickCounter === handAmount) {
+  if(index+1 === game.getNumberOfPlayers() && stickCount === handAmount) {
     playDealersHand()
-    stickCounter = 0
+    stickCount = 0
     Html.getAndSetAttributes('dealer-img', {
       onclick: 'nextRound()',
       class: 'buttonImage cursor'
     })
-  } else if(stickCounter === handAmount) {
+  } else if(stickCount === handAmount) {
     game.nextPlayer()
-    stickCounter = 0
+    stickCount = 0
     
     Html.getAndShowButton(`player${index+1}-drawCardButton`)
     Html.getAndShowButton(`player${index+1}-stickButton`)
@@ -296,7 +296,7 @@ function stick(index, hand) {
 }
 
 function doubleDown(index) {
-  const player = game.players[index]
+  const player = game.players[index]  //todo
   const bet = player.removeBet()
   player.receiveChips(bet)
   player.placeBet(Number(bet * 2))
@@ -310,12 +310,12 @@ function doubleDown(index) {
 
 function playDealersHand() {
   game.playDealersHand()
-  if(game.getRound() === 1) Html.showHintButton()
-
-  document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
-  document.getElementById('dealer-hand-value').setAttribute('class', '')
+  const dealerHandValue = document.getElementById('dealer-hand-value')
+  dealerHandValue.innerHTML = game.handValue(game.dealer.showHand())
+  dealerHandValue.setAttribute('class', '')
   displayAllCards()
   const playersChips = game.getPlayersChipsAndBets()
+  if(game.getRound() === 1) Html.showHintButton()
 
   game.payWinners()
   setHandValueColours()
@@ -326,15 +326,9 @@ function playDealersHand() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const playerDiffDiv = document.createElement('div')
-    if(difference < 0) {
-      playerDiffDiv.innerHTML = `Lost:${difference}`
-    } else if(difference > 0) {
-      playerDiffDiv.innerHTML = `Won:${difference}`
-    } else {
-      playerDiffDiv.innerHTML = 'Break Even'
-    }
-    Html.getAndAppendChild(`player${index}-bet-div`, playerDiffDiv)
+    const valueDiv = document.createElement('div')
+    valueDiv.innerHTML = (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even'
+    Html.getAndAppendChild(`player${index}-bet-div`, valueDiv)
   })
 }
 
