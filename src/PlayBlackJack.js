@@ -1,10 +1,9 @@
-const Player = require('./Player')
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame.js')
 const players = []
 let stickCounter = 0
 let betCount = 0
-let game
+const game = new BlackJackGame()
 
 function addPlayerByClick(event) {
   if (event.keyCode === 13) {
@@ -17,29 +16,28 @@ function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
   if(chips.value !== '') {
-    const player = new Player(name.value, chips.value)
-    name.value = ''
-    chips.value = 10000
+    const player = game.addPlayer(name.value, chips.value)
     players.push(player)
 
     const li = Html.li()
     Html.appendChildren(li, [
-      Html.textNode(`${player.getName()}  `),
-      Html.textNode(`chips: ${player.getChips()}`)
+      Html.textNode(`${name.value}  `),
+      Html.textNode(chips.value)
     ])
-
+    name.value = ''
+    chips.value = 10000
     Html.setFocus('nameInput')
     Html.getAndAppendChild('playersList', li)
     Html.getAndSetAttributes('createGameButton', {
       class: 'inputButton',
-      onclick: 'createBlackJackGame()'
+      onclick: 'startGame()'
     })
   } 
 }
 
 function setUpTable() {
   Html.getAndSetAttributes('table-div', { class: 'displayBlock' })
-  Html.getAndSetAttributes('createGameForm', { class: 'hidden' })
+  Html.hideElement('createGameForm')
 
   const playerRow = document.getElementById('players-div')
 
@@ -139,8 +137,8 @@ function splitCards() {
   const chipsDiv = document.getElementById(`player${player}-chips`)
   Html.appendChildren(chipsDiv, elements)
 
-  document.getElementById(`player${player}-doubleButton`).setAttribute('class', 'hidden')
-  document.getElementById(`player${player}-splitButton`).setAttribute('class', 'hidden')
+  Html.hideElement(`player${player}-doubleButton`)
+  Html.hideElement(`player${player}-splitButton`)
   displayPlayerCards()  
 }
 
@@ -353,9 +351,8 @@ function showChipsDifference(playersChips) {
   })
 }
 
-function createBlackJackGame() {
+function startGame() {
   setUpTable()
-  game = new BlackJackGame(null, players)
   game.deck.shuffle()
   document.getElementById('hint-button').setAttribute('class', 'displayBlock')
   console.log(game.deck)
@@ -492,6 +489,6 @@ window.makeBet = makeBet
 window.dealCards = dealCards
 window.drawCard = drawCard
 window.stick = stick
-window.createBlackJackGame = createBlackJackGame
+window.startGame = startGame
 window.addNewPlayer = addNewPlayer
 window.nextRound = nextRound
