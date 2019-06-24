@@ -43,6 +43,26 @@ class Html {
     })
   }
 
+  static checkForAndHideElement(id) {
+    if(document.getElementById(id)) {
+      this.hideElement(document.getElementById(id))
+    }
+  }
+
+  static checkForAndShowButton(id) {
+    if(document.getElementById(id)) {
+      document.getElementById(id).setAttribute('class', 'button displayInline')
+    }
+  }
+
+  static showHintButton() {
+    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
+  }
+
+  static getAndShowButton(id) {
+    document.getElementById(id).setAttribute('class', 'button displayInline')
+  }
+
   static getAndHideElement(...ids) {
     ids.forEach((id) => {
       document.getElementById(id).setAttribute('class', 'hidden')

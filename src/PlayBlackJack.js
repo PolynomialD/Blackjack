@@ -1,6 +1,5 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame.js')
-const players = []
 const game = new BlackJackGame()
 
 function addPlayerByClick(event) {
@@ -14,8 +13,7 @@ function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
   if(chips.value !== '') {
-    const player = game.addPlayer(name.value, chips.value)
-    players.push(player)
+    game.addPlayer(name.value, chips.value)
 
     const li = Html.li()
     Html.appendChildren(li, [
@@ -235,12 +233,9 @@ function dealCards() {
 }
 
 function drawCard(index, hand) {
-  if(document.getElementById(`player${index}-doubleButton`)) {
-    Html.getAndHideElement(`player${index}-doubleButton`)
-  }
-  if(document.getElementById(`player${index}-splitButton`)) {
-    Html.getAndHideElement(`player${index}-splitButton`)
-  }
+  Html.checkForAndHideElement(`player${index}-doubleButton`)
+  Html.checkForAndHideElement(`player${index}-splitButton`)
+
   game.players[index].receiveCard(game.deck.dealCard(), hand)
   if(game.handValue(game.players[index].showHand(hand)) > 21) {
     stick(index, hand)
@@ -257,12 +252,9 @@ function drawCard(index, hand) {
 }
 let stickCounter = 0
 function stick(index, hand) {
-  if(document.getElementById(`player${index}-doubleButton`)) {
-    Html.getAndHideElement(`player${index}-doubleButton`)
-  }
-  if(document.getElementById(`player${index}-splitButton`)) {
-    Html.getAndHideElement(`player${index}-splitButton`)
-  }
+  Html.checkForAndHideElement(`player${index}-doubleButton`)
+  Html.checkForAndHideElement(`player${index}-splitButton`)
+
   const handAmount = game.players[index].hands.length
   if(hand === 0) {
     const handValue = game.handValue(game.players[index].showHand(0))
@@ -284,7 +276,7 @@ function stick(index, hand) {
      Html.getAndHideElement(`player${index}-split-stickButton`)
     stickCounter++
   }
-  if(index+1 === players.length && stickCounter === handAmount) {
+  if(index+1 === game.players.length && stickCounter === handAmount) {
     playDealersHand()
     stickCounter = 0
     Html.getAndSetAttributes('dealer-img', {
@@ -294,14 +286,12 @@ function stick(index, hand) {
   } else if(stickCounter === handAmount) {
     game.nextPlayer()
     stickCounter = 0
-    document.getElementById(`player${index+1}-drawCardButton`).setAttribute('class', 'button displayInline')
-    document.getElementById(`player${index+1}-stickButton`).setAttribute('class', 'button displayInline')
-    if(document.getElementById(`player${index+1}-doubleButton`)) {
-      document.getElementById(`player${index+1}-doubleButton`).setAttribute('class', 'button displayInline')
-    }
-    if(document.getElementById(`player${index+1}-splitButton`)) {
-      document.getElementById(`player${index+1}-splitButton`).setAttribute('class', 'button displayBlock')
-    }
+    
+    Html.getAndShowButton(`player${index+1}-drawCardButton`)
+    Html.getAndShowButton(`player${index+1}-stickButton`)
+
+    Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+    Html.checkForAndShowButton(`player${index+1}-splitButton`)
   }
 }
 
@@ -320,9 +310,8 @@ function doubleDown(index) {
 
 function playDealersHand() {
   game.playDealersHand()
-  if(game.getRound() === 1) {
-    document.getElementById('hint-button').setAttribute('class', 'displayBlock')
-  }
+  if(game.getRound() === 1) Html.showHintButton()
+
   document.getElementById('dealer-hand-value').innerHTML = game.handValue(game.dealer.showHand())
   document.getElementById('dealer-hand-value').setAttribute('class', '')
   displayAllCards()
@@ -352,7 +341,7 @@ function showChipsDifference(playersChips) {
 function startGame() {
   setUpTable()
   game.deck.shuffle()
-  document.getElementById('hint-button').setAttribute('class', 'displayBlock')
+  Html.showHintButton()
   console.log(game.deck)
 }
 
@@ -367,7 +356,7 @@ function nextRound() {
     class: 'buttonImage',
     onclick: ''
   })
-  Html.getAndSetAttributes('hint-button', {class: 'displayBlock'})
+  Html.showHintButton()
   setUpTable()
 }
 
