@@ -9,6 +9,15 @@ class BlackJackGame {
     this.players = players || []
     this.currentPlayer = 0
     this.round = 1
+    this.betCount = 0
+  }
+
+  getBetCount() {
+    return this.betCount
+  }
+
+  addBetToCount() {
+    this.betCount++
   }
 
   getCurrentPlayer() {
@@ -25,6 +34,7 @@ class BlackJackGame {
 
   nextRound() {
     this.round++
+    this.betCount = 0
     this.currentPlayer = 0
     if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
       this.deck = this.createBlackJackDeck()

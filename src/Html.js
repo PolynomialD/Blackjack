@@ -67,6 +67,13 @@ class Html {
     })
   }
 
+  static getAndAppendChildren(id, children) {
+    const parent = document.getElementById(id)
+    children.forEach((child) => {
+      parent.appendChild(child)
+    })
+  }
+
   static setFocus(id) {
     document.getElementById(id).focus()
   }

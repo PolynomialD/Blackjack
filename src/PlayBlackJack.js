@@ -39,9 +39,7 @@ function setUpTable() {
   Html.getAndSetAttributes('table-div', { class: 'displayBlock' })
   Html.hideElement('createGameForm')
 
-  const playerRow = document.getElementById('players-div')
-
-  const playerDivs = players.map((player, index) => {
+  const playerDivs = game.players.map((player, index) => {
     const playerChips = Html.div({
       id: `player${index}-chips`
     })
@@ -86,7 +84,7 @@ function setUpTable() {
         class: 'bet-div'
       })
     ]
-    
+
     const playerDiv = Html.div({
       id: `player${index}-div`,
       class: 'playerDiv displayInline'
@@ -95,7 +93,7 @@ function setUpTable() {
     return playerDiv
   })
   playerDivs.reverse().forEach((playerDiv) => {
-    playerRow.appendChild(playerDiv)
+    Html.getAndAppendChild('players-div', playerDiv)
   })
 }
 
@@ -111,16 +109,16 @@ function splitCards() {
     Html.div({
       id: `player${player}-split-cards`
     }),
-
+    
     Html.div({
       id: `player${player}-split-hand-value`,
       class: 'playerHandValue'
     }, game.handValue(game.players[player].showHand(1))),
-
+    
     Html.div({
       id: `player${player}-split-bet-div`
     }, `bet:${game.players[player].getBets()[0]}`),
-
+    
     Html.button({
       id: `player${player}-split-drawCardButton`,
       class: 'button',
@@ -134,12 +132,10 @@ function splitCards() {
     }, 'Stick')
   ]
 
-  const chipsDiv = document.getElementById(`player${player}-chips`)
-  Html.appendChildren(chipsDiv, elements)
-
+  Html.getAndAppendChildren(`player${player}-chips`, elements)
   Html.hideElement(`player${player}-doubleButton`)
   Html.hideElement(`player${player}-splitButton`)
-  displayPlayerCards()  
+  displayPlayerCards()
 }
 
 function makeBet(index) {
@@ -148,7 +144,7 @@ function makeBet(index) {
 
   if(betInput.value !== '' && betInput.value > 0) {
     game.players[index].placeBet(Number(betInput.value))
-    
+
     document.getElementById('hint-text').innerHTML = ''
 
     Html.getAndSetAttributes(`player${index}-img`, {
@@ -158,9 +154,9 @@ function makeBet(index) {
 
     betInput.setAttribute('class', 'hidden')
     betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
-    betCount++
+    game.addBetToCount()
   }
-  if(betCount === game.getNumberOfPlayers()) {
+  if(game.getBetCount() === game.getNumberOfPlayers()) {
     if(game.deck.dealtCards.length === 0) {
       Html.getAndSetAttributes('hint-button', { class: 'displayInline'})
     } else {
@@ -171,8 +167,6 @@ function makeBet(index) {
       onclick: 'dealCards()',
       class: 'buttonImage cursor'
     })
-
-    betCount = 0
   }
   refreshChipsTotals()
 }
