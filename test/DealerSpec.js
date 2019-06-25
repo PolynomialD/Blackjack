@@ -1,48 +1,53 @@
 const Deck = require('../src/Deck')
 const Dealer = require('../src/Dealer')
-const Player = require('../src/Player')
 const Gen = require('verify-it').Gen
+const Hand = require('../src/Hand')
 
 describe('Dealer', () => {
-  describe('hand', () => {
-    it('should store a number of cards', () => {
-      const deck = new Deck(['♣', '♦'], [['J',10]])
+  describe('receiveCard', () => {
+    verify.it('should put a card into the dealers hand', Gen.integerBetween(1,52), (card) => {
+      const deck = new Deck()
       const dealer = new Dealer()
-      dealer.receiveCard(deck.dealCard())
-      dealer.receiveCard(deck.dealCard())
-      dealer.hand.cards.should.eql(
-       [{'face': '♣J', 'image': '../assets/cards/jack_of_clubs.png', 'suit': '♣','value': 10},
-        {'face': '♦J', 'image': '../assets/cards/jack_of_diamonds.png', 'suit':'♦', 'value': 10}]
-      )
+      const expected = deck.cards[card]
+
+      dealer.receiveCard(deck.cards[card])
+      dealer.hand.cards[0].should.eql(expected)
+    })
+  })
+
+  describe('removeCard()', () => {
+    verify.it('should remove a card from the dealers hand', Gen.integerBetween(1,52), (cards) => {
+      const deck = new Deck()
+      const dealer = new Dealer()
+      const index = Gen.integerBetween(0, cards-1)()
+
+      for(let i=0; i<cards; i++) {
+        dealer.hand.cards.push(deck.cards[i])
+      }
+      const removedCard = dealer.hand.cards[index]
+      dealer.removeCard(index).should.eql(removedCard)
     })
   })
 
   describe('handSize()', () => {
-   verify.it('should give the size of the dealers hand', Gen.integerBetween(2,50), (cards) => {
+   verify.it('should give the size of the dealers hand', Gen.integerBetween(2,50), (amount) => {
       const deck = new Deck()
       const dealer = new Dealer()
-      const expected = cards
-      for(cards; cards>0; cards--) {
-        dealer.receiveCard(deck.dealCard())
+
+      for(let i=0; i<amount; i++) {
+        dealer.hand.cards.push(deck.cards[i])
       }
-      dealer.handSize().should.eql(expected)
+      dealer.handSize().should.eql(amount)
     })
   })
 
- describe('removeCard()', () => {
-    verify.it('should remove a card from the dealers hand', Gen.integerBetween(1,52), (cards) => {
+  describe('discardHand()', () => {
+    verify.it('should discard and replace the dealers hand', Gen.integerBetween(1,20), (card) => {
       const deck = new Deck()
       const dealer = new Dealer()
-      const expected = cards - 1
-      const index = Gen.integerBetween(0,expected)()
-
-      for(cards; cards>0; cards--) {
-        dealer.receiveCard(deck.dealCard())
-      }
-      const removedCard = dealer.hand.cards[index]
-
-      dealer.removeCard(index).should.eql(removedCard)
-      dealer.hand.size().should.eql(expected)
+      dealer.hand.cards.push(deck.cards[card])
+      dealer.discardHand()
+      dealer.hand.should.eql(new Hand())
     })
   })
 
@@ -59,15 +64,13 @@ describe('Dealer', () => {
       dealer.giveChips(chips)
       dealer.chips.should.eql(expected)
     })
+  })
 
-    verify.it('should give chips to the player', () => {
-      Gen.integerBetween(1,9000), Gen.integerBetween(1,9000), (chips, dealerChips) => {
-        const dealer = new Dealer()
-        const bob = new Player('Bob', chips)
-        const expected = chips + dealerChips
-        bob.receiveChips(dealer.giveChips(dealerChips))
-        bob.chips.should.eql(expected)
-      }
+  describe('receiveChips()', () => {
+    verify.it('should give chips to the dealer', Gen.integerBetween(1,9000), (chips) => {
+      const dealer = new Dealer()
+      dealer.receiveChips(chips)
+      dealer.chips.should.eql(1000000 + chips)
     })
   })
 })
