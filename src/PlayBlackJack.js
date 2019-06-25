@@ -247,8 +247,8 @@ function drawCard(index, hand) {
 function stick(index, hand) {
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
-
   const handAmount = game.players[index].getHandAmount()
+
   if(hand === 0) {
     const handValue = game.handValue(game.players[index].showHand(0))
     document.getElementById(`player${index}-hand-value`).innerHTML = handValue
@@ -262,12 +262,7 @@ function stick(index, hand) {
       if(index+1 === game.getNumberOfPlayers()) {
         playDealersHand()
       } else {
-        game.nextPlayer()
-        Html.getAndShowButton(`player${index+1}-drawCardButton`)
-        Html.getAndShowButton(`player${index+1}-stickButton`)
-
-        Html.checkForAndShowButton(`player${index+1}-doubleButton`)
-        Html.checkForAndShowButton(`player${index+1}-splitButton`)
+        nextPlayer(index)
       }
     }
     if(handAmount === 2) {
@@ -275,16 +270,12 @@ function stick(index, hand) {
         if(index+1 === game.getNumberOfPlayers()) {
           playDealersHand()
         } else {
-          game.nextPlayer()
-          Html.getAndShowButton(`player${index+1}-drawCardButton`)
-          Html.getAndShowButton(`player${index+1}-stickButton`)
-
-          Html.checkForAndShowButton(`player${index+1}-doubleButton`)
-          Html.checkForAndShowButton(`player${index+1}-splitButton`)
+          nextPlayer(index)
         }
       }
     }
   }
+
   if(hand === 1) {
     const splitHandValue = game.handValue(game.players[index].showHand(1))
     document.getElementById(`player${index}-split-hand-value`).innerHTML = splitHandValue
@@ -298,15 +289,19 @@ function stick(index, hand) {
       if(index+1 === game.getNumberOfPlayers()) {
         playDealersHand()
       } else {
-        game.nextPlayer()
-        Html.getAndShowButton(`player${index+1}-drawCardButton`)
-        Html.getAndShowButton(`player${index+1}-stickButton`)
-
-        Html.checkForAndShowButton(`player${index+1}-doubleButton`)
-        Html.checkForAndShowButton(`player${index+1}-splitButton`)
+        nextPlayer(index)
       }
     }
   }
+}
+
+function nextPlayer(index) {
+  game.nextPlayer()
+  Html.getAndShowButton(`player${index+1}-drawCardButton`)
+  Html.getAndShowButton(`player${index+1}-stickButton`)
+
+  Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+  Html.checkForAndShowButton(`player${index+1}-splitButton`)
 }
 
 function doubleDown() {
