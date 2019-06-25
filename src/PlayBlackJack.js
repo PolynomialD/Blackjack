@@ -48,7 +48,7 @@ function createPlayerElements() {
       Html.img({
         id: `player${index}-img`,
         type: 'button',
-        onClick: `makeBet(${index})`,
+        onClick: `placeBet(${index})`,
         src: '../assets/avatars/player_avatar.png',
         class: 'playerImage cursor'
       }),
@@ -131,7 +131,7 @@ function createSplitButtons() {
   Html.getAndHideElement(`player${player}-splitButton`)
 }
 
-function makeBet(index) {
+function placeBet(index) {
   const betInput = document.getElementById(`player${index}-bet-input`)
   const betDiv = document.getElementById(`player${index}-bet-div`)
 
@@ -168,7 +168,7 @@ function makeBets(event) {
   if(event.button === 2) {
     game.players.forEach((player, index) => {
       if(player.getBets().length === 0) {
-        makeBet(index)
+        placeBet(index)
       }
     })
     dealCards()
@@ -462,7 +462,7 @@ window.addPlayerByClick = addPlayerByClick
 window.doubleDown = doubleDown
 window.displayTheCount = displayTheCount
 window.splitCards = splitCards
-window.makeBet = makeBet
+window.placeBet = placeBet
 window.dealCards = dealCards
 window.drawCard = drawCard
 window.stick = stick
