@@ -50,7 +50,6 @@ class BlackJackGame {
     this.currentPlayer = 0
     if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
       this.deck = this.createBlackJackDeck()
-      console.log('new cards!')
     }
     this.dealer.discardHand()
     this.players.forEach((player) => {

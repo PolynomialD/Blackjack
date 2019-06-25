@@ -357,6 +357,7 @@ function playDealersHand() {
 
 function nextRound() {
   game.nextRound()
+  if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
   Html.getAndSetAttributes('deck-button', {
     class: 'buttonImage displayInline',
