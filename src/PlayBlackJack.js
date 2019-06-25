@@ -31,7 +31,7 @@ function addNewPlayer() {
   }
 }
 
-function setUpTable() {
+function createPlayerElements() {
   Html.getAndSetAttributes('table-div', { class: 'displayBlock' })
   Html.getAndHideElement('createGameForm')
 
@@ -96,7 +96,11 @@ function setUpTable() {
 function splitCards() {
   game.splitHand()
   refreshChipsTotals()
+  createSplitButtons()
+  displayPlayerCards()
+}
 
+function createSplitButtons() {
   const player = game.getCurrentPlayer()
   const hand = game.players[player].showHand(0)
   document.getElementById(`player${player}-hand-value`).innerText = game.handValue(hand)
@@ -132,7 +136,6 @@ function splitCards() {
 
   Html.getAndHideElement(`player${player}-doubleButton`)
   Html.getAndHideElement(`player${player}-splitButton`)
-  displayPlayerCards()
 }
 
 function makeBet(index) {
@@ -179,11 +182,7 @@ function makeBets(event) {
   }
 }
 
-function dealCards() {
-  game.dealCards()
-  displayDealerCard()
-  displayPlayerCards()
-
+function createPlayerButtons() {
   game.players.forEach((player, index) => {
     const drawCardButton = Html.button({
       id: `player${index}-drawCardButton`,
@@ -212,7 +211,7 @@ function dealCards() {
     const doubleButton = Html.button({
       id: `player${index}-doubleButton`,
       class: 'button',
-      onclick: `doubleDown(${index})`
+      onclick: `doubleDown()`
     })
     doubleButton.innerHTML = 'Double'
     if(index !== 0) Html.hideElement(doubleButton)
@@ -251,6 +250,7 @@ function drawCard(index, hand) {
   }
   displayPlayerCards()
 }
+
 let stickCount = 0   // todo
 function stick(index, hand) {
   Html.checkForAndHideElement(`player${index}-doubleButton`)
@@ -296,8 +296,9 @@ function stick(index, hand) {
   }
 }
 
-function doubleDown(index) {
-  const player = game.players[index]  //todo
+function doubleDown() {
+  const index = game.getCurrentPlayer()
+  const player = game.players[index]
   const bet = player.removeBet()
   player.receiveChips(bet)
   player.placeBet(Number(bet * 2))
@@ -334,10 +335,17 @@ function showChipsDifference(playersChips) {
 }
 
 function startGame() {
-  setUpTable()
+  createPlayerElements()
   game.deck.shuffle()
   Html.showHintButton()
   console.log(game.deck)
+}
+
+function dealCards() {
+  game.dealCards()
+  displayDealerCard()
+  displayPlayerCards()
+  createPlayerButtons()
 }
 
 function nextRound() {
@@ -352,7 +360,7 @@ function nextRound() {
     onclick: ''
   })
   Html.showHintButton()
-  setUpTable()
+  createPlayerElements()
 }
 
 function displayPlayerCards() {
@@ -426,8 +434,6 @@ function setHandValueColours() {
   }
   game.players.forEach((player, index) => {
     document.getElementById(`player${index}-hand-value`).setAttribute('class', `playerHandValue ${player.getHandResult()}Colour`)
-  })
-  game.players.forEach((player, index) => {
     if(player.hands.length === 2) {
       document.getElementById(`player${index}-split-hand-value`).setAttribute('class', `playerHandValue ${player.getSecondHandResult()}Colour`)
     }
@@ -439,17 +445,15 @@ function displayTheCount() {
   const dealtCards = game.deck.dealtCardsSize()
   const cardsTotal = dealtCards + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(game.getRound() === 1) { 
-    if(dealtCards !== 0) {
-      hintText.innerHTML = 'Click the dealer to continue'
-    } else if(game.players[0].getBets()[0]) {
-      hintText.innerHTML = 'Click the deck to continue'
-    } else if(game.players[0].getBets() !== []) {
-      hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
-    }
-  } else {
-      hintText.innerHTML = `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining  `
-    }
+  if(game.getRound() !== 1) { 
+    hintText.innerHTML = `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining  `
+  } else if(dealtCards !== 0) {
+    hintText.innerHTML = 'Click the dealer to continue'
+  } else if(game.players[0].getBets()[0]) {
+    hintText.innerHTML = 'Click the deck to continue'
+  } else if(game.players[0].getBets() !== []) {
+    hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
+  } 
 }
 
 window.changeCardColour = changeCardColour
