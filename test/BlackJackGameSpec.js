@@ -20,6 +20,7 @@ describe('BlackJackGame', () => {
     verify.it('should add a player', () => {
       const game = new BlackJackGame()
       game.addPlayer('Bob', 9000)
+
       game.getNumberOfPlayers().should.eql(1)
     }) 
   })
@@ -31,6 +32,7 @@ describe('BlackJackGame', () => {
       game.addPlayer('Joe', 9000)
       game.addPlayer('Jim', 9000)
       game.removePlayer(player)
+
       game.players.length.should.eql(2)
     })
   })
@@ -89,6 +91,7 @@ describe('BlackJackGame', () => {
         const deck = new Deck(['♠'], values)
         const expectedValue = valueArray.reduce((total, value) => total + value) + numberOfAces
         const game = new BlackJackGame(deck)
+
         game.handValue(game.deck.cards).should.eql(expectedValue)
       })
 
@@ -98,6 +101,7 @@ describe('BlackJackGame', () => {
       const deck = new Deck(['♠'], values)
       const expectedValue = 21
       const game = new BlackJackGame(deck)
+
       game.handValue(game.deck.cards).should.eql(expectedValue)
     })
   })
@@ -108,7 +112,18 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame(deck)
       game.dealCards()
       game.playDealersHand()
+
       game.handValue(game.dealer.hand.showCards()).should.eql(20)
+    })
+  })
+
+  describe('nextRound()', () => {
+    verify.it('should discard the players and dealers hands', () => {
+      const game = new BlackJackGame()
+      const jim = game.addPlayer('Jim', 9000)
+      game.dealCards()
+      game.nextRound()
+      jim.hands[0].cards.should.eql([])
     })
   })
 
@@ -141,6 +156,7 @@ describe('BlackJackGame', () => {
       bob.placeBet(1000)
       game.dealCards()
       game.payWinners()
+
       bob.chips.should.eql(10500)
       jim.chips.should.eql(10500)
     })
@@ -188,6 +204,16 @@ describe('BlackJackGame', () => {
       game.payWinners()
 
       bob.chips.should.eql(8000)
+    })
+  })
+
+  describe('changeCardColour()', () => {
+    verify.it('should change the card back colour', () => {
+      const game = new BlackJackGame()
+      const initialColour = game.deck.cardColour
+      game.changeCardColour()
+
+      game.deck.cardColour.should.not.eql(initialColour)
     })
   })
 })
