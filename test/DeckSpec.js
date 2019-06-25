@@ -15,6 +15,19 @@ describe('Deck', () => {
       }
       deck.size().should.eql(expected)
     })
+
+    verify.it('should remove the top card', () => {
+      const deck = new Deck()
+      const expected = deck.cards.slice(1)
+      deck.dealCard()
+      deck.cards.should.eql(expected)
+    })
+
+    verify.it('should return the top card', () => {
+      const deck = new Deck()
+      const expected = deck.cards[0]
+      deck.dealCard().should.eql(expected)
+    })
   })
   
   describe('dealCards()', () => {
@@ -74,8 +87,61 @@ describe('Deck', () => {
     })
   })
 
+  describe('size()', () => {
+    verify.it('should give the number of cards in the deck', Gen.integerBetween(0,51), (expected) => {
+      const deck = new Deck()
+      deck.cards.splice(expected)
+      deck.size().should.eql(expected)
+    })
+  })
+
+  describe('showDealtCards()', () => {
+    verify.it('should return an array containing the dealt cards',Gen.integerBetween(1,50), (amount) => {
+      const deck = new Deck()
+      deck.dealCards(amount)
+      const expected = deck.dealtCards
+      deck.showDealtCards().should.eql(expected)
+    })
+  })
+
+  describe('dealtCardsSize()', () => {
+    verify.it('should give the number of dealt cards',Gen.integerBetween(1,50), (amount) => {
+      const deck = new Deck()
+      deck.dealCards(amount)
+      const expected = deck.dealtCards.length
+      deck.dealtCardsSize().should.eql(expected)
+
+    })
+  })
+
+  describe('changeCardColour()', () => {
+    verify.it('should change the cardColour',Gen.integerBetween(0,5), (initialColour) => {
+      const deck = new Deck()
+      deck.cardColour = initialColour 
+      deck.changeCardColour()
+      deck.cardColour.should.not.eql(initialColour)
+    })
+
+    verify.it('should change the cardBackPath', () => {
+      const deck = new Deck()
+      const initialPath = deck.cardBackPath
+      deck.changeCardColour()
+      deck.cardBackPath.should.not.eql(initialPath)
+    })
+  })
+
+  describe('getCardBackPath()', () => {
+    verify.it('should get the cardBackPath', () => {
+      const deck = new Deck()
+      const expected = deck.cardBackPath
+      deck.getCardBackPath().should.eql(expected)
+    })
+  })
+
   describe('with custom deck', () => {
     verify.it('should have the correct number cards', genRandomArray, genRandomArray, (suits, cards) => {
+      console.log(suits)
+      console.log(cards)
       const deck = new Deck(suits, cards)
       const expected = suits.length * cards.length
       deck.size().should.eql(expected)

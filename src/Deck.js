@@ -39,7 +39,10 @@ class Deck {
   changeCardColour() {
     this.cardColour = (this.cardColour === 5) ? 0 : this.cardColour + 1
     this.cardBackPath = `../assets/cards/card_back_${this.colours[this.cardColour]}.png`
-    document.getElementById('dealer-card-back').setAttribute('src', this.cardBackPath)
+  }
+
+  getCardBackPath() {
+    return this.cardBackPath
   }
 
   size () {

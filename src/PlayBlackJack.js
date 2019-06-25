@@ -403,10 +403,10 @@ function displayDealerCard() {
     Html.img({
       id: 'dealer-card-back',
       class: 'card',
-      src: game.deck.cardBackPath,
-      onclick: 'changeCardColour()'
+      src: game.deck.getCardBackPath(),
+      onclick: 'changeCardColour(); displayDealerCard()'
     }),
-    
+
     Html.img({
       class: 'card',
       src: `${game.dealer.showHand()[1].image}`
@@ -480,6 +480,7 @@ function displayTheCount() {
   } 
 }
 
+window.displayDealerCard = displayDealerCard
 window.changeCardColour = changeCardColour
 window.makeBets = makeBets
 window.addPlayerByClick = addPlayerByClick
