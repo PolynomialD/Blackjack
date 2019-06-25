@@ -93,13 +93,6 @@ function createPlayerElements() {
   })
 }
 
-function splitCards() {
-  game.splitHand()
-  refreshChipsTotals()
-  createSplitButtons()
-  displayPlayerCards()
-}
-
 function createSplitButtons() {
   const player = game.getCurrentPlayer()
   const hand = game.players[player].showHand(0)
@@ -310,30 +303,6 @@ function doubleDown() {
   refreshChipsTotals()
 }
 
-function playDealersHand() {
-  game.playDealersHand()
-  const dealerHandValue = document.getElementById('dealer-hand-value')
-  dealerHandValue.innerHTML = game.handValue(game.dealer.showHand())
-  dealerHandValue.setAttribute('class', '')
-  displayAllCards()
-  const playersChips = game.getPlayersChipsAndBets()
-  if(game.getRound() === 1) Html.showHintButton()
-
-  game.payWinners()
-  setHandValueColours()
-  refreshChipsTotals()
-  showChipsDifference(playersChips)
-}
-
-function showChipsDifference(playersChips) {
-  game.players.forEach((player, index) => {
-    const difference = player.getChips() - playersChips[index]
-    const valueDiv = document.createElement('div')
-    valueDiv.innerHTML = (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even'
-    Html.getAndAppendChild(`player${index}-bet-div`, valueDiv)
-  })
-}
-
 function startGame() {
   createPlayerElements()
   game.deck.shuffle()
@@ -346,6 +315,25 @@ function dealCards() {
   displayDealerCard()
   displayPlayerCards()
   createPlayerButtons()
+}
+
+function splitCards() {
+  game.splitHand()
+  refreshChipsTotals()
+  createSplitButtons()
+  displayPlayerCards()
+}
+
+function playDealersHand() {
+  game.playDealersHand()
+  displayAllCards()
+  const playersChips = game.getPlayersChipsAndBets()
+  if(game.getRound() === 1) Html.showHintButton()
+
+  game.payWinners()
+  setHandValueColours()
+  refreshChipsTotals()
+  showChipsDifference(playersChips)
 }
 
 function nextRound() {
@@ -424,13 +412,25 @@ function refreshChipsTotals() {
   })
 }
 
+function showChipsDifference(playersChips) {
+  game.players.forEach((player, index) => {
+    const difference = player.getChips() - playersChips[index]
+    const valueDiv = document.createElement('div')
+    valueDiv.innerHTML = (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even'
+    Html.getAndAppendChild(`player${index}-bet-div`, valueDiv)
+  })
+}
+
 function changeCardColour() {
   game.changeCardColour()
 }
 
 function setHandValueColours() {
+  const dealerHandValue = document.getElementById('dealer-hand-value')
+  dealerHandValue.innerHTML = game.handValue(game.dealer.showHand())
+  dealerHandValue.setAttribute('class', '')
   if(game.handValue(game.dealer.showHand()) > 21) {
-    document.getElementById('dealer-hand-value').setAttribute('class', 'loseColour')
+    dealerHandValue.setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {
     document.getElementById(`player${index}-hand-value`).setAttribute('class', `playerHandValue ${player.getHandResult()}Colour`)
