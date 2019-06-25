@@ -25,6 +25,15 @@ describe('Player', () => {
       player.getHandAmount().should.eql(amount)
     })
   })
+
+  describe('discardHands()', () => {
+    verify.it('should remove hands and create a new hand', Gen.integerBetween(1,10), (amount) => {
+      const player = new Player('Bob')
+      player.hands = new Array(amount).fill(0)
+      player.discardHands()
+      player.getHandAmount().should.eql(1)
+    })
+  })
   
   describe('getHandResult()', () => {
     verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {

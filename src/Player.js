@@ -41,11 +41,11 @@ class Player {
   }
 
   placeBet(bet) {  
-    if(bet > 0 && bet <= this.chips) {
+    const chips = this.chips
+    if(bet > 0 && bet <= chips) {
       this.chips -= bet
       this.bets.push(bet)
-    } else if(bet > this.chips) {
-      const chips = this.chips
+    } else if(bet > chips) {
       this.bets.push(chips)
       this.chips = 0
     } 

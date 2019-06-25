@@ -2,24 +2,24 @@ const BlackJackGame = require('../src/BlackJackGame')
 const Deck = require('../src/Deck')
 const Gen = require('verify-it').Gen
 
-function createTestGame(players = 8) {
-  const testGame = new BlackJackGame()
-  for(let i=0; i<players; i++) {
-    const name = Gen.stringWithLength(6)()
-    const chips = Gen.integerBetween(1,9000)()
-    testGame.addPlayer(name,chips)
-  }
-  return testGame
-}
+// function createTestGame(players = 8) {
+//   const testGame = new BlackJackGame()
+//   for(let i=0; i<players; i++) {
+//     const name = Gen.stringWithLength(6)()
+//     const chips = Gen.integerBetween(1,9000)()
+//     testGame.addPlayer(name,chips)
+//   }
+//   return testGame
+// }
 
-function createTestBets(game) {
-  const testBets = new Array()
-  game.players.forEach((player) => {
-    const bet = Gen.integerBetween(1,player.getChips())()
-    testBets.push(bet)
-  })
-  return testBets
-}
+// function createTestBets(game) {
+//   const testBets = new Array()
+//   game.players.forEach((player) => {
+//     const bet = Gen.integerBetween(1,player.getChips())()
+//     testBets.push(bet)
+//   })
+//   return testBets
+// }
 
 describe('BlackJackGame', () => {
   describe('dealCards()', () => {
