@@ -1,6 +1,7 @@
 const Deck = require('../src/Deck')
 const Player = require('../src/Player')
 const Gen = require('verify-it').Gen
+const Hand = require('../src/Hand')
 
 describe('Player', () => {
   describe('name', () => {
@@ -9,7 +10,39 @@ describe('Player', () => {
       player.name.should.eql('Bob')
     })
   })
+
+  describe('getName()', () => {
+    verify.it('should give the players name', Gen.stringWithLength(6), (name) => {
+      const player = new Player(name)
+      player.getName().should.eql(name)
+    })
+  })
+
+  describe('getHandAmount()', () => {
+    verify.it('should give the number of hands a player has', Gen.integerBetween(1,10), (amount) => {
+      const player = new Player('Bob')
+      player.hands = new Array(amount).fill(0)
+      player.getHandAmount().should.eql(amount)
+    })
+  })
   
+  describe('getHandResult()', () => {
+    verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {
+      const player = new Player('Bob')
+      player.hands[0].result = expected
+      player.getHandResult().should.eql(expected)
+    })
+  })
+
+  describe('getSecondHandResult()', () => {
+    verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {
+      const player = new Player('Bob')
+      player.hands = [new Hand(), new Hand()]
+      player.hands[1].result = expected
+      player.getSecondHandResult().should.eql(expected)
+    })
+  })
+
   describe('showHand()', () => {
     verify.it('should give the correct handsize',
       Gen.integerBetween(0,52), (cardsToDeal) => {
