@@ -244,12 +244,11 @@ function drawCard(index, hand) {
   displayPlayerCards()
 }
 
-let stickCount = 0   // todo
 function stick(index, hand) {
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
 
-  const handAmount = game.players[index].hands.length
+  const handAmount = game.players[index].getHandAmount()
   if(hand === 0) {
     const handValue = game.handValue(game.players[index].showHand(0))
     document.getElementById(`player${index}-hand-value`).innerHTML = handValue
@@ -258,34 +257,55 @@ function stick(index, hand) {
     }
     Html.getAndHideElement(`player${index}-drawCardButton`)
     Html.getAndHideElement(`player${index}-stickButton`)
-    stickCount++
+
+    if(handAmount === 1) {
+      if(index+1 === game.getNumberOfPlayers()) {
+        playDealersHand()
+      } else {
+        game.nextPlayer()
+        Html.getAndShowButton(`player${index+1}-drawCardButton`)
+        Html.getAndShowButton(`player${index+1}-stickButton`)
+
+        Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+        Html.checkForAndShowButton(`player${index+1}-splitButton`)
+      }
+    }
+    if(handAmount === 2) {
+      if(document.getElementById(`player${index}-split-stickButton`).getAttribute('class') === 'hidden') {
+        if(index+1 === game.getNumberOfPlayers()) {
+          playDealersHand()
+        } else {
+          game.nextPlayer()
+          Html.getAndShowButton(`player${index+1}-drawCardButton`)
+          Html.getAndShowButton(`player${index+1}-stickButton`)
+
+          Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+          Html.checkForAndShowButton(`player${index+1}-splitButton`)
+        }
+      }
+    }
   }
   if(hand === 1) {
-     const splitHandValue = game.handValue(game.players[index].showHand(1))
-     document.getElementById(`player${index}-split-hand-value`).innerHTML = splitHandValue
-     if(splitHandValue > 21) {
+    const splitHandValue = game.handValue(game.players[index].showHand(1))
+    document.getElementById(`player${index}-split-hand-value`).innerHTML = splitHandValue
+    if(splitHandValue > 21) {
       Html.getAndSetAttributes(`player${index}-split-hand-value`, { class: 'loseColour' })
-     }
-     Html.getAndHideElement(`player${index}-split-drawCardButton`)
-     Html.getAndHideElement(`player${index}-split-stickButton`)
-    stickCount++
-  }
-  if(index+1 === game.getNumberOfPlayers() && stickCount === handAmount) {
-    playDealersHand()
-    stickCount = 0
-    Html.getAndSetAttributes('dealer-img', {
-      onclick: 'nextRound()',
-      class: 'buttonImage cursor'
-    })
-  } else if(stickCount === handAmount) {
-    game.nextPlayer()
-    stickCount = 0
-    
-    Html.getAndShowButton(`player${index+1}-drawCardButton`)
-    Html.getAndShowButton(`player${index+1}-stickButton`)
+    }
+    Html.getAndHideElement(`player${index}-split-drawCardButton`)
+    Html.getAndHideElement(`player${index}-split-stickButton`)
 
-    Html.checkForAndShowButton(`player${index+1}-doubleButton`)
-    Html.checkForAndShowButton(`player${index+1}-splitButton`)
+    if(document.getElementById(`player${index}-stickButton`).getAttribute('class') === 'hidden') {
+      if(index+1 === game.getNumberOfPlayers()) {
+        playDealersHand()
+      } else {
+        game.nextPlayer()
+        Html.getAndShowButton(`player${index+1}-drawCardButton`)
+        Html.getAndShowButton(`player${index+1}-stickButton`)
+
+        Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+        Html.checkForAndShowButton(`player${index+1}-splitButton`)
+      }
+    }
   }
 }
 
@@ -325,6 +345,10 @@ function splitCards() {
 }
 
 function playDealersHand() {
+  Html.getAndSetAttributes('dealer-img', {
+    onclick: 'nextRound()',
+    class: 'buttonImage cursor'
+  })
   game.playDealersHand()
   displayAllCards()
   const playersChips = game.getPlayersChipsAndBets()
