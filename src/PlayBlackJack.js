@@ -435,26 +435,21 @@ function setHandValueColours() {
 }
 
 function displayTheCount() {
-  let count = 0
-  game.deck.dealtCards.forEach((card) => {
-    if(card.value < 7) {
-      count++
-    } else if(card.value > 9) {
-      count--
-    }
-  })
   const cardsInDeck = game.deck.size()
-  const cardsTotal = game.deck.dealtCardsSize() + cardsInDeck
+  const dealtCards = game.deck.dealtCardsSize()
+  const cardsTotal = dealtCards + cardsInDeck
   const hintText = document.getElementById('hint-text')
-  if(game.getRound() === 1 && game.deck.dealtCardsSize() === 0) {
-    hintText.innerHTML = 'Click the dealer to continue'
-  } else if(game.getRound() === 1 && game.players[0].getBets()[0]) {
-    hintText.innerHTML = 'Click the deck to continue'
-  } else if(game.getRound() === 1 && game.players[0].getBets() !== []) {
-    hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
+  if(game.getRound() === 1) { 
+    if(dealtCards !== 0) {
+      hintText.innerHTML = 'Click the dealer to continue'
+    } else if(game.players[0].getBets()[0]) {
+      hintText.innerHTML = 'Click the deck to continue'
+    } else if(game.players[0].getBets() !== []) {
+      hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
+    }
   } else {
-    hintText.innerHTML = `The Count Is ${count} with ${cardsInDeck}/${cardsTotal} cards remaining  `
-  }
+      hintText.innerHTML = `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining  `
+    }
 }
 
 window.changeCardColour = changeCardColour

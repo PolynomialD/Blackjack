@@ -12,6 +12,18 @@ class BlackJackGame {
     this.betCount = 0
   }
 
+  getCardCount() {
+    let cardCount = 0
+    this.deck.showDealtCards().forEach((card) => {
+      if(card.value < 7) {
+        cardCount++
+      } else if(card.value > 9) {
+        cardCount--
+      }
+    })
+    return cardCount
+  }
+
   getBetCount() {
     return this.betCount
   }
@@ -70,6 +82,7 @@ class BlackJackGame {
   }
 
   createBlackJackDeck(decks = 6) {
+    this.cardCount = 0
     const suits = []
     for(decks; decks>0; decks--) {
       suits.push('♣','♦','♥','♠')
