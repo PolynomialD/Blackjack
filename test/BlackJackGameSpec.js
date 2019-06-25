@@ -123,7 +123,108 @@ describe('BlackJackGame', () => {
       const jim = game.addPlayer('Jim', 9000)
       game.dealCards()
       game.nextRound()
+
       jim.hands[0].cards.should.eql([])
+      game.dealer.hand.cards.should.eql([])
+    })
+
+    verify.it('should remove players with no chips', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 9000)
+      const jim = game.addPlayer('Jim', 9000)
+      const joe = game.addPlayer('Joe', 9000)
+      joe.placeBet(9000)
+      jim.placeBet(5000)
+      bob.placeBet(9000)
+      game.nextRound()
+
+      game.players.length.should.eql(1)
+    })
+
+    verify.it('should create a new deck when the deck is low', () => {
+      const deck = new Deck(['♣', '♦', '♥'],[['A',11],['K',10],['Q',10],['J',10]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Jim', 9000)
+      game.addPlayer('Bob', 9000)
+      game.dealCards()
+      game.nextRound()
+
+      game.deck.cards.length.should.eql(312)
+    })
+
+    verify.it('should set current player to 0', Gen.integerBetween(1,12), (player) => {
+      const game = new BlackJackGame()
+      game.currentPlayer = player
+      game.nextRound()
+
+      game.currentPlayer.should.eql(0)
+    })
+  })
+
+  describe('nextPlayer()', () => {
+    verify.it('should increase currentPlayer by 1', Gen.integerBetween(1,12), (player) => {
+      const game = new BlackJackGame()
+      game.currentPlayer = player
+      game.nextPlayer()
+
+      game.currentPlayer.should.eql(player+1)
+    })
+  })
+
+  describe('getCurrentPlayer()', () => {
+    verify.it('should get the current players position', Gen.integerBetween(1,12), (player) => {
+      const game = new BlackJackGame()
+      game.currentPlayer = player
+
+      game.getCurrentPlayer().should.eql(player)
+    })
+  })
+
+  describe('getRound()', () => {
+    verify.it('should get the round number', Gen.integerBetween(1,12), (round) => {
+      const game = new BlackJackGame()
+      game.round = round
+
+      game.getRound().should.eql(round)
+    })
+  })
+
+  describe('getBetCount()', () => {
+    verify.it('should get the bet count', Gen.integerBetween(1,12), (betCount) => {
+      const game = new BlackJackGame()
+      game.betCount = betCount
+
+      game.getBetCount().should.eql(betCount)
+    })
+  })
+
+  describe('addBetToCount', () => {
+    verify.it('should increase the betCount by 1', Gen.integerBetween(1,12), (betCount) => {
+      const game = new BlackJackGame()
+      game.betCount = betCount
+      game.addBetToCount()
+
+      game.betCount.should.eql(betCount+1)
+    })
+  })
+
+  describe('getCardCount', () => {
+    verify.it('should get the correct card count for high cards', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['Q',10],['K',10]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Bob', 9000)
+      game.addPlayer('Jim', 9000)
+      game.dealCards()
+      game.getCardCount().should.eql(-6)
+    })
+
+    verify.it('should get the correct card count for low cards', () => {
+      const deck = new Deck(['♣', '♦', '♥', '♠'],[['2',2],['3',3]])
+      const game = new BlackJackGame(deck)
+      game.addPlayer('Bob', 9000)
+      game.addPlayer('Jim', 9000)
+      game.dealCards()
+      game.getCardCount().should.eql(6)
     })
   })
 
