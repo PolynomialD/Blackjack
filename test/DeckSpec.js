@@ -140,8 +140,6 @@ describe('Deck', () => {
 
   describe('with custom deck', () => {
     verify.it('should have the correct number cards', genRandomArray, genRandomArray, (suits, cards) => {
-      console.log(suits)
-      console.log(cards)
       const deck = new Deck(suits, cards)
       const expected = suits.length * cards.length
       deck.size().should.eql(expected)

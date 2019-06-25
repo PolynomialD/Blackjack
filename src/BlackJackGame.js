@@ -102,7 +102,7 @@ class BlackJackGame {
   addPlayer(name, chips) {
     const player = new Player(name, chips)
     this.players.push(player)
-    return player
+    return this.players[this.players.length-1]
   }
 
   removePlayer(index) {
