@@ -333,7 +333,13 @@ function dealCards() {
 }
 
 function splitCards() {
+  const player = game.getCurrentPlayer()
+  const firstCardValue = game.player[player].showHand[0].cards[0].value
+  const secondCardValue = game.player[player].showHand[1].cards[0].value
   game.splitHand()
+  if(firstCardValue === 11 && secondCardValue === 11) {
+    game.players[player].stick()
+  }
   refreshChipsTotals()
   createSplitButtons()
   displayPlayerCards()

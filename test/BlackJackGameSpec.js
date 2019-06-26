@@ -62,18 +62,6 @@ describe('BlackJackGame', () => {
       bob.hands[0].cards.length.should.eql(2)
       bob.hands[1].cards.length.should.eql(2)
     })
-
-    verify.it('should deal 1 card to split aces then stick', () => {
-      const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['A',11]])
-      const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 9000)
-      game.addPlayer('Jim', 9000)
-      bob.placeBet(1000)
-      game.dealCards()
-      game.splitHand()
-
-      game.currentPlayer.should.eql(1)
-    })
   })
 
   describe('HandValue()', () => {
