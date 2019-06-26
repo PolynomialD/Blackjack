@@ -66,6 +66,9 @@ class BlackJackGame {
     this.players[this.currentPlayer].splitHand()
     this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),0)
     this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),1)
+    if(this.players[this.currentPlayer].hands[0].showCards()[0].value === 11 && this.players[this.currentPlayer].hands[1].showCards()[0].value === 11) {
+      this.players[this.currentPlayer] // todo
+    }
   }
 
   getPlayersChipsAndBets() {
