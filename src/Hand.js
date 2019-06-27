@@ -2,7 +2,7 @@ class Hand {
   constructor (cards) {
     this.cards = cards || [],
     this.result = ''
-    this.state = 'open'
+    this.state = ''
   }
   
   getState() {

@@ -238,6 +238,8 @@ function drawCard(index, hand) {
     if(handValue > 21) {
       handOne.setAttribute('class', 'loseColour')
       stick()
+      playSound('click1')
+
     }
   }
   if(hand === 1) {
@@ -247,6 +249,8 @@ function drawCard(index, hand) {
     if(handTwoValue > 21) {
       handTwo.setAttribute('class', 'loseColour')
       splitHandStick()
+      playSound('click1')
+
     }
   }
   displayPlayerCards()
@@ -255,6 +259,7 @@ function drawCard(index, hand) {
 function stick() {
   const index = game.getCurrentPlayer()
   game.players[index].stick()
+  playSound('click1')
 
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
@@ -312,6 +317,7 @@ function doubleDown() {
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${player.getBets()[0]}`
   Html.getAndHideElement(`player${index}-doubleButton`)
   stick(index,0)
+  playSound('click1')
   displayPlayerCards()
   refreshChipsTotals()
 }
@@ -351,6 +357,7 @@ function playDealersHand() {
   setHandValueColours()
   refreshChipsTotals()
   showChipsDifference(playersChips)
+  playSound('chips1')
 }
 
 function nextRound() {
@@ -473,6 +480,14 @@ function displayTheCount() {
     hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
   } 
 }
+
+function playSound(sound) {
+  const path = `../assets/other/${sound}_mp3`
+  const audio = new Audio(path)
+  audio.play()
+}
+
+window.playSound = playSound
 window.splitHandStick = splitHandStick
 window.displayDealerCard = displayDealerCard
 window.changeCardColour = changeCardColour
