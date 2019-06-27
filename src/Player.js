@@ -17,16 +17,13 @@ class Player {
   }
 
   getStatus() {
-    let status = 'pending'
-    if(this.hands[0].getState() === 'complete') {
-      status = 'done'
-    }
-    if(this.hands[1]) {
-      if(this.hands[1].getState() === 'complete') {
-        status = 'done'
-      }
-    }
-    return status
+    if(this.getHandAmount() === 1 && this.hands[0].getState() === 'complete') {
+      return 'done'
+    } else if(this.getHandAmount() === 2) {
+      if(this.hands[0].getState() === 'complete' && this.hands[1].getState() === 'complete') {
+        return 'done'
+      } 
+    } else return 'pending'
   }
 
   getHandResult () {
