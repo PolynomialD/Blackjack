@@ -1,6 +1,8 @@
 const Html = require('./Html')
-const BlackJackGame = require('./BlackJackGame.js')
-const game = new BlackJackGame()
+const BlackJackGame = require('./BlackJackGame')
+const Deck = require('./Deck')
+const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['A',11],['A',11],['A',11],['A',11],['A',11]])
+const game = new BlackJackGame(deck)
 
 function addPlayerByClick(event) {
   if (event.keyCode === 13) {
@@ -337,14 +339,14 @@ function splitCards() {
   createSplitButtons()
   refreshChipsTotals()
   displayPlayerCards()
-  // const index = game.getCurrentPlayer()
-  // const player = game.players[index]
-  // const firstCardValue = player.showHand(0)[0].value
-  // const secondCardValue = player.showHand(1)[0].value
-  // if(firstCardValue === 11 && secondCardValue === 11) {
-  //   stick(index,1)
-  //   stick(index,0)
-  // }
+  const index = game.getCurrentPlayer()
+  const player = game.players[index]
+  const firstCardValue = player.showHand(0)[0].value
+  const secondCardValue = player.showHand(1)[0].value
+  if(firstCardValue === 11 && secondCardValue === 11) {
+    stick(index,1)
+    stick(index,0)
+  }
 }
 
 function playDealersHand() {
