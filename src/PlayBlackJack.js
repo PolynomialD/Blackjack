@@ -245,7 +245,7 @@ function drawCard(index, hand) {
     const handTwoValue = game.handValue(game.players[index].showHand(1))
     handTwo.innerHTML = handTwoValue
     if(handTwoValue > 21) {
-      handTwo.innerHTML = handTwoValue
+      handTwo.setAttribute('class', 'loseColour')
       splitHandStick()
     }
   }
