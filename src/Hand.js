@@ -2,10 +2,19 @@ class Hand {
   constructor (cards) {
     this.cards = cards || [],
     this.result = ''
+    this.state = 'open'
+  }
+  
+  getState() {
+    return this.state
   }
 
-  setResult(state) {
-    this.result = state
+  setState(state) {
+    this.state = state
+  }
+
+  setResult(result) {
+    this.result = result
   }
 
   getResult() {
@@ -35,7 +44,7 @@ class Hand {
 
   split() {
     return this.isSplittable() ? [
-      new Hand([this.cards[0]]), 
+      new Hand([this.cards[0]]),
       new Hand([this.cards[1]])
     ] : undefined
   }

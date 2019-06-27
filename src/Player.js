@@ -8,6 +8,27 @@ class Player {
     this.bets = []
   }
 
+  stick() {
+    this.hands[0].setState('complete')
+  }
+
+  splitHandStick() {
+    this.hands[1].setState('complete')
+  }
+
+  getStatus() {
+    let status = 'pending'
+    if(this.hands[0].getState() === 'complete') {
+      status = 'done'
+    }
+    if(this.hands[1]) {
+      if(this.hands[1].getState() === 'complete') {
+        status = 'done'
+      }
+    }
+    return status
+  }
+
   getHandResult () {
     return this.hands[0].getResult()
   }

@@ -63,10 +63,15 @@ class BlackJackGame {
   }
 
   splitHand() {
-    this.players[this.currentPlayer].splitHand()
-    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),0)
-    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(),1)
-    
+    const player = this.players[this.currentPlayer]
+    player.splitHand()
+    player.receiveCard(this.deck.dealCard(),0)
+    player.receiveCard(this.deck.dealCard(),1)
+
+    if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
+      player.stick()
+      player.splitHandStick()
+    }
   }
 
   getPlayersChipsAndBets() {

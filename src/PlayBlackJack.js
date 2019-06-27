@@ -1,8 +1,6 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
-const Deck = require('./Deck')
-const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['A',11],['A',11],['A',11],['A',11],['A',11]])
-const game = new BlackJackGame(deck)
+const game = new BlackJackGame()
 
 function addPlayerByClick(event) {
   if (event.keyCode === 13) {
@@ -30,6 +28,50 @@ function addNewPlayer() {
       class: 'inputButton',
       onclick: 'startGame()'
     })
+  }
+}
+
+function placeBet(index) {
+  const betInput = document.getElementById(`player${index}-bet-input`)
+  const betDiv = document.getElementById(`player${index}-bet-div`)
+
+  if(betInput.value !== '' && betInput.value > 0) {
+    game.players[index].placeBet(Number(betInput.value))
+
+    Html.clearHtml('hint-text')
+
+    Html.getAndSetAttributes(`player${index}-img`, {
+      onclick: '',
+      class: 'playerImage'
+    })
+
+    Html.hideElement(betInput)
+    betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
+    game.addBetToCount()
+  }
+  if(game.getBetCount() === game.getNumberOfPlayers()) {
+    Html.getAndSetAttributes(`deck-button`, {
+      onclick: 'dealCards()',
+      class: 'buttonImage cursor'
+    })
+    if(game.deck.dealtCardsSize() === 0) {
+      Html.showHintButton()
+    } else {
+      Html.getAndHideElement('hint-button')
+      Html.clearHtml('hint-text')
+    }
+  }
+  refreshChipsTotals()
+}
+
+function makeBets(event) {
+  if(event.button === 2) {
+    game.players.forEach((player, index) => {
+      if(player.getBets().length === 0) {
+        placeBet(index)
+      }
+    })
+    dealCards()
   }
 }
 
@@ -131,50 +173,6 @@ function createSplitButtons() {
 
   Html.getAndHideElement(`player${player}-doubleButton`)
   Html.getAndHideElement(`player${player}-splitButton`)
-}
-
-function placeBet(index) {
-  const betInput = document.getElementById(`player${index}-bet-input`)
-  const betDiv = document.getElementById(`player${index}-bet-div`)
-
-  if(betInput.value !== '' && betInput.value > 0) {
-    game.players[index].placeBet(Number(betInput.value))
-
-    Html.clearHtml('hint-text')
-
-    Html.getAndSetAttributes(`player${index}-img`, {
-      onclick: '',
-      class: 'playerImage'
-    })
-
-    Html.hideElement(betInput)
-    betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
-    game.addBetToCount()
-  }
-  if(game.getBetCount() === game.getNumberOfPlayers()) {
-    Html.getAndSetAttributes(`deck-button`, {
-      onclick: 'dealCards()',
-      class: 'buttonImage cursor'
-    })
-    if(game.deck.dealtCardsSize() === 0) {
-      Html.showHintButton()
-    } else {
-      Html.getAndHideElement('hint-button')
-      Html.clearHtml('hint-text')
-    }
-  }
-  refreshChipsTotals()
-}
-
-function makeBets(event) {
-  if(event.button === 2) {
-    game.players.forEach((player, index) => {
-      if(player.getBets().length === 0) {
-        placeBet(index)
-      }
-    })
-    dealCards()
-  }
 }
 
 function createPlayerButtons() {
@@ -339,14 +337,6 @@ function splitCards() {
   createSplitButtons()
   refreshChipsTotals()
   displayPlayerCards()
-  const index = game.getCurrentPlayer()
-  const player = game.players[index]
-  const firstCardValue = player.showHand(0)[0].value
-  const secondCardValue = player.showHand(1)[0].value
-  if(firstCardValue === 11 && secondCardValue === 11) {
-    stick(index,1)
-    stick(index,0)
-  }
 }
 
 function playDealersHand() {
