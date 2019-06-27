@@ -138,6 +138,8 @@ function createPlayerElements() {
 }
 
 function createSplitButtons() {
+  playSound('cardPlace1')
+
   const player = game.getCurrentPlayer()
   const hand = game.players[player].showHand(0)
   document.getElementById(`player${player}-hand-value`).innerText = game.handValue(hand)
@@ -239,7 +241,8 @@ function drawCard(index, hand) {
       handOne.setAttribute('class', 'loseColour')
       stick()
       playSound('click1')
-
+    } else {
+      playSound('cardPlace1')
     }
   }
   if(hand === 1) {
@@ -250,7 +253,8 @@ function drawCard(index, hand) {
       handTwo.setAttribute('class', 'loseColour')
       splitHandStick()
       playSound('click1')
-
+    } else {
+      playSound('cardPlace1')
     }
   }
   displayPlayerCards()
