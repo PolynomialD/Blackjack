@@ -6,6 +6,7 @@ class Player {
     this.hands = [new Hand()]
     this.chips = chips
     this.bets = []
+    this.status = 'pending'
   }
 
   stick() {
@@ -18,12 +19,13 @@ class Player {
 
   getStatus() {
     if(this.getHandAmount() === 1 && this.hands[0].getState() === 'complete') {
-      return 'done'
+      this.status = 'done'
     } else if(this.getHandAmount() === 2) {
       if(this.hands[0].getState() === 'complete' && this.hands[1].getState() === 'complete') {
-        return 'done'
+        this.status = 'done'
       }
-    } else return 'pending'
+    }
+    return this.status
   }
 
   getHandResult () {

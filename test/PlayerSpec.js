@@ -18,6 +18,27 @@ describe('Player', () => {
     })
   })
 
+  describe('getStatus()', () => {
+    verify.it('should get the players status', () => {
+      const player = new Player('Bob')
+      player.getStatus().should.eql('pending')
+    })
+
+    verify.it('should set the players status to done after sticking 1 hand', () => {
+      const player = new Player('Bob')
+      player.stick()
+      player.getStatus().should.eql('done')
+    })
+
+    verify.it('should set the players status to done after sticking 2 hands', () => {
+      const player = new Player('Bob')
+      player.hands = [new Hand(['test']),new Hand(['test'])]
+      player.stick()
+      player.splitHandStick()
+      player.getStatus().should.eql('done')
+    })
+  })
+
   describe('getHandAmount()', () => {
     verify.it('should give the number of hands a player has', Gen.integerBetween(1,10), (amount) => {
       const player = new Player('Bob')
@@ -166,23 +187,6 @@ describe('Player', () => {
       bob.splitHand()
       bob.hands.length.should.eql(1)
     })
-
-    // verify.it('should be able to split multiple times', Gen.integerBetween(1,11), (value) => {
-    //   const bob = new Player('Bob', 9000)
-    //   const deck = new Deck(['♣','♥','♠','♦'],[[`${value}`,value]])
-      
-    //   bob.placeBet(1000)
-    //   bob.receiveCard(deck.dealCard())
-    //   bob.receiveCard(deck.dealCard())
-    //   bob.splitHand(1)
-    //   bob.receiveCard(deck.dealCard(),0)
-    //   bob.receiveCard(deck.dealCard(),1)
-
-    //   bob.splitHand(1)
-    //   bob.hands.length.should.eql(3)
-    //   bob.splitHand(2)
-    //   bob.hands.length.should.eql(4)
-    // })
 
     verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000)
