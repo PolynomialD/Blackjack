@@ -240,7 +240,7 @@ function drawCard(index, hand) {
     if(handValue > 21) {
       handOne.setAttribute('class', 'loseColour')
       stick()
-      playSound('click1')
+      playSound('groan1')
     } else {
       playSound('cardPlace1')
     }
@@ -252,7 +252,7 @@ function drawCard(index, hand) {
     if(handTwoValue > 21) {
       handTwo.setAttribute('class', 'loseColour')
       splitHandStick()
-      playSound('click1')
+      playSound('groan1')
     } else {
       playSound('cardPlace1')
     }
@@ -285,7 +285,7 @@ function stick() {
 function splitHandStick() {
   const index = game.getCurrentPlayer()
   game.players[index].splitHandStick()
-
+  playSound('click1')
 
   Html.getAndHideElement(`player${index}-split-drawCardButton`)
   Html.getAndHideElement(`player${index}-split-stickButton`)
@@ -327,6 +327,7 @@ function doubleDown() {
 }
 
 function startGame() {
+  playSound('bossa_nova_bg', 'loop')
   createPlayerElements()
   game.deck.shuffle()
   Html.showHintButton()
@@ -485,9 +486,10 @@ function displayTheCount() {
   } 
 }
 
-function playSound(sound) {
-  const path = `../assets/other/${sound}_mp3`
+function playSound(sound, option) {
+  const path = `../assets/other/${sound}.mp3`
   const audio = new Audio(path)
+  if(option === 'loop') audio.loop = true
   audio.play()
 }
 
