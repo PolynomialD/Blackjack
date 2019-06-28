@@ -14,6 +14,7 @@ function addNewPlayer() {
   const chips = document.getElementById('chipsInput')
   if(chips.value !== '') {
     game.addPlayer(name.value, chips.value)
+    playSound('click2')
 
     const li = Html.li()
     Html.appendChildren(li, [
@@ -48,6 +49,7 @@ function placeBet(index) {
     Html.hideElement(betInput)
     betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     game.addBetToCount()
+    playSound('chips_stack1')
   }
   if(game.getBetCount() === game.getNumberOfPlayers()) {
     Html.getAndSetAttributes(`deck-button`, {
@@ -138,7 +140,7 @@ function createPlayerElements() {
 }
 
 function createSplitButtons() {
-  playSound('cardPlace1')
+  playSound('card_place1')
 
   const player = game.getCurrentPlayer()
   const hand = game.players[player].showHand(0)
@@ -240,7 +242,7 @@ function drawCard(index, hand) {
     if(handValue > 21) {
       stick()
     } else {
-      playSound('cardPlace1')
+      playSound('card_place1')
     }
   }
   if(hand === 1) {
@@ -250,7 +252,7 @@ function drawCard(index, hand) {
     if(splitHandValue > 21) {
       splitHandStick()
     } else {
-      playSound('cardPlace1')
+      playSound('card_place1')
     }
   }
   displayPlayerCards()
@@ -336,7 +338,8 @@ function doubleDown() {
 }
 
 function startGame() {
-  playSound('bossa_nova_bg', 'loop')
+  // playSound('casino_background1', 'loop')
+  playSound('card_fan1')
   createPlayerElements()
   game.deck.shuffle()
   Html.showHintButton()
@@ -378,6 +381,7 @@ function playDealersHand() {
 
 function nextRound() {
   game.nextRound()
+  playSound('card_fan1')
   if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
   Html.getAndSetAttributes('deck-button', {
@@ -498,7 +502,7 @@ function displayTheCount() {
 }
 
 function playSound(sound, option) {
-  const path = `../assets/other/${sound}.mp3`
+  const path = `../assets/audio/${sound}.mp3`
   const audio = new Audio(path)
   if(option === 'loop') audio.loop = true
   audio.play()
