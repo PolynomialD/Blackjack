@@ -16,15 +16,20 @@ class Deck {
       return this.values.map((value) => {
         let suitString
         let valueString
-        if(suit === '♣') {suitString = 'clubs'}
-        else if(suit === '♦') {suitString = 'diamonds'}
-        else if(suit === '♥') {suitString = 'hearts'}
-        else if(suit === '♠') {suitString = 'spades'}
-        if(value[0] === 'J') {valueString = 'jack'}
-        else if(value[0] === 'Q') {valueString = 'queen'}
-        else if(value[0] === 'K') {valueString = 'king'}
-        else if(value[0] === 'A') {valueString = 'ace'}
-        else {valueString = value[1]}
+
+        switch(suit) {
+          case '♣': suitString = 'clubs'
+          case '♦': suitString = 'diamonds'
+          case '♥': suitString = 'spades'
+          case '♠': suitString = 'spades'
+        }
+        switch(value[0]) {
+          case 'J': valueString = 'jack'
+          case 'Q': valueString = 'queen'
+          case 'K': valueString = 'king'
+          case 'A': valueString = 'ace'
+          default: valueString = value[1]
+        }
         return {
           'suit': suit,
           'face': suit+`${value[0]}`,
