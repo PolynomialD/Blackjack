@@ -11,6 +11,22 @@ generateCards = (amount) => {
   }
 }
 
+describe('getState()', () => {
+  verify.it('should get the state of the hand', () => {
+    const hand = new Hand()
+    hand.state = 'test'
+    hand.getState().should.eql('test')
+  })
+})
+
+describe('setState()', () => {
+  verify.it('should set the state of the hand', () => {
+    const hand = new Hand()
+    hand.setState('test')
+    hand.state.should.eql('test')
+  })
+})
+
 describe('Hand', () => {
   verify.it('should be able to takecards', generateCards(5), (cards) => {
     const hand = new Hand()

@@ -19,15 +19,22 @@ class Deck {
 
         switch(suit) {
           case '♣': suitString = 'clubs'
+          break
           case '♦': suitString = 'diamonds'
-          case '♥': suitString = 'spades'
+          break
+          case '♥': suitString = 'hearts'
+          break
           case '♠': suitString = 'spades'
         }
         switch(value[0]) {
           case 'J': valueString = 'jack'
+          break
           case 'Q': valueString = 'queen'
+          break
           case 'K': valueString = 'king'
+          break
           case 'A': valueString = 'ace'
+          break
           default: valueString = value[1]
         }
         return {
