@@ -32,7 +32,22 @@ h1, h2 {
   height: 75px;
   width: 55px;
   box-shadow: 2px 2px;
-  margin: 3px
+  margin: 3px;
+}
+
+.bet-button {
+  background-color: #e0e2d9e5;
+  border: none;
+  padding: 2px 25px;
+  text-align: center;
+  font-size: 12px;
+  margin: 4px 4px;
+  opacity: 0.8;
+  transition: 0.3s;
+  text-decoration: none;
+  cursor: pointer;
+  width: 60px;
+  height: 22px;
 }
 
 .button {
@@ -44,7 +59,6 @@ h1, h2 {
   margin: 2px 1px;
   opacity: 0.8;
   transition: 0.3s;
-  display: inline-block;
   text-decoration: none;
   cursor: pointer;
 }
@@ -126,9 +140,12 @@ h1, h2 {
 }
 
 .betInput {
-  width: 4em;
+  width: 60px;
+  height: 22px;
   background-color: #e0e2d9e5;
-  border: none
+  border: none;
+  text-align: center;
+  font-size: 14px;
 }
 
 .input {

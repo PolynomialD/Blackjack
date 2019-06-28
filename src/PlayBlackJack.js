@@ -46,6 +46,7 @@ function placeBet(index) {
       class: 'playerImage'
     })
 
+    Html.getAndHideElement(`player${index}-increase-bet-button`, `player${index}-decrease-bet-button`)
     Html.hideElement(betInput)
     betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     game.addBetToCount()
@@ -113,13 +114,23 @@ function createPlayerElements() {
         class: 'playerHandValue'
       }),
 
+      Html.button({
+        id: `player${index}-increase-bet-button`,
+        class: 'displayBlock bet-button',
+        onclick: `increaseBet(${index})`
+      }, '+'),
+
       Html.input({
         id: `player${index}-bet-input`,
         class: 'betInput',
-        type: 'number',
-        step: 500,
         value: 1000
       }),
+
+      Html.button({
+        id: `player${index}-decrease-bet-button`,
+        class: 'displayBlock bet-button',
+        onclick: `decreaseBet(${index})`
+      }, '-'),
 
       Html.div({
         id: `player${index}-bet-div`,
@@ -260,17 +271,19 @@ function drawCard(index, hand) {
 
 function stick() {
   const index = game.getCurrentPlayer()
-  game.players[index].stick()
-  
+  const player = game.players[index]
+
+  player.stick()
+
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
   Html.getAndHideElement(`player${index}-drawCardButton`)
   Html.getAndHideElement(`player${index}-stickButton`)
-  
-  const handValue = game.handValue(game.players[index].showHand(0))
+
+  const handValue = game.handValue(player.showHand(0))
   const handDiv = document.getElementById(`player${index}-hand-value`)
   handDiv.innerHTML = handValue
-  
+
   if(handValue > 21) {
     handDiv.setAttribute('class', 'loseColour')
     playSound('groan1')
@@ -278,7 +291,7 @@ function stick() {
     playSound('click1')
   }
 
-  if(game.players[index].getStatus() === 'done') {
+  if(player.getStatus() === 'done') {
     if(index+1 === game.getNumberOfPlayers()) {
       playDealersHand()
     } else {
@@ -289,15 +302,17 @@ function stick() {
 
 function splitHandStick() {
   const index = game.getCurrentPlayer()
-  game.players[index].splitHandStick()
+  const player = game.players[index]
+
+  player.splitHandStick()
   
   Html.getAndHideElement(`player${index}-split-drawCardButton`)
   Html.getAndHideElement(`player${index}-split-stickButton`)
   
-  const splitHandValue = game.handValue(game.players[index].showHand(1))
+  const splitHandValue = game.handValue(player.showHand(1))
   const splitHandDiv = document.getElementById(`player${index}-split-hand-value`)
   splitHandDiv.innerHTML = splitHandValue
-  
+
   if(splitHandValue > 21) {
     splitHandDiv.setAttribute('class', 'loseColour')
     playSound('groan1')
@@ -305,7 +320,7 @@ function splitHandStick() {
     playSound('click1')
   }
 
-  if(game.players[index].getStatus() === 'done') {
+  if(player.getStatus() === 'done') {
     if(index+1 === game.getNumberOfPlayers()) {
       playDealersHand()
     } else {
@@ -501,6 +516,18 @@ function displayTheCount() {
   } 
 }
 
+function increaseBet(index) {
+  const input = document.getElementById(`player${index}-bet-input`)
+  const currentBet = Number(input.value)
+  input.value = currentBet + 500
+}
+
+function decreaseBet(index) {
+  const input = document.getElementById(`player${index}-bet-input`)
+  const currentBet = Number(input.value)
+  input.value = currentBet - 500
+}
+
 function playSound(sound, option) {
   const path = `../assets/audio/${sound}.mp3`
   const audio = new Audio(path)
@@ -508,6 +535,8 @@ function playSound(sound, option) {
   audio.play()
 }
 
+window.increaseBet = increaseBet
+window.decreaseBet = decreaseBet
 window.playSound = playSound
 window.splitHandStick = splitHandStick
 window.displayDealerCard = displayDealerCard
