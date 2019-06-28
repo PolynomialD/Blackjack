@@ -10,6 +10,22 @@ class BlackJackGame {
     this.currentPlayer = 0
     this.round = 1
     this.betCount = 0
+    this.history = []
+  }
+
+  addToHistory() {
+    const round = {
+      round: this.round,
+      roundHistory: []
+    }
+    this.players.forEach((player) => {
+     round.roundHistory.push({
+        name: player.getName(),
+        hands: player.showHands(),
+        bets: player.getBets()
+      })
+    })
+    this.history.push(round)
   }
 
   getCardCount() {

@@ -328,4 +328,15 @@ describe('BlackJackGame', () => {
       game.deck.cardColour.should.not.eql(initialColour)
     })
   })
+
+  describe('history', () => {
+    verify.it('should log player info to the history', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 9000)
+      bob.placeBet(1000)
+      game.dealCards()
+      game.addToHistory()
+      console.log(game.history)
+    })
+  })
 })

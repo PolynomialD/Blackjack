@@ -69,8 +69,16 @@ class Player {
     } 
   }
 
-  showHand(handNumber=0) {
+  showHand(handNumber = 0) {
     return this.hands[handNumber].showCards()
+  }
+
+  showHands() {
+    if(this.getHandAmount() === 2) {
+      return [this.hands[0].showCards(),this.hands[1].showCards()]
+    } else {
+      return [this.hands[0].showCards()]
+    }
   }
 
   splitHand() {

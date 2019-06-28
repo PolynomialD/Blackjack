@@ -378,6 +378,8 @@ function splitCards() {
 }
 
 function playDealersHand() {
+  game.addToHistory()
+  console.log(game.history)
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'
