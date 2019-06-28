@@ -21,7 +21,7 @@ describe('Player', () => {
   describe('getStatus()', () => {
     verify.it('should get the players status', () => {
       const player = new Player('Bob')
-      player.getStatus().should.eql('pending')
+      player.getStatus().should.eql('playing')
     })
 
     verify.it('should set the players status to done after sticking 1 hand', () => {
@@ -33,8 +33,8 @@ describe('Player', () => {
     verify.it('should set the players status to done after sticking 2 hands', () => {
       const player = new Player('Bob')
       player.hands = [new Hand(['test']),new Hand(['test'])]
-      player.stick()
       player.splitHandStick()
+      player.stick()
       player.getStatus().should.eql('done')
     })
   })
