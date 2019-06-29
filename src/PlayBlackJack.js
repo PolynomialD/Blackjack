@@ -234,8 +234,7 @@ function createSplitElements() {
 
   Html.getAndAppendChildren(`player${index}-chips`, elements)
 
-  Html.getAndHideElement(`player${index}-doubleButton`)
-  Html.getAndHideElement(`player${index}-splitButton`)
+  hideAltButtons(index, 0)
 
   setHandValue(index, 0)
   setHandValue(index, 1)
@@ -245,17 +244,16 @@ function drawCard(hand) {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
 
-  Html.checkForAndHideElement(`player${index}-doubleButton`)
-  Html.checkForAndHideElement(`player${index}-splitButton`)
+  hideAltButtons(index, hand)
 
   game.drawCard(hand)
   setHandValue(index, hand)
 
   if(player.hands[hand].getState() === 'complete') {
-    hideButtons(index, hand)
+    hideMainButtons(index, hand)
   }
   if(player.getStatus() === 'done') {
-    nextPlayer(index)
+    nextPlayer()
   } else {
     playSound('card_place1')
   }
@@ -266,31 +264,30 @@ function drawCard(hand) {
 function stick() {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
-  player.stick(0)
-
   const value = setHandValue(index, 0)
   if(value < 22) playSound('click1')
 
-  Html.checkForAndHideElement(`player${index}-doubleButton`)
-  Html.checkForAndHideElement(`player${index}-splitButton`)
-  hideButtons(index, 0)
+  player.stick(0)
+  hideMainButtons(index, 0)
+  hideAltButtons(index, 0)
 
   if(player.getStatus() === 'done') {
-    nextPlayer(index)
+    nextPlayer()
   }
 }
 
 function splitHandStick() {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
-  player.stick(1)
-
   const value = setHandValue(index, 1)
   if(value < 22) playSound('click1')
-  hideButtons(index, 1)
+
+  player.stick(1)
+  hideMainButtons(index, 1)
+  hideAltButtons(index, 1)
 
   if(player.getStatus() === 'done') {
-    nextPlayer(index)
+    nextPlayer()
   }
 }
 
@@ -298,19 +295,20 @@ function doubleDown() {
   const index = game.getCurrentPlayer()
   game.doubleDown()
 
-  Html.getAndHideElement(`player${index}-doubleButton`, `player${index}-drawCardButton`, `player${index}-stickButton`)
-  Html.checkForAndHideElement(`player${index}-splitButton`)
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
+  hideMainButtons(index, 0)
+  hideAltButtons(index, 0)
 
   const value = setHandValue(index, 0)
   if(value < 22) playSound('click1')
 
   displayPlayerCards()
   refreshChipsTotals()
-  nextPlayer(index)
+  nextPlayer()
 }
 
-function nextPlayer(index) {
+function nextPlayer() {
+  const index = game.getCurrentPlayer()
   if(index+1 === game.getNumberOfPlayers()) {
     playDealersHand()
   } else {
@@ -378,10 +376,10 @@ function playDealersHand() {
 }
 
 function nextRound() {
-  game.nextRound()
   playSound('card_fan1')
-
   if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
+  game.nextRound()
+
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
   Html.getAndSetAttributes('deck-button', {
     class: 'buttonImage displayInline',
@@ -395,10 +393,19 @@ function nextRound() {
   createPlayerElements()
 }
 
-function hideButtons(index, hand) {
-  const split = (hand === 0) ? '' : '-split'
-  Html.getAndHideElement(`player${index}${split}-drawCardButton`, `player${index}${split}-stickButton`)
+function hideMainButtons(index, hand) {
+  const splitCheck = (hand === 0) ? '' : '-split'
+  Html.getAndHideElement(`player${index}${splitCheck}-drawCardButton`, `player${index}${splitCheck}-stickButton`)
 }
+
+function hideAltButtons(index, hand) {
+  const splitCheck = (hand === 0) ? '' : '-split'
+  Html.checkForAndHideElement(`player${index}${splitCheck}-doubleButton`)
+  Html.checkForAndHideElement(`player${index}${splitCheck}-splitButton`)
+  Html.checkForAndHideElement(`player${index}${splitCheck}-insuranceButton`)
+}
+
+
 
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
@@ -476,9 +483,9 @@ function changeCardColour() {
 }
 
 function setHandValue(index, hand) {
-  const split = (hand === 0) ? '' : '-split'
+  const splitCheck = (hand === 0) ? '' : '-split'
   const handValue = game.handValue(game.players[index].showHand(hand))
-  const handDiv = document.getElementById(`player${index}${split}-hand-value`)
+  const handDiv = document.getElementById(`player${index}${splitCheck}-hand-value`)
   handDiv.innerHTML = handValue
 
   if(handValue > 21) {
@@ -496,9 +503,13 @@ function setHandValueColours() {
     dealerHandValue.setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {
-    document.getElementById(`player${index}-hand-value`).setAttribute('class', `playerHandValue ${player.getHandResult()}Colour`)
+    Html.getAndSetAttributes(`player${index}-hand-value`, {
+      class: `playerHandValue ${player.getHandResult()}Colour`
+    })
     if(player.hands.length === 2) {
-      document.getElementById(`player${index}-split-hand-value`).setAttribute('class', `playerHandValue ${player.getSecondHandResult()}Colour`)
+      Html.getAndSetAttributes(`player${index}-split-hand-value`, {
+        class: `playerHandValue ${player.getSecondHandResult()}Colour`
+      })
     }
   })
 }
@@ -510,13 +521,9 @@ function displayTheCount() {
   const hintText = document.getElementById('hint-text')
   if(game.getRound() !== 1) { 
     hintText.innerHTML = `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining  `
-  } else if(dealtCards !== 0) {
+  } else {
     hintText.innerHTML = 'Click the dealer to continue'
-  } else if(game.players[0].getBets()[0]) {
-    hintText.innerHTML = 'Click the deck to continue'
-  } else if(game.players[0].getBets() !== []) {
-    hintText.innerHTML = 'Right click the deck to place all bets and deal cards'
-  } 
+  }
 }
 
 function increaseBet(index) {
