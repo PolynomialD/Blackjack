@@ -336,7 +336,7 @@ function splitCards() {
 function playDealersHand() {
   playSound('chips1')
   game.playDealersHand()
-  game.addToHistory()
+  game.addRoundToHistory()
 
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
@@ -487,11 +487,11 @@ function setHandValueColours() {
   }
   game.players.forEach((player, index) => {
     Html.getAndSetAttributes(`player${index}-hand-value`, {
-      class: `playerHandValue ${player.getHandResult()}Colour`
+      class: `playerHandValue ${player.getHandResult(0)}Colour`
     })
     if(player.hands.length === 2) {
       Html.getAndSetAttributes(`player${index}-split-hand-value`, {
-        class: `playerHandValue ${player.getSecondHandResult()}Colour`
+        class: `playerHandValue ${player.getHandResult(1)}Colour`
       })
     }
   })

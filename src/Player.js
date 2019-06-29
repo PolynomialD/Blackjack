@@ -23,12 +23,8 @@ class Player {
     } else return 'playing'
   }
 
-  getHandResult () {
-    return this.hands[0].getResult()
-  }
-
-  getSecondHandResult () {
-    return this.hands[1].getResult()
+  getHandResult(hand) {
+    return this.hands[hand].getResult()
   }
 
   getBets() {

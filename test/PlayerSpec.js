@@ -60,18 +60,16 @@ describe('Player', () => {
     verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {
       const player = new Player('Bob')
       player.hands[0].result = expected
-      player.getHandResult().should.eql(expected)
+      player.getHandResult(0).should.eql(expected)
     })
   })
 
-  describe('getSecondHandResult()', () => {
-    verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {
+    verify.it('should give the correct hand result with 2 hands', Gen.integerBetween(0,50), (expected) => {
       const player = new Player('Bob')
       player.hands = [new Hand(), new Hand()]
       player.hands[1].result = expected
-      player.getSecondHandResult().should.eql(expected)
+      player.getHandResult(1).should.eql(expected)
     })
-  })
 
   describe('showHand()', () => {
     verify.it('should give the correct handsize',

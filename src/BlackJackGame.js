@@ -13,7 +13,7 @@ class BlackJackGame {
     this.history = []
   }
 
-  addToHistory() {
+  addRoundToHistory() {
     this.history.push({
       round: this.round,
       players: this.players.map((player) => {
