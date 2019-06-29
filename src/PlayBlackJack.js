@@ -379,6 +379,7 @@ function splitCards() {
 
 function playDealersHand() {
   game.addToHistory()
+  console.log(game.players[0].getBets())
   console.log(game.history)
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',

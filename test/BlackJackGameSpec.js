@@ -336,7 +336,9 @@ describe('BlackJackGame', () => {
       bob.placeBet(1000)
       game.dealCards()
       game.addToHistory()
-      console.log(game.history)
+      game.playDealersHand()
+      
+      game.history[0].players[0].bets.should.eql([1000])
     })
   })
 })
