@@ -48,7 +48,7 @@ h1, h2 {
   text-decoration: none;
   cursor: pointer;
   width: 70px;
-  height: 26px;
+  height: 28px;
 }
 
 .button {
@@ -108,7 +108,7 @@ h1, h2 {
 }
 
 .chipsText {
-  font-size: 18px;
+  font-size: 19px;
   margin: 5px;
 }
 
@@ -148,7 +148,7 @@ h1, h2 {
   border: none;
   border-radius: 2px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .input {

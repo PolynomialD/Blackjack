@@ -224,16 +224,15 @@ function createSplitElements() {
 }
 
 function drawCard(hand) {
-  const index = game.getCurrentPlayer()
-  const player = game.players[index]
+  const player = game.players[game.getCurrentPlayer()]
 
   game.drawCard(hand)
   setHandValue(hand)
-  hideAltButtons(index, hand)
+  hideAltButtons(hand)
   displayPlayerCards()
 
   if(player.hands[hand].getState() === 'complete') {
-    hideMainButtons(index, hand)
+    hideMainButtons(hand)
   }
   if(player.getStatus() === 'done') {
     nextPlayer()
@@ -243,14 +242,13 @@ function drawCard(hand) {
 }
 
 function stick(hand) {
-  const index = game.getCurrentPlayer()
-  const player = game.players[index]
+  const player = game.players[game.getCurrentPlayer()]
   const value = setHandValue(hand)
   if(value < 22) playSound('click1')
 
   player.stick(hand)
-  hideMainButtons(index, hand)
-  hideAltButtons(index, hand)
+  hideMainButtons(hand)
+  hideAltButtons(hand)
 
   if(player.getStatus() === 'done') {
     nextPlayer()
@@ -262,8 +260,8 @@ function doubleDown() {
   game.doubleDown()
 
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
-  hideMainButtons(index, 0)
-  hideAltButtons(index, 0)
+  hideMainButtons(0)
+  hideAltButtons(0)
 
   const value = setHandValue(0)
   if(value < 22) playSound('click1')
@@ -326,7 +324,7 @@ function splitCards() {
   playSound('card_split1')
   game.splitHand()
 
-  hideAltButtons(index, 0)
+  hideAltButtons(0)
 
   createSplitElements()
   refreshChipsTotals()
@@ -376,12 +374,14 @@ function nextRound() {
   createPlayerElements()
 }
 
-function hideMainButtons(index, hand) {
+function hideMainButtons(hand) {
+  const index = game.getCurrentPlayer()
   const cards = (hand === 0) ? '' : '-split'
   Html.getAndHideElement(`player${index}${cards}-drawCardButton`, `player${index}${cards}-stickButton`)
 }
 
-function hideAltButtons(index, hand) {
+function hideAltButtons(hand) {
+  const index = game.getCurrentPlayer()
   const cards = (hand === 0) ? '' : '-split'
   Html.checkForAndHideElement(`player${index}${cards}-doubleButton`)
   Html.checkForAndHideElement(`player${index}${cards}-splitButton`)
