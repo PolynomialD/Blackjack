@@ -90,7 +90,7 @@ class BlackJackGame {
 
   getPlayersChipsAndBets() {
     return this.players.map((player) => {
-      return player.getChips() + player.getBets().reduce((total,number) => {
+      return player.getInsuranceBet() + player.getChips() + player.getBets().reduce((total,number) => {
         return total + number
       })
     })
@@ -151,6 +151,11 @@ class BlackJackGame {
   payWinners() {
     const dealerHandValue = this.handValue(this.dealer.showHand())
     this.players.forEach((player) => {
+      if(dealerHandValue === 21 && this.dealer.handSize() === 2 && player.getInsuranceBet() !== 0) {
+        player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))
+      } else if(player.getInsuranceBet() !== 0) {
+        player.removeInsuranceBet()
+      }
       player.hands.forEach((hand) => {
         const playerHandValue = this.handValue(hand.showCards())
         if(playerHandValue === 21 && hand.size() === 2 && player.hands.length === 1) {

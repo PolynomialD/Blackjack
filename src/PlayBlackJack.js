@@ -1,8 +1,6 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
-const Deck = require('./Deck')
-const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['A',11],['A',11]])
-const game = new BlackJackGame(deck)
+const game = new BlackJackGame()
 
 function addPlayerByClick(click) {
   if (click.keyCode === 13) {
@@ -137,6 +135,11 @@ function createPlayerElements() {
       Html.div({
         id: `player${index}-bet-div`,
         class: 'bet-div'
+      }),
+
+      Html.div({
+        id: `player${index}-insurance-div`,
+        class: 'bet-div'
       })
     ]
 
@@ -233,7 +236,6 @@ function createPlayerButtons() {
     })
     insuranceButton.innerHTML = 'Insurance'
     if(index !== 0) Html.hideElement(insuranceButton)
-
 
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
@@ -369,11 +371,14 @@ function doubleDown() {
 
 function insuranceBet() {
   const index = game.getCurrentPlayer()
+  const player = game.players[index]
   Html.getAndHideElement(`player${index}-insuranceButton`)
+  player.placeInsuranceBet()
+  document.getElementById(`player${index}-insurance-div`).innerHTML = `Insurance:${player.getInsuranceBet()}`
+  refreshChipsTotals()
 }
 
 function startGame() {
-  // playSound('casino_background1', 'loop')
   playSound('card_fan1')
   createPlayerElements()
   game.deck.shuffle()
@@ -399,7 +404,6 @@ function splitCards() {
 
 function playDealersHand() {
   game.addToHistory()
-  console.log(game.players[0].getBets())
   console.log(game.history)
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
@@ -498,9 +502,10 @@ function refreshChipsTotals() {
 function showChipsDifference(playersChips) {
   game.players.forEach((player, index) => {
     const difference = player.getChips() - playersChips[index]
-    const valueDiv = document.createElement('div')
-    valueDiv.innerHTML = (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even'
-    Html.getAndAppendChild(`player${index}-bet-div`, valueDiv)
+    const valueDiv = Html.div({
+      class: 'bet-div'
+    }, (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even')
+    Html.getAndAppendChild(`player${index}-insurance-div`, valueDiv)
   })
 }
 

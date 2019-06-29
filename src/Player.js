@@ -6,6 +6,7 @@ class Player {
     this.hands = [new Hand()]
     this.chips = chips
     this.bets = []
+    this.insuranceBet = 0
   }
 
   stick() {
@@ -38,8 +39,18 @@ class Player {
     return this.bets
   }
 
+  getInsuranceBet() {
+    return this.insuranceBet
+  }
+
   removeBet() {
     return this.bets.pop()
+  }
+
+  removeInsuranceBet() {
+    const bet = this.insuranceBet
+    this.insuranceBet = 0
+    return bet
   }
 
   getChips() {
@@ -67,6 +78,15 @@ class Player {
       this.bets.push(chips)
       this.chips = 0
     } 
+  }
+
+  placeInsuranceBet() {
+    const chips = this.chips
+    const halfBet = this.bets[0]/2
+    if(chips > halfBet) {
+      this.chips -= halfBet
+      this.insuranceBet = halfBet
+    }
   }
 
   showHand(handNumber = 0) {
