@@ -154,7 +154,7 @@ function createPlayerButtons() {
     const stickButton = Html.button({
       id: `player${index}-stickButton`,
       class: 'button',
-      onclick: `stick()`
+      onclick: `stick(0)`
     })
     stickButton.innerHTML = 'Stick'
     if(index !== 0) Html.hideElement(stickButton)
@@ -228,7 +228,7 @@ function createSplitElements() {
     Html.button({
       id: `player${index}-split-stickButton`,
       class: 'button',
-      onclick: `splitHandStick()`
+      onclick: `stick(1)`
     }, 'Stick')
   ]
 
@@ -261,30 +261,15 @@ function drawCard(hand) {
   displayPlayerCards()
 }
 
-function stick() {
+function stick(hand) {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
-  const value = setHandValue(index, 0)
+  const value = setHandValue(index, hand)
   if(value < 22) playSound('click1')
 
-  player.stick(0)
-  hideMainButtons(index, 0)
-  hideAltButtons(index, 0)
-
-  if(player.getStatus() === 'done') {
-    nextPlayer()
-  }
-}
-
-function splitHandStick() {
-  const index = game.getCurrentPlayer()
-  const player = game.players[index]
-  const value = setHandValue(index, 1)
-  if(value < 22) playSound('click1')
-
-  player.stick(1)
-  hideMainButtons(index, 1)
-  hideAltButtons(index, 1)
+  player.stick(hand)
+  hideMainButtons(index, hand)
+  hideAltButtons(index, hand)
 
   if(player.getStatus() === 'done') {
     nextPlayer()
@@ -549,7 +534,6 @@ window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet
 window.decreaseBet = decreaseBet
 window.playSound = playSound
-window.splitHandStick = splitHandStick
 window.displayDealerCard = displayDealerCard
 window.changeCardColour = changeCardColour
 window.makeBets = makeBets
