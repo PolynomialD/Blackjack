@@ -38,8 +38,8 @@ h1, h2 {
 .bet-button {
   background-color: #e0e2d9e5;
   border: none;
-  border-radius: 4px;
-  padding: 2px 25px;
+  border-radius: 2px;
+  padding: 2px 20px;
   text-align: center;
   font-size: 12px;
   margin: 4px 4px;
@@ -47,13 +47,14 @@ h1, h2 {
   transition: 0.3s;
   text-decoration: none;
   cursor: pointer;
-  width: 60px;
-  height: 22px;
+  width: 70px;
+  height: 26px;
 }
 
 .button {
   background-color: #e0e2d9e5;
   border: none;
+  border-radius: 2px;
   padding: 4px 8px;
   text-align: center;
   font-size: 12px;
@@ -98,7 +99,7 @@ h1, h2 {
 }
 
 .playerDiv {
-  margin: 20px
+  margin: 17px
 }
 
 .playerImage {
@@ -112,7 +113,7 @@ h1, h2 {
 }
 
 .bet-div {
-  font-size: 16px;
+  font-size: 17px;
   margin: 5px;
 }
 
@@ -141,10 +142,11 @@ h1, h2 {
 }
 
 .betInput {
-  width: 60px;
-  height: 22px;
+  width: 70px;
+  height: 26px;
   background-color: #e0e2d9e5;
   border: none;
+  border-radius: 2px;
   text-align: center;
   font-size: 14px;
 }
