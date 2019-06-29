@@ -14,19 +14,16 @@ class BlackJackGame {
   }
 
   addToHistory() {
-    const round = {
+    this.history.push({
       round: this.round,
-      players: []
-    }
-
-    this.players.forEach((player) => {
-      round.players.push({
-        name: player.getName(),
-        hands: player.showHands(),
-        bets: (player.getBets().length === 2) ? [player.getBets()[0], player.getBets()[1]] : [player.getBets()[0]]
+      players: this.players.map((player) => {
+        return {
+          name: player.getName(),
+          hands: player.showHands(),
+          bets: (player.getBets().length === 2) ? [player.getBets()[0], player.getBets()[1]] : [player.getBets()[0]]
+        }
       })
     })
-    this.history.push(round)
   }
 
   getCardCount() {
