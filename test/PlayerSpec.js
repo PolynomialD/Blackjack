@@ -121,7 +121,7 @@ describe('Player', () => {
       }
       const removedCard = bob.hands[0].cards[4]
       bob.removeCard(5).should.eql(removedCard)
-      bob.showHand().length.should.eql(9)
+      bob.hands[0].cards.length.should.eql(9)
     })
   })
 

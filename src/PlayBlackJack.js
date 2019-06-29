@@ -1,10 +1,12 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
-const game = new BlackJackGame()
+const Deck = require('./Deck')
+const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['A',11],['A',11]])
+const game = new BlackJackGame(deck)
 
-function addPlayerByClick(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault()
+function addPlayerByClick(click) {
+  if (click.keyCode === 13) {
+    click.preventDefault()
     addNewPlayer()
   }
 }
@@ -224,6 +226,15 @@ function createPlayerButtons() {
     doubleButton.innerHTML = 'Double'
     if(index !== 0) Html.hideElement(doubleButton)
 
+    const insuranceButton = Html.button({
+      id: `player${index}-insuranceButton`,
+      class: 'button',
+      onclick: `insuranceBet()`
+    })
+    insuranceButton.innerHTML = 'Insurance'
+    if(index !== 0) Html.hideElement(insuranceButton)
+
+
     const playerDiv = document.getElementById(`player${index}-div`)
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton) 
@@ -233,6 +244,9 @@ function createPlayerButtons() {
     }
     if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
       playerDiv.appendChild(splitButton)
+    }
+    if(game.dealer.hand.cards[1].value === 11) {
+      playerDiv.appendChild(insuranceButton)
     }
     document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(0))
   })
@@ -336,6 +350,7 @@ function nextPlayer(index) {
 
   Html.checkForAndShowButton(`player${index+1}-doubleButton`)
   Html.checkForAndShowButton(`player${index+1}-splitButton`)
+  Html.checkForAndShowButton(`player${index+1}-insuranceButton`)
 }
 
 function doubleDown() {
@@ -350,6 +365,11 @@ function doubleDown() {
   stick(index,0)
   displayPlayerCards()
   refreshChipsTotals()
+}
+
+function insuranceBet() {
+  const index = game.getCurrentPlayer()
+  Html.getAndHideElement(`player${index}-insuranceButton`)
 }
 
 function startGame() {
@@ -538,6 +558,7 @@ function playSound(sound, option) {
   audio.play()
 }
 
+window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet
 window.decreaseBet = decreaseBet
 window.playSound = playSound

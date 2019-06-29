@@ -11,7 +11,7 @@ describe('BlackJackGame', () => {
       game.dealCards()
 
       game.players.forEach((player) => {
-        player.showHand().length.should.eql(2)
+        player.hands[0].cards.length.should.eql(2)
       })
     })
   })
