@@ -76,27 +76,37 @@ class BlackJackGame {
     })
   }
 
+  drawCard(hand) {
+    const player = this.players[this.currentPlayer]
+
+    player.receiveCard(this.deck.dealCard(), hand)
+
+    if(this.handValue(player.showHand(hand)) > 21) {
+      player.stick(hand)
+    }
+  }
+
   doubleDown() {
-    const index = this.currentPlayer
-    const player = this.players[index]
+    const player = this.players[this.currentPlayer]
     const bet = player.removeBet()
 
     player.receiveChips(bet)
     player.placeBet(Number(bet * 2))
     player.receiveCard(this.deck.dealCard())
 
-    player.stick()
+    player.stick(0)
   }
 
   splitHand() {
     const player = this.players[this.currentPlayer]
+
     player.splitHand()
     player.receiveCard(this.deck.dealCard(),0)
     player.receiveCard(this.deck.dealCard(),1)
 
     if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
-      player.stick()
-      player.splitHandStick()
+      player.stick(0)
+      player.stick(1)
     }
   }
 
@@ -122,7 +132,7 @@ class BlackJackGame {
   }
 
   dealCards(amountToDeal = 2) {
-    for (amountToDeal; amountToDeal > 0; amountToDeal--) {
+    for(amountToDeal; amountToDeal > 0; amountToDeal--) {
       this.players.forEach((player) => {
         player.receiveCard(this.deck.dealCard())
       })

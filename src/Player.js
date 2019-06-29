@@ -9,12 +9,8 @@ class Player {
     this.insuranceBet = 0
   }
 
-  stick() {
-    this.hands[0].setState('complete')
-  }
-
-  splitHandStick() {
-    this.hands[1].setState('complete')
+  stick(hand) {
+    this.hands[hand].setState('complete')
   }
 
   getStatus() {

@@ -155,52 +155,12 @@ function createPlayerElements() {
   })
 }
 
-function createSplitButtons() {
-  playSound('card_place1')
-
-  const player = game.getCurrentPlayer()
-  const hand = game.players[player].showHand(0)
-  document.getElementById(`player${player}-hand-value`).innerText = game.handValue(hand)
-
-  const elements = [
-    Html.div({
-      id: `player${player}-split-cards`
-    }),
-    
-    Html.div({
-      id: `player${player}-split-hand-value`,
-      class: 'playerHandValue'
-    }, game.handValue(game.players[player].showHand(1))),
-    
-    Html.div({
-      id: `player${player}-split-bet-div`
-    }, `bet :${game.players[player].getBets()[0]}`),
-    
-    Html.button({
-      id: `player${player}-split-drawCardButton`,
-      class: 'button',
-      onclick: `drawCard(${player},1)`
-    }, 'Card'),
-
-    Html.button({
-      id: `player${player}-split-stickButton`,
-      class: 'button',
-      onclick: `splitHandStick()`
-    }, 'Stick')
-  ]
-
-  Html.getAndAppendChildren(`player${player}-chips`, elements)
-
-  Html.getAndHideElement(`player${player}-doubleButton`)
-  Html.getAndHideElement(`player${player}-splitButton`)
-}
-
 function createPlayerButtons() {
   game.players.forEach((player, index) => {
     const drawCardButton = Html.button({
       id: `player${index}-drawCardButton`,
       class: 'button',
-      onclick: `drawCard(${index}, 0)`
+      onclick: `drawCard(0)`
     })
     drawCardButton.innerHTML = 'Card'
     if(index !== 0) Html.hideElement(drawCardButton)
@@ -250,53 +210,84 @@ function createPlayerButtons() {
     if(game.dealer.hand.cards[1].value === 11) {
       playerDiv.appendChild(insuranceButton)
     }
-    document.getElementById(`player${index}-hand-value`).innerHTML = game.handValue(game.players[index].showHand(0))
+    setHandValue(index, 0)
   })
   Html.getAndHideElement('deck-button','hint-button')
   Html.clearHtml('hint-text')
 }
 
-function drawCard(index, hand) {
+function createSplitButtons() {
+  const index = game.getCurrentPlayer()
+
+  const elements = [
+    Html.div({
+      id: `player${index}-split-cards`
+    }),
+    
+    Html.div({
+      id: `player${index}-split-hand-value`,
+      class: 'playerHandValue'
+    }),
+    
+    Html.div({
+      id: `player${index}-split-bet-div`
+    }, `Bet:${game.players[index].getBets()[0]}`),
+    
+    Html.button({
+      id: `player${index}-split-drawCardButton`,
+      class: 'button',
+      onclick: `drawCard(1)`
+    }, 'Card'),
+
+    Html.button({
+      id: `player${index}-split-stickButton`,
+      class: 'button',
+      onclick: `splitHandStick()`
+    }, 'Stick')
+  ]
+
+  Html.getAndAppendChildren(`player${index}-chips`, elements)
+
+  Html.getAndHideElement(`player${index}-doubleButton`)
+  Html.getAndHideElement(`player${index}-splitButton`)
+
+  setHandValue(index, 0)
+  setHandValue(index, 1)
+}
+
+function drawCard(hand) {
+  const index = game.getCurrentPlayer()
+  const player = game.players[index]
+
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
 
-  game.players[index].receiveCard(game.deck.dealCard(), hand)
+  game.drawCard(hand)
+  setHandValue(index, hand)
 
-  if(hand === 0) {
-    const handDiv = document.getElementById(`player${index}-hand-value`)
-    const handValue = game.handValue(game.players[index].showHand(0))
-    handDiv.innerHTML = handValue
-    if(handValue > 21) {
-      stick()
-    } else {
-      playSound('card_place1')
-    }
+  if(player.hands[hand].getState() === 'complete') {
+    hideButtons(index, hand)
   }
-  if(hand === 1) {
-    const splitHandDiv = document.getElementById(`player${index}-split-hand-value`)
-    const splitHandValue = game.handValue(game.players[index].showHand(1))
-    splitHandDiv.innerHTML = splitHandValue
-    if(splitHandValue > 21) {
-      splitHandStick()
-    } else {
-      playSound('card_place1')
-    }
+  if(player.getStatus() === 'done') {
+    nextPlayer(index)
+  } else {
+    playSound('card_place1')
   }
+
   displayPlayerCards()
 }
 
 function stick() {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
+  player.stick(0)
 
-  player.stick()
+  const value = setHandValue(index, 0)
+  if(value < 22) playSound('click1')
 
   Html.checkForAndHideElement(`player${index}-doubleButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
-  Html.getAndHideElement(`player${index}-drawCardButton`)
-  Html.getAndHideElement(`player${index}-stickButton`)
-
-  setHandValue(0)
+  hideButtons(index, 0)
 
   if(player.getStatus() === 'done') {
     nextPlayer(index)
@@ -306,13 +297,11 @@ function stick() {
 function splitHandStick() {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
+  player.stick(1)
 
-  player.splitHandStick()
-  
-  Html.getAndHideElement(`player${index}-split-drawCardButton`)
-  Html.getAndHideElement(`player${index}-split-stickButton`)
-
-  setHandValue(1)
+  const value = setHandValue(index, 1)
+  if(value < 22) playSound('click1')
+  hideButtons(index, 1)
 
   if(player.getStatus() === 'done') {
     nextPlayer(index)
@@ -323,13 +312,13 @@ function doubleDown() {
   const index = game.getCurrentPlayer()
   game.doubleDown()
 
-  Html.getAndHideElement(`player${index}-doubleButton`)
-  Html.getAndHideElement(`player${index}-drawCardButton`)
-  Html.getAndHideElement(`player${index}-stickButton`)
+  Html.getAndHideElement(`player${index}-doubleButton`, `player${index}-drawCardButton`, `player${index}-stickButton`)
   Html.checkForAndHideElement(`player${index}-splitButton`)
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
 
-  setHandValue(0)
+  const value = setHandValue(index, 0)
+  if(value < 22) playSound('click1')
+
   displayPlayerCards()
   refreshChipsTotals()
   nextPlayer(index)
@@ -363,7 +352,6 @@ function startGame() {
   createPlayerElements()
   game.deck.shuffle()
   Html.showHintButton()
-  console.log(game.deck)
 }
 
 function dealCards() {
@@ -383,27 +371,30 @@ function splitCards() {
 }
 
 function playDealersHand() {
+  const playersChips = game.getPlayersChipsAndBets()
+
+  playSound('chips1')
+  game.playDealersHand()
   game.addToHistory()
   console.log(game.history)
+
+  if(game.getRound() === 1) Html.showHintButton()
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'
   })
-  game.playDealersHand()
-  displayAllCards()
-  const playersChips = game.getPlayersChipsAndBets()
-  if(game.getRound() === 1) Html.showHintButton()
-
+  
   game.payWinners()
+  displayAllCards()
   setHandValueColours()
   refreshChipsTotals()
   showChipsDifference(playersChips)
-  playSound('chips1')
 }
 
 function nextRound() {
   game.nextRound()
   playSound('card_fan1')
+
   if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
   Html.getAndSetAttributes('deck-button', {
@@ -416,6 +407,11 @@ function nextRound() {
   })
   Html.showHintButton()
   createPlayerElements()
+}
+
+function hideButtons(index, hand) {
+  const split = (hand === 0) ? '' : '-split'
+  Html.getAndHideElement(`player${index}${split}-drawCardButton`, `player${index}${split}-stickButton`)
 }
 
 function displayPlayerCards() {
@@ -493,20 +489,18 @@ function changeCardColour() {
   game.changeCardColour()
 }
 
-  function setHandValue(hand) {
-    const index = game.getCurrentPlayer()
-    const split = (hand === 0) ? '' : '-split'
-    const handValue = game.handValue(game.players[index].showHand(hand))
-    const handDiv = document.getElementById(`player${index}${split}-hand-value`)
-    handDiv.innerHTML = handValue
+function setHandValue(index, hand) {
+  const split = (hand === 0) ? '' : '-split'
+  const handValue = game.handValue(game.players[index].showHand(hand))
+  const handDiv = document.getElementById(`player${index}${split}-hand-value`)
+  handDiv.innerHTML = handValue
 
-    if(handValue > 21) {
-      handDiv.setAttribute('class', 'loseColour')
-      playSound('groan1')
-    } else {
-      playSound('click1')
-    }
+  if(handValue > 21) {
+    handDiv.setAttribute('class', 'loseColour')
+    playSound('groan1')
   }
+  return handValue
+}
 
 function setHandValueColours() {
   const dealerHandValue = document.getElementById('dealer-hand-value')
