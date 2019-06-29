@@ -2,16 +2,10 @@ const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const game = new BlackJackGame()
 
-function addPlayerByClick(click) {
-  if (click.keyCode === 13) {
-    click.preventDefault()
-    addNewPlayer()
-  }
-}
-
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
+
   if(chips.value !== '') {
     game.addPlayer(name.value, chips.value)
     playSound('click2')
@@ -65,9 +59,6 @@ function makeBets() {
 }
 
 function createPlayerElements() {
-  Html.getAndSetAttributes('table-div', { class: 'displayBlock' })
-  Html.getAndHideElement('createGameForm')
-
   const playerDivs = game.players.map((player, index) => {
     const playerChips = Html.div({
       id: `player${index}-chips`
@@ -198,8 +189,6 @@ function createPlayerButtons() {
     }
     setHandValue(index, 0)
   })
-  Html.getAndHideElement('deck-button','hint-button')
-  Html.clearHtml('hint-text')
 }
 
 function createSplitElements() {
@@ -235,7 +224,6 @@ function createSplitElements() {
   Html.getAndAppendChildren(`player${index}-chips`, elements)
 
   hideAltButtons(index, 0)
-
   setHandValue(index, 0)
   setHandValue(index, 1)
 }
@@ -244,10 +232,10 @@ function drawCard(hand) {
   const index = game.getCurrentPlayer()
   const player = game.players[index]
 
-  hideAltButtons(index, hand)
-
   game.drawCard(hand)
   setHandValue(index, hand)
+  hideAltButtons(index, hand)
+  displayPlayerCards()
 
   if(player.hands[hand].getState() === 'complete') {
     hideMainButtons(index, hand)
@@ -257,8 +245,6 @@ function drawCard(hand) {
   } else {
     playSound('card_place1')
   }
-
-  displayPlayerCards()
 }
 
 function stick(hand) {
@@ -318,13 +304,19 @@ function insuranceBet() {
 
 function startGame() {
   playSound('card_fan1')
+  Html.getAndSetAttributes('table-div', {
+    class: 'displayBlock'
+  })
+  Html.getAndHideElement('createGameForm')
   createPlayerElements()
   game.deck.shuffle()
-  Html.showHintButton()
+  if(game.getRound() !== 1) Html.showHintButton()
 }
 
 function dealCards() {
   playSound('fast_deal1')
+  Html.getAndHideElement('deck-button','hint-button')
+  Html.clearHtml('hint-text')
   game.dealCards()
   displayDealerCard()
   displayPlayerCards()
@@ -345,9 +337,7 @@ function playDealersHand() {
   playSound('chips1')
   game.playDealersHand()
   game.addToHistory()
-  console.log(game.history)
 
-  if(game.getRound() === 1) Html.showHintButton()
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'
@@ -365,9 +355,12 @@ function nextRound() {
   if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
   game.nextRound()
 
-  Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
+  Html.getAndSetAttributes('table-div', {
+    class: 'displayBlock'
+  })
+  Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value')
   Html.getAndSetAttributes('deck-button', {
-    class: 'buttonImage displayInline',
+    class: 'buttonImage cursor',
     onclick: 'makeBets()'
   })
   Html.getAndSetAttributes('dealer-img', {
@@ -389,8 +382,6 @@ function hideAltButtons(index, hand) {
   Html.checkForAndHideElement(`player${index}${splitCheck}-splitButton`)
   Html.checkForAndHideElement(`player${index}${splitCheck}-insuranceButton`)
 }
-
-
 
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
@@ -463,10 +454,6 @@ function showChipsDifference(playersChips) {
   })
 }
 
-function changeCardColour() {
-  game.changeCardColour()
-}
-
 function setHandValue(index, hand) {
   const splitCheck = (hand === 0) ? '' : '-split'
   const handValue = game.handValue(game.players[index].showHand(hand))
@@ -503,12 +490,20 @@ function displayTheCount() {
   const cardsInDeck = game.deck.size()
   const dealtCards = game.deck.dealtCardsSize()
   const cardsTotal = dealtCards + cardsInDeck
-  const hintText = document.getElementById('hint-text')
-  if(game.getRound() !== 1) { 
-    hintText.innerHTML = `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining  `
-  } else {
-    hintText.innerHTML = 'Click the dealer to continue'
+
+  document.getElementById('hint-text').innerHTML =
+  `The Count Is ${game.getCardCount()} with ${cardsInDeck}/${cardsTotal} cards remaining`
+}
+
+function addNewPlayerButton(click) {
+  if (click.keyCode === 13) {
+    click.preventDefault()
+    addNewPlayer()
   }
+}
+
+function changeCardColour() {
+  game.changeCardColour()
 }
 
 function increaseBet(index) {
@@ -537,7 +532,7 @@ window.playSound = playSound
 window.displayDealerCard = displayDealerCard
 window.changeCardColour = changeCardColour
 window.makeBets = makeBets
-window.addPlayerByClick = addPlayerByClick
+window.addNewPlayerButton = addNewPlayerButton
 window.doubleDown = doubleDown
 window.displayTheCount = displayTheCount
 window.splitCards = splitCards
