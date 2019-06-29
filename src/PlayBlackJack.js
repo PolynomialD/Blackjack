@@ -174,7 +174,7 @@ function createSplitButtons() {
     
     Html.div({
       id: `player${player}-split-bet-div`
-    }, `bet:${game.players[player].getBets()[0]}`),
+    }, `bet :${game.players[player].getBets()[0]}`),
     
     Html.button({
       id: `player${player}-split-drawCardButton`,
@@ -296,23 +296,10 @@ function stick() {
   Html.getAndHideElement(`player${index}-drawCardButton`)
   Html.getAndHideElement(`player${index}-stickButton`)
 
-  const handValue = game.handValue(player.showHand(0))
-  const handDiv = document.getElementById(`player${index}-hand-value`)
-  handDiv.innerHTML = handValue
-
-  if(handValue > 21) {
-    handDiv.setAttribute('class', 'loseColour')
-    playSound('groan1')
-  } else {
-    playSound('click1')
-  }
+  setHandValue(0)
 
   if(player.getStatus() === 'done') {
-    if(index+1 === game.getNumberOfPlayers()) {
-      playDealersHand()
-    } else {
-      nextPlayer(index)
-    }
+    nextPlayer(index)
   }
 }
 
@@ -324,49 +311,42 @@ function splitHandStick() {
   
   Html.getAndHideElement(`player${index}-split-drawCardButton`)
   Html.getAndHideElement(`player${index}-split-stickButton`)
-  
-  const splitHandValue = game.handValue(player.showHand(1))
-  const splitHandDiv = document.getElementById(`player${index}-split-hand-value`)
-  splitHandDiv.innerHTML = splitHandValue
 
-  if(splitHandValue > 21) {
-    splitHandDiv.setAttribute('class', 'loseColour')
-    playSound('groan1')
-  } else {
-    playSound('click1')
-  }
+  setHandValue(1)
 
   if(player.getStatus() === 'done') {
-    if(index+1 === game.getNumberOfPlayers()) {
-      playDealersHand()
-    } else {
-      nextPlayer(index)
-    }
+    nextPlayer(index)
   }
-}
-
-function nextPlayer(index) {
-  game.nextPlayer()
-  Html.getAndShowButton(`player${index+1}-drawCardButton`)
-  Html.getAndShowButton(`player${index+1}-stickButton`)
-
-  Html.checkForAndShowButton(`player${index+1}-doubleButton`)
-  Html.checkForAndShowButton(`player${index+1}-splitButton`)
-  Html.checkForAndShowButton(`player${index+1}-insuranceButton`)
 }
 
 function doubleDown() {
   const index = game.getCurrentPlayer()
-  const player = game.players[index]
-  const bet = player.removeBet()
-  player.receiveChips(bet)
-  player.placeBet(Number(bet * 2))
-  player.receiveCard(game.deck.dealCard())
-  document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${player.getBets()[0]}`
+  game.doubleDown()
+
   Html.getAndHideElement(`player${index}-doubleButton`)
-  stick(index,0)
+  Html.getAndHideElement(`player${index}-drawCardButton`)
+  Html.getAndHideElement(`player${index}-stickButton`)
+  Html.checkForAndHideElement(`player${index}-splitButton`)
+  document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
+
+  setHandValue(0)
   displayPlayerCards()
   refreshChipsTotals()
+  nextPlayer(index)
+}
+
+function nextPlayer(index) {
+  if(index+1 === game.getNumberOfPlayers()) {
+    playDealersHand()
+  } else {
+    game.nextPlayer()
+
+    Html.checkForAndShowButton(`player${index+1}-drawCardButton`)
+    Html.checkForAndShowButton(`player${index+1}-stickButton`)
+    Html.checkForAndShowButton(`player${index+1}-doubleButton`)
+    Html.checkForAndShowButton(`player${index+1}-splitButton`)
+    Html.checkForAndShowButton(`player${index+1}-insuranceButton`)
+  }
 }
 
 function insuranceBet() {
@@ -374,7 +354,7 @@ function insuranceBet() {
   const player = game.players[index]
   Html.getAndHideElement(`player${index}-insuranceButton`)
   player.placeInsuranceBet()
-  document.getElementById(`player${index}-insurance-div`).innerHTML = `Insurance:${player.getInsuranceBet()}`
+  document.getElementById(`player${index}-insurance-div`).innerHTML = `Insurance: ${player.getInsuranceBet()}`
   refreshChipsTotals()
 }
 
@@ -504,7 +484,7 @@ function showChipsDifference(playersChips) {
     const difference = player.getChips() - playersChips[index]
     const valueDiv = Html.div({
       class: 'bet-div'
-    }, (difference < 0) ? `Lost:${difference}` : (difference > 0) ? `Won:${difference}` : 'Break Even')
+    }, (difference < 0) ? `Lost: ${difference}` : (difference > 0) ? `Won: ${difference}` : 'Break Even')
     Html.getAndAppendChild(`player${index}-insurance-div`, valueDiv)
   })
 }
@@ -512,6 +492,21 @@ function showChipsDifference(playersChips) {
 function changeCardColour() {
   game.changeCardColour()
 }
+
+  function setHandValue(hand) {
+    const index = game.getCurrentPlayer()
+    const split = (hand === 0) ? '' : '-split'
+    const handValue = game.handValue(game.players[index].showHand(hand))
+    const handDiv = document.getElementById(`player${index}${split}-hand-value`)
+    handDiv.innerHTML = handValue
+
+    if(handValue > 21) {
+      handDiv.setAttribute('class', 'loseColour')
+      playSound('groan1')
+    } else {
+      playSound('click1')
+    }
+  }
 
 function setHandValueColours() {
   const dealerHandValue = document.getElementById('dealer-hand-value')

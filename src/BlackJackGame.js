@@ -76,6 +76,18 @@ class BlackJackGame {
     })
   }
 
+  doubleDown() {
+    const index = this.currentPlayer
+    const player = this.players[index]
+    const bet = player.removeBet()
+
+    player.receiveChips(bet)
+    player.placeBet(Number(bet * 2))
+    player.receiveCard(this.deck.dealCard())
+
+    player.stick()
+  }
+
   splitHand() {
     const player = this.players[this.currentPlayer]
     player.splitHand()
