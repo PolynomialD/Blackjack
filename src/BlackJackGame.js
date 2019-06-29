@@ -19,6 +19,8 @@ class BlackJackGame {
       players: this.players.map((player) => {
         return {
           name: player.getName(),
+          chips: player.getChips() + player.getBets().reduce((total, num) => {
+            return total + num}) + player.getInsuranceBet(),
           hands: player.showHands(),
           bets: (player.getBets().length === 2) ? [player.getBets()[0], player.getBets()[1]] : [player.getBets()[0]]
         }

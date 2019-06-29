@@ -320,7 +320,6 @@ function dealCards() {
 }
 
 function splitCards() {
-  const index = game.getCurrentPlayer()
   playSound('card_split1')
   game.splitHand()
 
@@ -335,8 +334,6 @@ function splitCards() {
 }
 
 function playDealersHand() {
-  const playersChips = game.getPlayersChipsAndBets()
-
   playSound('chips1')
   game.playDealersHand()
   game.addToHistory()
@@ -350,7 +347,7 @@ function playDealersHand() {
   displayAllCards()
   setHandValueColours()
   refreshChipsTotals()
-  showChipsDifference(playersChips)
+  showChipsDifference()
 }
 
 function nextRound() {
@@ -449,9 +446,10 @@ function refreshChipsTotals() {
   })
 }
 
-function showChipsDifference(playersChips) {
+function showChipsDifference() {
   game.players.forEach((player, index) => {
-    const difference = player.getChips() - playersChips[index]
+    const previousChips = game.history[game.getRound() - 1].players[index].chips
+    const difference = player.getChips() - previousChips
     const valueDiv = Html.div({
       class: 'bet-div'
     }, (difference < 0) ? `Lost: ${difference}` : (difference > 0) ? `Won: ${difference}` : 'Break Even')
