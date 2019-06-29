@@ -39,41 +39,27 @@ function placeBet(index) {
   if(betInput.value !== '' && betInput.value > 0) {
     game.players[index].placeBet(Number(betInput.value))
 
-    Html.clearHtml('hint-text')
-
     Html.getAndSetAttributes(`player${index}-img`, {
       onclick: '',
       class: 'playerImage'
     })
 
+    betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     Html.getAndHideElement(`player${index}-increase-bet-button`, `player${index}-decrease-bet-button`)
     Html.hideElement(betInput)
-    betDiv.innerHTML = `Bet:${game.players[index].getBets()[0]}`
     game.addBetToCount()
     playSound('chips_stack1')
-  }
-  if(game.getBetCount() === game.getNumberOfPlayers()) {
-    Html.getAndSetAttributes(`deck-button`, {
-      onclick: 'dealCards()',
-      class: 'buttonImage cursor'
-    })
-    if(game.deck.dealtCardsSize() === 0) {
-      Html.showHintButton()
-    } else {
-      Html.getAndHideElement('hint-button')
-      Html.clearHtml('hint-text')
-    }
   }
   refreshChipsTotals()
 }
 
-function makeBets(click) {
-  if(click.button === 2) {
-    game.players.forEach((player, index) => {
-      if(player.getBets().length === 0) {
-        placeBet(index)
-      }
-    })
+function makeBets() {
+  game.players.forEach((player, index) => {
+    if(player.getBets().length === 0) {
+      placeBet(index)
+    }
+  })
+  if(game.getBetCount() === game.getNumberOfPlayers()) {
     dealCards()
   }
 }
@@ -216,7 +202,7 @@ function createPlayerButtons() {
   Html.clearHtml('hint-text')
 }
 
-function createSplitButtons() {
+function createSplitElements() {
   const index = game.getCurrentPlayer()
 
   const elements = [
@@ -365,7 +351,7 @@ function dealCards() {
 function splitCards() {
   playSound('card_split1')
   game.splitHand()
-  createSplitButtons()
+  createSplitElements()
   refreshChipsTotals()
   displayPlayerCards()
 }
@@ -399,7 +385,7 @@ function nextRound() {
   Html.clearHtml('dealer-cards-div', 'players-div', 'dealer-hand-value', 'hint-text')
   Html.getAndSetAttributes('deck-button', {
     class: 'buttonImage displayInline',
-    onclick: ''
+    onclick: 'makeBets()'
   })
   Html.getAndSetAttributes('dealer-img', {
     class: 'buttonImage',
