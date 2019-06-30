@@ -3,6 +3,10 @@ const Player = require('../src/Player')
 const Gen = require('verify-it').Gen
 const Hand = require('../src/Hand')
 
+const fakeLogger = {
+  log: () => undefined
+}
+
 describe('Player', () => {
   describe('name', () => {
     it('should be a string', () => {
@@ -55,21 +59,21 @@ describe('Player', () => {
       player.getHandAmount().should.eql(1)
     })
   })
-  
+
   describe('getHandResult()', () => {
     verify.it('should give the correct hand result', Gen.integerBetween(0,50), (expected) => {
-      const player = new Player('Bob')
+      const player = new Player('Bob', 0, fakeLogger)
       player.hands[0].result = expected
       player.getHandResult(0).should.eql(expected)
     })
-  })
 
     verify.it('should give the correct hand result with 2 hands', Gen.integerBetween(0,50), (expected) => {
-      const player = new Player('Bob')
+      const player = new Player('Bob', 0, fakeLogger)
       player.hands = [new Hand(), new Hand()]
       player.hands[1].result = expected
       player.getHandResult(1).should.eql(expected)
     })
+  })
 
   describe('showHand()', () => {
     verify.it('should give the correct handsize',
@@ -83,17 +87,17 @@ describe('Player', () => {
         bob.showHand().length.should.eql(expected)
     })
   })
-    
+
   describe('chips', () => {
     it('should accept a number', () => {
       const player = new Player('Bob', 9000)
       player.getChips().should.eql(9000)
     })
   })
-  
+
   describe('getChips()', () => {
     verify.it('should give the players chips total',Gen.integerBetween(1,9000), (bet) => {
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       const expected = 9000 - bet
       bob.placeBet(bet)
       bob.getChips().should.eql(expected)
@@ -110,34 +114,21 @@ describe('Player', () => {
     })
   })
 
-  describe('removeCard()', () => {
-    it('should remove a card from player.hand', () => {
-      const deck = new Deck()
-      const bob = new Player('Bob', 5000)
-      for(let i=10; i>0; i--) {
-        bob.receiveCard(deck.dealCard())
-      }
-      const removedCard = bob.hands[0].cards[4]
-      bob.removeCard(5).should.eql(removedCard)
-      bob.hands[0].cards.length.should.eql(9)
-    })
-  })
-
   describe('placeBet()', () => {
     it('should add the bet to player bets array', () => {
-      const bob = new Player('Bob', 5000)
+      const bob = new Player('Bob', 5000, fakeLogger)
       bob.placeBet(1000)
       bob.bets.should.eql([1000])
     })
 
     it('should remove chips from the player', () => {
-      const player = new Player('Bob', 5000)
+      const player = new Player('Bob', 5000, fakeLogger)
       player.placeBet(1000)
       player.getChips().should.eql(4000)
     })
     
     it('should place a bet not more than the players chips', () => {
-      const bob = new Player('Bob', 5000)
+      const bob = new Player('Bob', 5000, fakeLogger)
       bob.placeBet(7000)
       bob.getBets().should.eql([5000])
       bob.getChips().should.eql(0)
@@ -146,7 +137,7 @@ describe('Player', () => {
 
   describe('getBets()', () => {
     verify.it('should return a players bets', Gen.integerBetween(1,9000), (bet) => {
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       bob.placeBet(bet)
       bob.getBets().should.eql([bet])
     })
@@ -154,7 +145,7 @@ describe('Player', () => {
 
   describe('removeBet()', () => {
     verify.it('should remove a bet from bets', () => { 
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       bob.placeBet(1000)
       bob.removeBet()
       bob.bets.should.eql([])
@@ -164,7 +155,7 @@ describe('Player', () => {
 
   describe('splitHand()', () => {
     verify.it('should split the players hand', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
 
       bob.placeBet(1000)
@@ -177,7 +168,7 @@ describe('Player', () => {
 
     verify.it('should only split when values are equal',
     Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
       deck.cards.forEach((card) => {
         bob.receiveCard(card)
@@ -187,7 +178,7 @@ describe('Player', () => {
     })
 
     verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 9000)
+      const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.placeBet(1000)
       bob.receiveCard(deck.dealCard())
@@ -197,7 +188,7 @@ describe('Player', () => {
     })
 
     verify.it('should not split if the player cannot place a matching bet', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 1100)
+      const bob = new Player('Bob', 1100, fakeLogger)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.placeBet(1000)
       bob.receiveCard(deck.dealCard())

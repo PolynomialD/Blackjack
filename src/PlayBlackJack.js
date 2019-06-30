@@ -337,7 +337,7 @@ function playDealersHand() {
   playSound('chips1')
   game.playDealersHand()
   game.addRoundToHistory()
-
+  console.log(game.history)
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'

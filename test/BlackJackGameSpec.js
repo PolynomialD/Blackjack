@@ -37,19 +37,6 @@ describe('BlackJackGame', () => {
     })
   })
 
-  describe('getPlayerChipsAndBets()', () => {
-    verify.it('should create an array containing the players chips + bets', () => {
-      const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
-      const jim = game.addPlayer('Jim', 9000)
-      bob.placeBet(1000)
-      bob.placeBet(2000)
-      jim.placeBet(5000)
-
-      game.getPlayersChipsAndBets().should.eql([9000,9000])
-    })
-  })
-
   describe('splitHand()', () => {
     verify.it('should deal a card to each hand', () => {
       const deck = new Deck(['♣', '♦', '♥'],[['J',10],['Q',10],['K',10]])
@@ -70,7 +57,6 @@ describe('BlackJackGame', () => {
       bob.placeBet(1000)
       game.dealCards()
       game.splitHand()
-
       bob.getStatus().should.eql('done')
     })
   })

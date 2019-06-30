@@ -1,6 +1,7 @@
 const Deck = require('./Deck')
 const Dealer = require('./Dealer')
 const Player = require('./Player')
+const Logger = require('./Logger')
 
 class BlackJackGame {
   constructor (deck, players) {
@@ -11,6 +12,7 @@ class BlackJackGame {
     this.round = 1
     this.betCount = 0
     this.history = []
+    this.logger = new Logger()
   }
 
   addRoundToHistory() {
@@ -112,14 +114,6 @@ class BlackJackGame {
     }
   }
 
-  getPlayersChipsAndBets() {
-    return this.players.map((player) => {
-      return player.getInsuranceBet() + player.getChips() + player.getBets().reduce((total,number) => {
-        return total + number
-      })
-    })
-  }
-
   changeCardColour() {
     this.deck.changeCardColour()
   }
@@ -143,7 +137,7 @@ class BlackJackGame {
   }
 
   addPlayer(name, chips) {
-    const player = new Player(name, chips)
+    const player = new Player(name, chips, this.logger)
     this.players.push(player)
     return this.players[this.players.length-1]
   }

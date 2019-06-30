@@ -1,12 +1,13 @@
 const Hand = require('./Hand')
 
 class Player {
-  constructor (name, chips) {
+  constructor (name, chips, logger) {
     this.name = name.toString()
     this.hands = [new Hand()]
     this.chips = chips
     this.bets = []
     this.insuranceBet = 0
+    this.logger = logger
   }
 
   stick(hand) {
@@ -24,7 +25,9 @@ class Player {
   }
 
   getHandResult(hand) {
-    return this.hands[hand].getResult()
+    const result = this.hands[hand].getResult()
+    this.logger.log(`${this.name}: ${result}`)
+    return result
   }
 
   getBets() {
@@ -65,8 +68,10 @@ class Player {
     const chips = this.chips
     if(bet > 0 && bet <= chips) {
       this.chips -= bet
+      this.logger.log(`${this.name} bets ${bet}`)
       this.bets.push(bet)
     } else if(bet > chips) {
+      this.logger.log(`${this.name} bets ${chips}`)
       this.bets.push(chips)
       this.chips = 0
     } 
@@ -76,6 +81,7 @@ class Player {
     const chips = this.chips
     const halfBet = this.bets[0]/2
     if(chips > halfBet) {
+      this.logger.log(`${this.name} insurance bets ${halfBet}`)
       this.chips -= halfBet
       this.insuranceBet = halfBet
     }
@@ -111,10 +117,6 @@ class Player {
   receiveCard(card, handNumber=0) {
     this.hands[handNumber].takeCard(card)
   }
-
-  removeCard(cardPos, handNumber=0) {
-    return this.hands[handNumber].getCard(cardPos-1)
-  }  
 }
 
 module.exports = Player
