@@ -56,7 +56,7 @@ describe('Player', () => {
       const player = new Player('Bob')
       player.hands = new Array(amount).fill(0)
       player.discardHands()
-      player.getHandAmount().should.eql(1)
+      player.hands.length.should.eql(1)
     })
   })
 
@@ -91,7 +91,7 @@ describe('Player', () => {
   describe('chips', () => {
     it('should accept a number', () => {
       const player = new Player('Bob', 9000)
-      player.getChips().should.eql(9000)
+      player.chips.should.eql(9000)
     })
   })
 
@@ -124,14 +124,14 @@ describe('Player', () => {
     it('should remove chips from the player', () => {
       const player = new Player('Bob', 5000, fakeLogger)
       player.placeBet(1000)
-      player.getChips().should.eql(4000)
+      player.chips.should.eql(4000)
     })
     
     it('should place a bet not more than the players chips', () => {
       const bob = new Player('Bob', 5000, fakeLogger)
       bob.placeBet(7000)
-      bob.getBets().should.eql([5000])
-      bob.getChips().should.eql(0)
+      bob.bets.should.eql([5000])
+      bob.chips.should.eql(0)
     })
   })
 

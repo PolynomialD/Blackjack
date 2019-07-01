@@ -39,11 +39,10 @@ describe('BlackJackGame', () => {
 
   describe('splitHand()', () => {
     verify.it('should deal a card to each hand', () => {
-      const deck = new Deck(['♣', '♦', '♥'],[['J',10],['Q',10],['K',10]])
-      const game = new BlackJackGame(deck)
+      const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 9000)
-      bob.placeBet(1000)
-      game.dealCards()
+      bob.bets = [1000]
+      bob.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       game.splitHand()
 
       bob.hands[0].cards.length.should.eql(2)
@@ -51,11 +50,10 @@ describe('BlackJackGame', () => {
     })
 
     verify.it('should only deal 1 card to split aces then stick', () => {
-      const deck = new Deck(['♣', '♦', '♥'],[['A',11],['A',11],['A',11]])
-      const game = new BlackJackGame(deck)
+      const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 9000)
-      bob.placeBet(1000)
-      game.dealCards()
+      bob.bets = [1000]
+      bob.hands[0].cards = [{value: 11}, {value: 11}]
       game.splitHand()
       bob.getStatus().should.eql('done')
     })
