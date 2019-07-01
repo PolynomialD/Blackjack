@@ -79,7 +79,7 @@ describe('Player', () => {
     verify.it('should give the correct handsize',
       Gen.integerBetween(0,52), (cardsToDeal) => {
         const deck = new Deck()
-        const bob = new Player('Bob', 5000)
+        const bob = new Player('Bob', 5000, fakeLogger)
         const expected = cardsToDeal
         for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
           bob.receiveCard(deck.dealCard())

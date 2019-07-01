@@ -246,7 +246,7 @@ function stick(hand) {
   const value = setHandValue(hand)
   if(value < 22) playSound('click1')
 
-  player.stick(hand)
+  game.stick(hand)
   hideMainButtons(hand)
   hideAltButtons(hand)
 

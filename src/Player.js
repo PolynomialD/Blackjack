@@ -106,6 +106,7 @@ class Player {
       const newHands = hand.split()
       this.hands[0] = newHands[0]
       this.hands.push(newHands[1])
+      this.logger.log(`${this.name} splits the hand`)
       this.placeBet(this.bets[0])
     }
   }

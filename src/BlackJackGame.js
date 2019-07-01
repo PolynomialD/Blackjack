@@ -82,21 +82,31 @@ class BlackJackGame {
 
   drawCard(hand) {
     const player = this.players[this.currentPlayer]
+    const card = this.deck.dealCard()
 
-    player.receiveCard(this.deck.dealCard(), hand)
+    player.receiveCard(card, hand)
+    this.logger.log(`${player.getName()} draws ${card.face}`)
 
     if(this.handValue(player.showHand(hand)) > 21) {
       player.stick(hand)
+      this.logger.log(`${player.getName()} goes bust!`)
     }
+  }
+
+  stick(hand) {
+    const player = this.players[this.currentPlayer]
+    this.logger.log(`${player.getName()} sticks on ${this.handValue(player.showHand(hand))}`)
+    player.stick(hand)
   }
 
   doubleDown() {
     const player = this.players[this.currentPlayer]
     const bet = player.removeBet()
 
+    this.logger.log(`${player.getName()} doubles down`)
     player.receiveChips(bet)
     player.placeBet(Number(bet * 2))
-    player.receiveCard(this.deck.dealCard())
+    this.drawCard(0)
 
     player.stick(0)
   }
@@ -105,8 +115,8 @@ class BlackJackGame {
     const player = this.players[this.currentPlayer]
 
     player.splitHand()
-    player.receiveCard(this.deck.dealCard(),0)
-    player.receiveCard(this.deck.dealCard(),1)
+    this.drawCard(0)
+    this.drawCard(1)
 
     if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
       player.stick(0)
@@ -130,15 +140,19 @@ class BlackJackGame {
   dealCards(amountToDeal = 2) {
     for(amountToDeal; amountToDeal > 0; amountToDeal--) {
       this.players.forEach((player) => {
-        player.receiveCard(this.deck.dealCard())
+        const card = this.deck.dealCard()
+        player.receiveCard(card, 0)
+        this.logger.log(`${player.getName()} is dealt ${card.face}`)
       })
       this.dealer.receiveCard(this.deck.dealCard())
     }
+    this.logger.log(`the dealer shows ${this.dealer.showHand()[1].face}`)
   }
 
   addPlayer(name, chips) {
     const player = new Player(name, chips, this.logger)
     this.players.push(player)
+    this.logger.log(`${player.getName()} joins the table`)
     return this.players[this.players.length-1]
   }
 

@@ -19,9 +19,9 @@ describe('BlackJackGame', () => {
   describe('addPlayer()', () => {
     verify.it('should add a player', () => {
       const game = new BlackJackGame()
-      game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000)
 
-      game.getNumberOfPlayers().should.eql(1)
+      game.players[0].should.eql(bob)
     }) 
   })
 
@@ -227,19 +227,17 @@ describe('BlackJackGame', () => {
     verify.it('should pay winners when the dealer goes bust', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['J',10],['Q',10],['K',10]])
       const game = new BlackJackGame(deck)
-      game.addPlayer('Bob', 1000)
-      game.addPlayer('Jim', 1000)
+      const bob = game.addPlayer('Bob', 1000)
+      const jim = game.addPlayer('Jim', 1000)
 
-      game.players.forEach((player) => {
-        player.placeBet(1000)
-      })
+      bob.bets = [1000]
+      jim.bets = [1000]
       game.dealCards()
       game.dealer.receiveCard(game.deck.dealCard())
       game.payWinners()
 
-      game.players.forEach((player) => {
-        player.getChips().should.eql(2000)
-      })
+     bob.chips.should.eql(3000)
+     jim.chips.should.eql(3000) 
     })
 
     verify.it('should pay 1.5 for a blackjack', () => {
@@ -248,13 +246,13 @@ describe('BlackJackGame', () => {
       const jim = game.addPlayer('Jim', 9000)
       const bob = game.addPlayer('Bob', 9000)
 
-      jim.placeBet(1000)
-      bob.placeBet(1000)
+      jim.bets = [1000]
+      bob.bets = [1000]
       game.dealCards()
       game.payWinners()
 
-      bob.chips.should.eql(10500)
-      jim.chips.should.eql(10500)
+      bob.chips.should.eql(11500)
+      jim.chips.should.eql(11500)
     })
 
     verify.it('should give chips for split bets', () => {
@@ -263,8 +261,8 @@ describe('BlackJackGame', () => {
       const bob = game.addPlayer('Bob', 9000)
       const jim = game.addPlayer('Jim', 9000)
 
-      jim.placeBet(1000)
-      bob.placeBet(1000)
+      jim.bets = [1000]
+      bob.bets = [1000]
       game.dealCards()
       jim.receiveCard(game.deck.dealCard())
       bob.splitHand()
@@ -272,8 +270,8 @@ describe('BlackJackGame', () => {
       bob.receiveCard(game.deck.dealCard(),1)
       game.payWinners()
 
-      jim.chips.should.eql(10000)
-      bob.chips.should.eql(11000)
+      jim.chips.should.eql(11000)
+      bob.chips.should.eql(12000)
     })
 
     verify.it('should return chips to the player if its a draw', Gen.integerBetween(1,21), (value) => {
@@ -281,12 +279,12 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame(deck)
       const bob = game.addPlayer('Bob', 9000)
 
-      bob.placeBet(1000)
+      bob.bets = [1000]
       bob.receiveCard(game.deck.cards[0])
       game.dealer.receiveCard(game.deck.cards[1])
       game.payWinners()
 
-      bob.chips.should.eql(9000)
+      bob.chips.should.eql(10000)
     })
 
     verify.it('should remove chips from the player if they go bust', () => {
@@ -294,12 +292,12 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame(deck)
       const bob = game.addPlayer('Bob', 9000)
 
-      bob.placeBet(1000)
+      bob.bets = [1000]
       game.dealCards()
       bob.receiveCard(game.deck.cards[0])
       game.payWinners()
 
-      bob.chips.should.eql(8000)
+      bob.chips.should.eql(9000)
     })
   })
 
@@ -317,12 +315,12 @@ describe('BlackJackGame', () => {
     verify.it('should log player info to the history', () => {
       const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 9000)
-      bob.placeBet(1000)
+      bob.bets = [1000]
       game.dealCards()
       game.addRoundToHistory()
-      game.playDealersHand()
-      
+
       game.history[0].players[0].bets.should.eql([1000])
+      game.history[0].players[0].hands.length.should.eql(1)
     })
   })
 })
