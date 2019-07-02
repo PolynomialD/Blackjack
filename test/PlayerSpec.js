@@ -138,7 +138,7 @@ describe('Player', () => {
   describe('getBets()', () => {
     verify.it('should return a players bets', Gen.integerBetween(1,9000), (bet) => {
       const bob = new Player('Bob', 9000, fakeLogger)
-      bob.placeBet(bet)
+      bob.bets = [bet]
       bob.getBets().should.eql([bet])
     })
   })
@@ -146,10 +146,10 @@ describe('Player', () => {
   describe('removeBet()', () => {
     verify.it('should remove a bet from bets', () => { 
       const bob = new Player('Bob', 9000, fakeLogger)
-      bob.placeBet(1000)
+      bob.bets = [1000]
       bob.removeBet()
+
       bob.bets.should.eql([])
-      bob.chips.should.eql(8000)
     })
   })
 
@@ -158,11 +158,10 @@ describe('Player', () => {
       const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
 
-      bob.placeBet(1000)
-      deck.cards.forEach((card) => {
-        bob.receiveCard(card)
-      })
+      bob.bets = [1000]
+      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
+
       bob.hands.length.should.eql(2)
     })
 
@@ -170,20 +169,21 @@ describe('Player', () => {
     Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
       const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
-      deck.cards.forEach((card) => {
-        bob.receiveCard(card)
-      })
+
+      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
+
       bob.hands.length.should.eql(1)
     })
 
     verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
       const bob = new Player('Bob', 9000, fakeLogger)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-      bob.placeBet(1000)
-      bob.receiveCard(deck.dealCard())
-      bob.receiveCard(deck.dealCard())
+
+      bob.bets = [1000]
+      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
+
       bob.bets.should.eql([1000,1000])
     })
 
@@ -191,9 +191,9 @@ describe('Player', () => {
       const bob = new Player('Bob', 900)
       const deck = new Deck(['♣','♥'],[[`${value}`,value]])
       bob.bets = [1000]
-      bob.receiveCard(deck.dealCard())
-      bob.receiveCard(deck.dealCard())
+      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
+
       bob.hands.length.should.eql(1)
     })
   })
