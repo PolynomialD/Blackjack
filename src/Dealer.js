@@ -7,6 +7,10 @@ class Dealer {
     this.chips = 1000000
   }
 
+  showsAnAce() {
+    return (this.hand.cards[1].value === 11) ? true : false
+  }
+
   receiveCard(card) {
     this.hand.takeCard(card)
   }

@@ -178,13 +178,13 @@ function createPlayerButtons() {
     playerDiv.appendChild(drawCardButton)
     playerDiv.appendChild(stickButton) 
 
-    if(player.getBets()[0] <= player.getChips()) {
+    if(player.canBetAgain()) {
       playerDiv.appendChild(doubleButton)
     }
-    if(player.hands[0].isSplittable() && player.getChips() >= player.getBets()[0]) {
+    if(player.hands[0].isSplittable() && player.canBetAgain()) {
       playerDiv.appendChild(splitButton)
     }
-    if(game.dealer.hand.cards[1].value === 11) {
+    if(game.dealer.showsAnAce() && player.canHalfBetAgain()) {
       playerDiv.appendChild(insuranceButton)
     }
   })

@@ -14,6 +14,10 @@ class Player {
     return (this.chips >= this.bets[0]) ? true : false
   }
 
+  canHalfBetAgain() {
+    return (this.chips >= this.bets[0]/2) ? true : false
+  }
+
   stick(hand) {
     this.hands[hand].setState('complete')
   }
