@@ -42,7 +42,7 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 9000)
       bob.bets = [1000]
-      bob.hands[0].cards = [{value: 'test'}, {value: 'test'}]
+      bob.hands[0].cards = [{value: 'test', face: ''}, {value: 'test', face: ''}]
       game.splitHand()
 
       bob.hands[0].cards.length.should.eql(2)
@@ -53,7 +53,7 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 9000)
       bob.bets = [1000]
-      bob.hands[0].cards = [{value: 11}, {value: 11}]
+      bob.hands[0].cards = [{value: 11, face: ''}, {value: 11, face: ''}]
       game.splitHand()
       bob.getStatus().should.eql('done')
     })

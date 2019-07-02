@@ -196,6 +196,21 @@ describe('Player', () => {
       bob.splitHand()
       bob.hands.length.should.eql(1)
     })
+  })
 
+  describe('canBetAgain', () => {
+    verify.it('should return true if the player has enough chips to bet again', () => {
+      const bob = new Player('Bob', 2000, fakeLogger)
+      bob.bets = [2000]
+      
+      bob.canBetAgain().should.eql(true)
+    })
+
+    verify.it('should return true if the player has enough chips to bet again', () => {
+      const bob = new Player('Bob', 1000, fakeLogger)
+      bob.bets = [2000]
+      
+      bob.canBetAgain().should.eql(false)
+    })
   })
 })

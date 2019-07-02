@@ -10,6 +10,10 @@ class Player {
     this.logger = logger
   }
 
+  canBetAgain() {
+    return (this.chips >= this.bets[0]) ? true : false
+  }
+
   stick(hand) {
     this.hands[hand].setState('complete')
   }
