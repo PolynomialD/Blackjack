@@ -125,21 +125,22 @@ describe('Player', () => {
   })
 
   describe('placeBet()', () => {
-    it('should add the bet to player bets array', () => {
+    verify.it('should add the bet to player bets array', Gen.integerBetween(1,5000), (bet) => {
       const bob = new Player('Bob', 5000, fakeLogger)
-      bob.placeBet(1000)
-      bob.bets.should.eql([1000])
+      bob.placeBet(bet)
+      bob.bets.should.eql([bet])
     })
 
-    it('should remove chips from the player', () => {
+    verify.it('should remove chips from the player', Gen.integerBetween(1,5000), (bet) => {
       const player = new Player('Bob', 5000, fakeLogger)
-      player.placeBet(1000)
-      player.chips.should.eql(4000)
+      const expected = 5000 - bet
+      player.placeBet(bet)
+      player.chips.should.eql(expected)
     })
-    
-    it('should place a bet not more than the players chips', () => {
+
+    verify.it('should place a bet not more than the players chips', Gen.integerBetween(5001,10000), (bet) => {
       const bob = new Player('Bob', 5000, fakeLogger)
-      bob.placeBet(7000)
+      bob.placeBet(bet)
       bob.bets.should.eql([5000])
       bob.chips.should.eql(0)
     })
@@ -160,6 +161,16 @@ describe('Player', () => {
       bob.removeBet()
 
       bob.bets.should.eql([])
+    })
+  })
+
+  describe('placeInsuranceBet()', Gen.integerBetween(1,5000), (bet) => {
+    verify.it('should add a bet to the insuranceBet array', () => {
+      const bob = new Player('Bob', 5000, fakeLogger)
+      const expected = bet / 2
+      bob.bets = [bet]
+      bob.placeInsuranceBet()
+      bob.insuranceBet.should.eql(expected)
     })
   })
 
