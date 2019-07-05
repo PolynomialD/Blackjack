@@ -15,6 +15,21 @@ describe('Dealer', () => {
     })
   })
 
+  describe('showsAnAce', () => {
+    verify.it('should return true if the dealer shows an ace', () => {
+      const dealer = new Dealer()
+      dealer.hand.cards = [{value: 10}, {value: 11}]
+
+      dealer.showsAnAce().should.eql(true)
+    })
+
+    verify.it('should return false if the dealer does not show an ace', () => {
+      const dealer = new Dealer()
+      dealer.hand.cards = [{value: 1}, {value: 1}]
+
+      dealer.showsAnAce().should.eql(false)
+    })
+  })
   describe('removeCard()', () => {
     verify.it('should remove a card from the dealers hand', Gen.integerBetween(1,52), (cards) => {
       const deck = new Deck()
