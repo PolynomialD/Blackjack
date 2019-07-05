@@ -88,6 +88,16 @@ describe('Player', () => {
     })
   })
 
+  describe('showHands()', () => {
+    verify.it('should return all of a players hands', () => {
+      const bob = new Player('Bob', 5000, fakeLogger)
+      bob.hands = [new Hand(), new Hand()]
+      bob.hands[0].cards = [{value: 'test'}]
+      bob.hands[1].cards = [{value: 'test'}]
+      bob.showHands().should.eql([[{value: 'test'}],[{value: 'test'}]])
+    })
+  })
+
   describe('chips', () => {
     it('should accept a number', () => {
       const player = new Player('Bob', 9000)
