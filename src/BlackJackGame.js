@@ -142,7 +142,9 @@ class BlackJackGame {
       this.players.forEach((player) => {
         const card = this.deck.dealCard()
         player.receiveCard(card, 0)
-        this.logger.log(`${player.getName()} is dealt ${card.face}`)
+        if(amountToDeal === 1) {
+          this.logger.log(`${player.getName()} is dealt ${player.showHand(0)[0].face} ${player.showHand(0)[1].face}`)
+        }
       })
       this.dealer.receiveCard(this.deck.dealCard())
     }

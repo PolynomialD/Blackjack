@@ -39,7 +39,7 @@ class Deck {
         }
         return {
           'suit': suit,
-          'face': `${value[0]} ${suit}`,
+          'face': `${value[0]}${suit}`,
           'value': value[1],
           'image': `../assets/cards/${valueString}_of_${suitString}.png`
         }
