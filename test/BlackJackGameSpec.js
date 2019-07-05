@@ -102,13 +102,13 @@ describe('BlackJackGame', () => {
   })
 
   describe('playDealersHand()', () => {
-    verify.it('should draw cards until hand value is 17+', () => {
+    verify.it('should draw cards until hand value is between 17 and 21', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
       const game = new BlackJackGame(deck)
-      game.dealCards()
+      game.dealer.hand.cards = [{value: 5, face: ''}, {value: 5, face: ''}]
       game.playDealersHand()
 
-      game.handValue(game.dealer.hand.showCards()).should.eql(20)
+      game.dealer.hand.cards.length.should.eql(4)
     })
   })
 
@@ -116,7 +116,8 @@ describe('BlackJackGame', () => {
     verify.it('should discard the players and dealers hands', () => {
       const game = new BlackJackGame()
       const jim = game.addPlayer('Jim', 9000)
-      game.dealCards()
+      game.dealer.hand.cards = [{value: 'test'}, {value: 'test'}]
+      jim.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       game.nextRound()
 
       jim.hands[0].cards.should.eql([])
@@ -125,12 +126,9 @@ describe('BlackJackGame', () => {
 
     verify.it('should remove players with no chips', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
-      const jim = game.addPlayer('Jim', 9000)
-      const joe = game.addPlayer('Joe', 9000)
-      joe.placeBet(9000)
-      jim.placeBet(5000)
-      bob.placeBet(9000)
+      game.addPlayer('Bob', 0)
+      game.addPlayer('Jim', 9000)
+      game.addPlayer('Joe', 0)
       game.nextRound()
 
       game.players.length.should.eql(1)

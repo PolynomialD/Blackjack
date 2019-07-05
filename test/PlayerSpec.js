@@ -170,6 +170,7 @@ describe('Player', () => {
       const expected = bet / 2
       bob.bets = [bet]
       bob.placeInsuranceBet()
+
       bob.insuranceBet.should.eql(expected)
     })
 
@@ -178,7 +179,18 @@ describe('Player', () => {
       const expected = 10000 - bet / 2
       player.bets = [bet]
       player.placeInsuranceBet()
+
       player.chips.should.eql(expected)
+    })
+  })
+
+  describe('removeInsuranceBet()', () => {
+    verify.it('should change InsuranceBet to 0', () => { 
+      const bob = new Player('Bob', 9000, fakeLogger)
+      bob.insuranceBet = 1000
+      bob.removeInsuranceBet()
+
+      bob.insuranceBet.should.eql(0)
     })
   })
 
@@ -251,7 +263,7 @@ describe('Player', () => {
       bob.canHalfBetAgain().should.eql(true)
     })
 
-    verify.it('should return false if the player does not have enough chips to bet again', () => {
+    verify.it('should return false if the player does not have enough chips to bet half again', () => {
       const bob = new Player('Bob', 900)
       bob.bets = [2000]
       
