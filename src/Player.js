@@ -110,6 +110,10 @@ class Player {
     return this.hands.map((hand) => hand.showCards())
   }
 
+  handValue(hand) {
+    return this.hands[hand].value()
+  }
+
   splitHand() {
     const hand = this.hands[0]
 

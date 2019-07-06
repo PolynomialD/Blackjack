@@ -48,6 +48,16 @@ class Hand {
       new Hand([this.cards[1]])
     ] : undefined
   }
+
+  value() {
+    const clone = JSON.parse(JSON.stringify(this.cards))
+    return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
+      if(card.face.includes('A') && total + card.value > 21) {
+        return total + 1
+      }
+      return total + card.value
+    }, 0)
+  }
 }
 
 module.exports = Hand
