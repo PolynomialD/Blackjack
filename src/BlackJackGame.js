@@ -185,7 +185,7 @@ class BlackJackGame {
   payWinners() {
     const dealerHandValue = this.handValue(this.dealer.showHand())
     this.players.forEach((player) => {
-      if(dealerHandValue === 21 && this.dealer.handSize() === 2 && player.getInsuranceBet() !== 0) {
+      if(this.dealer.hasBlackJack() && player.getInsuranceBet() !== 0) {
         player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))
       } else if(player.getInsuranceBet() !== 0) {
         player.removeInsuranceBet()

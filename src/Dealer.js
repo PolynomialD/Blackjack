@@ -7,6 +7,14 @@ class Dealer {
     this.chips = 1000000
   }
 
+  hasBlackJack() {
+    if(this.hand.cards[1].value === 11 && this.hand.cards[0].value === 10 && this.handSize() === 2) {
+      return true
+    } else if(this.hand.cards[1].value === 10 && this.hand.cards[0].value === 11 && this.handSize() === 2) {
+      return true
+    } else return false
+  }
+
   showsAnAce() {
     return (this.hand.cards[1].value === 11) ? true : false
   }

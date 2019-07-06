@@ -272,17 +272,18 @@ describe('BlackJackGame', () => {
       bob.chips.should.eql(12000)
     })
 
-    verify.it('should return chips to the player if its a draw', Gen.integerBetween(1,21), (value) => {
-      const deck = new Deck(['♣'],[['A',value],['K',value]])
+    verify.it('should return chips to the player if its a draw', Gen.integerBetween(1,10), (value) => {
+      const deck = new Deck(['♣', '♦', '♥'],[['K',value],['Q',value]])
       const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 0)
 
       bob.bets = [1000]
-      bob.receiveCard(game.deck.cards[0])
-      game.dealer.receiveCard(game.deck.cards[1])
+      game.dealCards()
+      console.log(game.dealer.showHand())
+      console.log(bob.showHand())
       game.payWinners()
 
-      bob.chips.should.eql(10000)
+      bob.chips.should.eql(1000)
     })
 
     verify.it('should remove chips from the player if they go bust', () => {

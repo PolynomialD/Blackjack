@@ -95,5 +95,11 @@ describe('Dealer', () => {
       dealer.hand.cards = [{value: 10, face: ''},{value: 11, face:''}]
       dealer.hasBlackJack().should.eql(true)
     })
+
+    verify.it('should return false if the dealer does not have blackjack', () => {
+      const dealer = new Dealer()
+      dealer.hand.cards = [{value: 10, face: ''},{value: 10, face:''},{value: 1, face:''}]
+      dealer.hasBlackJack().should.eql(false)
+    })
   })
 })
