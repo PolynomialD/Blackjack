@@ -279,8 +279,6 @@ describe('BlackJackGame', () => {
 
       bob.bets = [1000]
       game.dealCards()
-      console.log(game.dealer.showHand())
-      console.log(bob.showHand())
       game.payWinners()
 
       bob.chips.should.eql(1000)
@@ -316,7 +314,7 @@ describe('BlackJackGame', () => {
       bob.insuranceBet = 1000
       game.payWinners()
 
-      bob.chips.should.eql(1000)
+      bob.insuranceBet.should.eql(0)
     })
   })
 

@@ -85,8 +85,6 @@ class BlackJackGame {
     const card = this.deck.dealCard()
 
     player.receiveCard(card, hand)
-    this.logger.log(`${player.getName()} draws ${card.face}`)
-
     if(this.handValue(player.showHand(hand)) > 21) {
       player.stick(hand)
       this.logger.log(`${player.getName()} goes bust!`)
@@ -101,13 +99,8 @@ class BlackJackGame {
 
   doubleDown() {
     const player = this.players[this.currentPlayer]
-    const bet = player.removeBet()
-
-    this.logger.log(`${player.getName()} doubles down`)
-    player.receiveChips(bet)
-    player.placeBet(Number(bet * 2))
+    player.doubleBet()
     this.drawCard(0)
-
     player.stick(0)
   }
 
@@ -117,7 +110,7 @@ class BlackJackGame {
     player.splitHand()
     this.drawCard(0)
     this.drawCard(1)
-
+    this.logger.log(`${player.name} shows ${player.displayCards()}`)
     if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
       player.stick(0)
       player.stick(1)
@@ -142,13 +135,17 @@ class BlackJackGame {
       this.players.forEach((player) => {
         const card = this.deck.dealCard()
         player.receiveCard(card, 0)
-        if(amountToDeal === 1) {
-          this.logger.log(`${player.getName()} is dealt ${player.showHand(0)[0].face} ${player.showHand(0)[1].face}`)
-        }
       })
       this.dealer.receiveCard(this.deck.dealCard())
     }
-    this.logger.log(`the dealer shows ${this.dealer.showHand()[1].face}`)
+    this.logHands()
+  }
+
+  logHands () {
+    this.logger.log(`Dealer shows [?, ${this.dealer.showHand()[1].face}]`)
+    this.players.forEach((player) => {
+      this.logger.log(`${player.name} shows ${player.displayCards()}`)
+    })
   }
 
   addPlayer(name, chips) {

@@ -117,7 +117,7 @@ describe('Player', () => {
   describe('receiveChips()', () => {
     verify.it('should add chips to the players chips total',
       Gen.integerBetween(1, 9000), Gen.integerBetween(1,9000), (chips, pot) => {
-        const bob = new Player('Bob', chips)
+        const bob = new Player('Bob', chips, fakeLogger)
         const expected = chips + pot
         bob.receiveChips(pot)
         bob.chips.should.eql(expected)

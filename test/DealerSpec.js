@@ -56,16 +56,6 @@ describe('Dealer', () => {
     })
   })
 
-  describe('discardHand()', () => {
-    verify.it('should discard and replace the dealers hand', Gen.integerBetween(1,20), (card) => {
-      const deck = new Deck()
-      const dealer = new Dealer()
-      dealer.hand.cards.push(deck.cards[card])
-      dealer.discardHand()
-      dealer.hand.should.eql(new Hand())
-    })
-  })
-
   describe('giveChips()', Gen.integerBetween(1,9000), (chips) => {
     verify.it('should return a number of chips', () => {
       const dealer = new Dealer()

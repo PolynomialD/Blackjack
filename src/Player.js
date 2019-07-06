@@ -50,6 +50,12 @@ class Player {
     return this.bets.pop()
   }
 
+  doubleBet() {
+    const newBet = this.bet[0] * 2
+    this.logger.log(`${this.name} doubles bet to ${newBet}`)
+    this.bet[0] = newBet
+  }
+
   removeInsuranceBet() {
     const bet = this.insuranceBet
     this.insuranceBet = 0
@@ -69,10 +75,11 @@ class Player {
   }
 
   receiveChips(amount) {
+    this.logger.log(`${this.name} receives ${amount}`)
     this.chips += amount
   }
 
-  placeBet(bet) {  
+  placeBet(bet) {
     const chips = this.chips
     if(bet > 0 && bet <= chips) {
       this.chips -= bet
@@ -100,11 +107,7 @@ class Player {
   }
 
   showHands() {
-    if(this.getHandAmount() === 2) {
-      return [this.hands[0].showCards(),this.hands[1].showCards()]
-    } else {
-      return [this.hands[0].showCards()]
-    }
+    return this.hands.map((hand) => hand.showCards())
   }
 
   splitHand() {
@@ -119,11 +122,18 @@ class Player {
     }
   }
 
+  displayCards () {
+    return this.hands.map((hand) => {
+      return `[${hand.showCards().map((card) => card.face )}]`
+    })
+  }
+
   discardHands() {
     this.hands = [new Hand()]
   }
 
   receiveCard(card, handNumber=0) {
+    this.logger.log(`${this.name} is dealt ${card.face}`)
     this.hands[handNumber].takeCard(card)
   }
 }

@@ -1,10 +1,10 @@
 const Hand = require('./Hand')
+const Player = require('./Player')
 
-class Dealer {
-  constructor () {
-    this.name = 'Dealer'
+class Dealer extends Player {
+  constructor (logger = () => undefined) {
+    super('Dealer', 1000000, logger)
     this.hand = new Hand()
-    this.chips = 1000000
   }
 
   hasBlackJack() {
@@ -16,7 +16,7 @@ class Dealer {
   }
 
   showsAnAce() {
-    return (this.hand.cards[1].value === 11) ? true : false
+    return this.hand.cards[1].value === 11
   }
 
   receiveCard(card) {
