@@ -88,4 +88,12 @@ describe('Dealer', () => {
       dealer.chips.should.eql(1000000 + chips)
     })
   })
+
+  describe('hasBlackJack()', () => {
+    verify.it('should return true if the dealer has blackjack', () => {
+      const dealer = new Dealer()
+      dealer.hand.cards = [{value: 10, face: ''},{value: 11, face:''}]
+      dealer.hasBlackJack().should.eql(true)
+    })
+  })
 })

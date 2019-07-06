@@ -304,8 +304,18 @@ describe('BlackJackGame', () => {
       game.dealer.hand.cards = [{value: 10, face: ''},{value: 11, face:''}]
       bob.insuranceBet = 1000
       game.payWinners()
-      bob.chips.should.eql(3000)
 
+      bob.chips.should.eql(3000)
+    })
+
+    verify.it('should remove insurance bets if the dealer does not have blackjack', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 1000)
+      game.dealer.hand.cards = [{value: 10, face: ''},{value: 10, face:''}]
+      bob.insuranceBet = 1000
+      game.payWinners()
+
+      bob.chips.should.eql(1000)
     })
   })
 
