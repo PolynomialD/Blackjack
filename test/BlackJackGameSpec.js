@@ -297,6 +297,16 @@ describe('BlackJackGame', () => {
 
       bob.chips.should.eql(9000)
     })
+
+    verify.it('should pay insurance bets if the dealer has blackjack', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 1000)
+      game.dealer.hand.cards = [{value: 10, face: ''},{value: 11, face:''}]
+      bob.insuranceBet = 1000
+      game.payWinners()
+      bob.chips.should.eql(3000)
+
+    })
   })
 
   describe('changeCardColour()', () => {
