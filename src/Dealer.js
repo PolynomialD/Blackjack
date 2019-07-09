@@ -4,23 +4,23 @@ const Player = require('./Player')
 class Dealer extends Player {
   constructor (logger = () => undefined) {
     super('Dealer', 1000000, logger)
-    this.hand = new Hand()
+    this.hand = [new Hand()]
   }
 
   hasBlackJack() {
-    return this.hand.value() === 21 && this.handSize() === 2
+    return this.hand[0].value() === 21 && this.handSize() === 2
   }
 
   showsAnAce() {
-    return this.hand.cards[1].value === 11
+    return this.hand[0].cards[1].value === 11
   }
 
   receiveCard(card) {
-    this.hand.takeCard(card)
+    this.hand[0].takeCard(card)
   }
 
   removeCard(index) {
-    return this.hand.getCard(index)
+    return this.hand[0].getCard(index)
   }
 
   handSize() {
@@ -28,11 +28,11 @@ class Dealer extends Player {
   }
 
   showHand() {
-    return this.hand.showCards()
+    return this.hand[0].showCards()
   }
 
   discardHand() {
-    this.hand = new Hand()
+    this.hand = [new Hand()]
   }
 
   giveChips(amount) {

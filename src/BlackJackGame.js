@@ -85,7 +85,7 @@ class BlackJackGame {
     const card = this.deck.dealCard()
 
     player.receiveCard(card, hand)
-    if(this.handValue(player.showHand(hand)) > 21) {
+    if(player.handValue(hand) > 21) {
       player.stick(hand)
       this.logger.log(`${player.getName()} goes bust!`)
     }
@@ -93,7 +93,7 @@ class BlackJackGame {
 
   stick(hand) {
     const player = this.players[this.currentPlayer]
-    this.logger.log(`${player.getName()} sticks on ${this.handValue(player.showHand(hand))}`)
+    this.logger.log(`${player.getName()} sticks on ${player.handValue(hand)}`)
     player.stick(hand)
   }
 
@@ -163,24 +163,24 @@ class BlackJackGame {
     return this.players.length
   }
 
-  handValue(hand) {
-    const clone = JSON.parse(JSON.stringify(hand))
-    return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
-      if(card.face.includes('A') && total + card.value > 21) {
-        return total + 1
-      }
-      return total + card.value
-    }, 0)
-  }
+  // handValue(hand) {
+  //   const clone = JSON.parse(JSON.stringify(hand))
+  //   return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
+  //     if(card.face.includes('A') && total + card.value > 21) {
+  //       return total + 1
+  //     }
+  //     return total + card.value
+  //   }, 0)
+  // }
 
   playDealersHand() {
-    while(this.handValue(this.dealer.showHand()) < 17) {
+    while(this.dealer.hand[0].value() < 17) {
       this.dealer.receiveCard(this.deck.dealCard())
     }
   }
 
   payWinners() {
-    const dealerHandValue = this.handValue(this.dealer.showHand())
+    const dealerHandValue = this.dealer.handValue()
     this.players.forEach((player) => {
       if(this.dealer.hasBlackJack() && player.getInsuranceBet() !== 0) {
         player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))

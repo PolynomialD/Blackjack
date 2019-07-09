@@ -110,7 +110,7 @@ class Player {
     return this.hands.map((hand) => hand.showCards())
   }
 
-  handValue(hand) {
+  handValue(hand = 0) {
     return this.hands[hand].value()
   }
 

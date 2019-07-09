@@ -467,7 +467,7 @@ function setHandValues() {
 
 function setHandValue(hand, index = game.getCurrentPlayer()) {
   const cards = (hand === 0) ? '' : '-split'
-  const handValue = game.handValue(game.players[index].showHand(hand))
+  const handValue = game.players[index].handValue(hand)
   const handDiv = document.getElementById(`player${index}${cards}-hand-value`)
   handDiv.innerHTML = handValue
 
