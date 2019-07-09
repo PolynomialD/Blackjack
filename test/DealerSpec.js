@@ -11,21 +11,21 @@ describe('Dealer', () => {
       const expected = deck.cards[card]
 
       dealer.receiveCard(deck.cards[card])
-      dealer.hand.cards[0].should.eql(expected)
+      dealer.hand[0].cards[0].should.eql(expected)
     })
   })
 
   describe('showsAnAce', () => {
     verify.it('should return true if the dealer shows an ace', () => {
       const dealer = new Dealer()
-      dealer.hand.cards = [{value: 10}, {value: 11}]
+      dealer.hand[0].cards = [{value: 10}, {value: 11}]
 
       dealer.showsAnAce().should.eql(true)
     })
 
     verify.it('should return false if the dealer does not show an ace', () => {
       const dealer = new Dealer()
-      dealer.hand.cards = [{value: 1}, {value: 1}]
+      dealer.hand[0].cards = [{value: 1}, {value: 1}]
 
       dealer.showsAnAce().should.eql(false)
     })
@@ -37,9 +37,9 @@ describe('Dealer', () => {
       const index = Gen.integerBetween(0, cards-1)()
 
       for(let i=0; i<cards; i++) {
-        dealer.hand.cards.push(deck.cards[i])
+        dealer.hand[0].cards.push(deck.cards[i])
       }
-      const removedCard = dealer.hand.cards[index]
+      const removedCard = dealer.hand[0].cards[index]
       dealer.removeCard(index).should.eql(removedCard)
     })
   })
@@ -50,7 +50,7 @@ describe('Dealer', () => {
       const dealer = new Dealer()
 
       for(let i=0; i<amount; i++) {
-        dealer.hand.cards.push(deck.cards[i])
+        dealer.hand[0].cards.push(deck.cards[i])
       }
       dealer.handSize().should.eql(amount)
     })
@@ -82,13 +82,13 @@ describe('Dealer', () => {
   describe('hasBlackJack()', () => {
     verify.it('should return true if the dealer has blackjack', () => {
       const dealer = new Dealer()
-      dealer.hand.cards = [{value: 10, face: ''},{value: 11, face:''}]
+      dealer.hand[0].cards = [{value: 10, face: ''},{value: 11, face:''}]
       dealer.hasBlackJack().should.eql(true)
     })
 
     verify.it('should return false if the dealer does not have blackjack', () => {
       const dealer = new Dealer()
-      dealer.hand.cards = [{value: 10, face: ''},{value: 10, face:''},{value: 1, face:''}]
+      dealer.hand[0].cards = [{value: 10, face: ''},{value: 10, face:''},{value: 1, face:''}]
       dealer.hasBlackJack().should.eql(false)
     })
   })

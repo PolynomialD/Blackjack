@@ -24,7 +24,7 @@ class Dealer extends Player {
   }
 
   handSize() {
-    return this.hand.size()
+    return this.hand[0].size()
   }
 
   showHand() {
