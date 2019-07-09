@@ -10,6 +10,10 @@ class Player {
     this.logger = logger
   }
 
+  hasBlackJack(hand = 0) {
+    return this.hands[hand].value() === 21 && this.handSize() === 2
+  }
+
   canBetAgain() {
     return this.chips >= this.bets[0]
   }
@@ -51,9 +55,11 @@ class Player {
   }
 
   doubleBet() {
-    const newBet = this.bets[0] * 2
+    const bet = this.bets[0]
+    const newBet = bet * 2
     this.logger.log(`${this.name} doubles bet to ${newBet}`)
     this.bets[0] = newBet
+    this.chips -= bet
   }
 
   removeInsuranceBet() {
@@ -112,6 +118,10 @@ class Player {
 
   handValue(hand = 0) {
     return this.hands[hand].value()
+  }
+
+  handSize(hand = 0) {
+    return this.hands[hand].size()
   }
 
   splitHand() {

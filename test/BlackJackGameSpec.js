@@ -63,10 +63,10 @@ describe('BlackJackGame', () => {
     verify.it('should draw cards until hand value is between 17 and 21', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
       const game = new BlackJackGame(deck)
-      game.dealer.hand[0].cards = [{value: 5, face: ''}, {value: 5, face: ''}]
+      game.dealer.hands[0].cards = [{value: 5, face: ''}, {value: 5, face: ''}]
       game.playDealersHand()
 
-      game.dealer.hand[0].cards.length.should.eql(4)
+      game.dealer.hands[0].cards.length.should.eql(4)
     })
   })
 
@@ -74,12 +74,12 @@ describe('BlackJackGame', () => {
     verify.it('should discard the players and dealers hands', () => {
       const game = new BlackJackGame()
       const jim = game.addPlayer('Jim', 9000)
-      game.dealer.hand[0].cards = [{value: 'test'}, {value: 'test'}]
+      game.dealer.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       jim.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       game.nextRound()
 
       jim.hands[0].cards.should.eql([])
-      game.dealer.hand[0].cards.should.eql([])
+      game.dealer.hands[0].cards.should.eql([])
     })
 
     verify.it('should remove players with no chips', () => {
@@ -258,7 +258,7 @@ describe('BlackJackGame', () => {
     verify.it('should pay insurance bets if the dealer has blackjack', () => {
       const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 1000)
-      game.dealer.hand[0].cards = [{value: 10, face: ''},{value: 11, face:''}]
+      game.dealer.hands[0].cards = [{value: 10, face: ''},{value: 11, face:''}]
       bob.insuranceBet = 1000
       game.payWinners()
 
@@ -268,7 +268,7 @@ describe('BlackJackGame', () => {
     verify.it('should remove insurance bets if the dealer does not have blackjack', () => {
       const game = new BlackJackGame()
       const bob = game.addPlayer('Bob', 1000)
-      game.dealer.hand[0].cards = [{value: 10, face: ''},{value: 10, face:''}]
+      game.dealer.hands[0].cards = [{value: 10, face: ''},{value: 10, face:''}]
       bob.insuranceBet = 1000
       game.payWinners()
 

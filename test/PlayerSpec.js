@@ -147,11 +147,19 @@ describe('Player', () => {
   })
 
   describe('doubleBet()', () => {
-    verify.it('should double a players initial bet', () => {
+    verify.it('should double a players initial bet', Gen.integerBetween(1,5000), (bet) => {
       const bob = new Player('Bob', 5000, fakeLogger)
-      bob.bets = [1000]
+      bob.bets = [bet]
       bob.doubleBet()
-      bob.bets.should.eql([2000])
+      bob.bets.should.eql([bet * 2])
+    })
+
+    verify.it('should remove chips from the player', Gen.integerBetween(1,5000), (bet) => {
+      const player = new Player('Bob', 10000, fakeLogger)
+      const expected = 10000 - bet
+      player.bets = [bet]
+      player.doubleBet()
+      player.chips.should.eql(expected)
     })
   })
 

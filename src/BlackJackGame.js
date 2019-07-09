@@ -164,22 +164,21 @@ class BlackJackGame {
   }
 
   playDealersHand() {
-    while(this.dealer.hand[0].value() < 17) {
+    while(this.dealer.hands[0].value() < 17) {
       this.dealer.receiveCard(this.deck.dealCard())
     }
   }
 
   payWinners() {
-    const dealerHandValue = this.dealer.hand[0].value()
+    const dealerHandValue = this.dealer.hands[0].value()
     this.players.forEach((player) => {
-      if(this.dealer.hasBlackJack() && player.getInsuranceBet() !== 0) {
+      if(this.dealer.hasBlackJack()) {
         player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))
-      } else if(player.getInsuranceBet() !== 0) {
-        player.removeInsuranceBet()
-      }
+      } else player.removeInsuranceBet()
+
       player.hands.forEach((hand) => {
         const playerHandValue = hand.value()
-        if(playerHandValue === 21 && hand.size() === 2 && player.hands.length === 1) {
+        if(player.hasBlackJack(0) && player.getHandAmount() === 1) {
           player.receiveChips(this.dealer.giveChips(player.getBets()[0] + player.getBets()[0]/2))
           player.receiveChips(player.removeBet())
           hand.setResult('win')
