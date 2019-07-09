@@ -480,9 +480,9 @@ function setHandValue(hand, index = game.getCurrentPlayer()) {
 
 function setHandValueColours() {
   const dealerHandValue = document.getElementById('dealer-hand-value')
-  dealerHandValue.innerHTML = game.handValue(game.dealer.showHand())
+  dealerHandValue.innerHTML = game.dealer.handValue()
   dealerHandValue.setAttribute('class', '')
-  if(game.handValue(game.dealer.showHand()) > 21) {
+  if(game.dealer.handValue() > 21) {
     dealerHandValue.setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {
