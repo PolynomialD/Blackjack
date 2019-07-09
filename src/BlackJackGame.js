@@ -163,16 +163,6 @@ class BlackJackGame {
     return this.players.length
   }
 
-  // handValue(hand) {
-  //   const clone = JSON.parse(JSON.stringify(hand))
-  //   return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
-  //     if(card.face.includes('A') && total + card.value > 21) {
-  //       return total + 1
-  //     }
-  //     return total + card.value
-  //   }, 0)
-  // }
-
   playDealersHand() {
     while(this.dealer.hand[0].value() < 17) {
       this.dealer.receiveCard(this.deck.dealCard())

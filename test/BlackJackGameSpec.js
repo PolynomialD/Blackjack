@@ -59,48 +59,6 @@ describe('BlackJackGame', () => {
     })
   })
 
-  // describe('HandValue()', () => {
-  //   const generateDeckValues = (valueArray) => {
-  //     return valueArray.map((value) => {
-  //       return [`${value}`, value]
-  //     })
-  //   }
-
-  //   verify.it('should return the sum of card values without aces', 
-  //     Gen.array(Gen.integerBetween(2, 30), Gen.integerBetween(2, 10)()), (valueArray) => {
-  //       const expectedValue = valueArray.reduce((total, value) => total + value)
-  //       const values = generateDeckValues(valueArray)
-  //       const deck = new Deck(['♠'], values)
-  //       const game = new BlackJackGame(deck)
-
-  //       game.handValue(game.deck.cards).should.eql(expectedValue)
-  //     }
-  //   )
-
-  //   verify.it('should score an A as 1 if the total is higher than 21', 
-  //     Gen.array(Gen.integerBetween(6, 10), 2), Gen.integerBetween(2, 6), (valueArray, numberOfAces) => {
-  //       const values = generateDeckValues(valueArray)
-  //       new Array(numberOfAces).fill(0).forEach(() => {
-  //         values.push(['A', 11])
-  //       })
-  //       const deck = new Deck(['♠'], values)
-  //       const expectedValue = valueArray.reduce((total, value) => total + value) + numberOfAces
-  //       const game = new BlackJackGame(deck)
-
-  //       game.handValue(game.deck.cards).should.eql(expectedValue)
-  //     })
-
-  //   verify.it('should use an ace as 11 if it can', Gen.integerBetween(1, 8), (firstValue) => {
-  //     const secondValue = 9 - firstValue
-  //     const values = [[`${firstValue}`, firstValue], [`${secondValue}`, secondValue], ['A', 11], ['A', 11]]
-  //     const deck = new Deck(['♠'], values)
-  //     const expectedValue = 21
-  //     const game = new BlackJackGame(deck)
-
-  //     game.handValue(game.deck.cards).should.eql(expectedValue)
-  //   })
-  // })
-
   describe('playDealersHand()', () => {
     verify.it('should draw cards until hand value is between 17 and 21', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])
