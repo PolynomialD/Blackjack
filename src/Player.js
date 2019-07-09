@@ -102,8 +102,8 @@ class Player {
     }
   }
 
-  showHand(handNumber = 0) {
-    return this.hands[handNumber].showCards()
+  showHand(hand = 0) {
+    return this.hands[hand].showCards()
   }
 
   showHands() {
@@ -136,9 +136,9 @@ class Player {
     this.hands = [new Hand()]
   }
 
-  receiveCard(card, handNumber=0) {
+  receiveCard(card, hand = 0) {
     this.logger.log(`${this.name} is dealt ${card.face}`)
-    this.hands[handNumber].takeCard(card)
+    this.hands[hand].takeCard(card)
   }
 }
 

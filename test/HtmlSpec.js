@@ -94,4 +94,52 @@ describe('Html', () => {
       document.getElementById(id).should.have.html('')
     })
   })
+
+  describe('checkForAndHideElement()', () => {
+    verify.it('should check for and hide an element', Gen.string, (id) => {
+      document.body.appendChild(Html.div({id}))
+      Html.checkForAndHideElement(id)
+      document.getElementById(id).should.have.class('hidden')
+    })
+  })
+
+  describe('checkForAndShowButton()', () => {
+    verify.it('should check for and show a button', Gen.string, (id) => {
+      document.body.appendChild(Html.button({id}))
+      Html.checkForAndShowButton(id)
+      document.getElementById(id).should.have.class('displayInline')
+    })
+  })
+
+  describe('showHintButton()', () => {
+    verify.it('should show the hint button', () => {
+      document.body.appendChild(Html.button({id: 'hint-button'}))
+      Html.showHintButton()
+      document.getElementById('hint-button').should.have.class('displayBlock')
+    })
+  })
+
+  describe('getAndShowButton()', () => {
+    verify.it('should get and show a button', Gen.string, (id) => {
+      document.body.appendChild(Html.button({id}))
+      Html.getAndShowButton(id)
+      document.getElementById(id).should.have.class('displayInline')
+    })
+  })
+
+  describe('getAndHideElement()', () => {
+    verify.it('should get and hide an element', Gen.string, (id) => {
+      document.body.appendChild(Html.div({id}))
+      Html.getAndHideElement(id)
+      document.getElementById(id).should.have.class('hidden')
+    })
+  })
+
+  describe('hideElement()', () => {
+    verify.it('should hide an element', () => {
+      const element = Html.div()
+      Html.hideElement(element)
+      element.should.have.class('hidden')
+    })
+  })
 })
