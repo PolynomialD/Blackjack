@@ -142,4 +142,53 @@ describe('Html', () => {
       element.should.have.class('hidden')
     })
   })
+
+  describe('getAndSetAttributes()', () => {
+    verify.it('should get an element and set its attributes', Gen.string, Gen.object, (id, attr) => {
+      const element = document.body.appendChild(Html.div({id}))
+      Html.getAndSetAttributes(id, attr)
+      Object.keys(attr).forEach((key) => {
+        element.should.have.attr(key, attr[key])
+      })
+    })
+  })
+
+  describe('getAndAppendChild()', () => {
+    verify.it('should get an element and append an element to it', Gen.string, (id) => {
+      const parent = document.body.appendChild(Html.div({id}))
+      const child = Html.div({id: 'child'})
+      Html.getAndAppendChild(id, child)
+      parent.should.have.descendant(child)
+    })
+  })
+
+  describe('appendChildren()', () => {
+    verify.it('should append elements to another element', Gen.integerBetween(1,10), (num) => {
+      const parent = document.body.appendChild(Html.div({id: 'parent'}))
+      const children = []
+      for(let i=0; i<num; i++) {
+       children.push(Html.div())
+      }
+      Html.appendChildren(parent, children)
+      parent.should.have.descendants('div').and.have.length(num)
+    })
+  })
+
+  describe('getAndAppendChildren()', () => {
+    verify.it('should append elements to another element', Gen.string, Gen.integerBetween(1,10), (id, num) => {
+      const parent = document.body.appendChild(Html.div({id}))
+      const children = []
+      for(let i=0; i<num; i++) {
+       children.push(Html.div())
+      }
+      Html.getAndAppendChildren(id, children)
+      parent.should.have.descendants('div').and.have.length(num)
+    })
+  })
+
+  // describe('setFocus()', () => {
+  //   verify.it('should set the focus to an element', Gen.string, (id) => {
+     
+  //   })
+  // })
 })
