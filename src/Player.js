@@ -11,11 +11,11 @@ class Player {
   }
 
   canBetAgain() {
-    return (this.chips >= this.bets[0]) ? true : false
+    return this.chips >= this.bets[0]
   }
 
   canHalfBetAgain() {
-    return (this.chips >= this.bets[0]/2) ? true : false
+    return this.chips >= this.bets[0]/2
   }
 
   stick(hand) {
@@ -51,9 +51,9 @@ class Player {
   }
 
   doubleBet() {
-    const newBet = this.bet[0] * 2
+    const newBet = this.bets[0] * 2
     this.logger.log(`${this.name} doubles bet to ${newBet}`)
-    this.bet[0] = newBet
+    this.bets[0] = newBet
   }
 
   removeInsuranceBet() {

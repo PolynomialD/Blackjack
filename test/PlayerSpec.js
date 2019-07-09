@@ -146,6 +146,15 @@ describe('Player', () => {
     })
   })
 
+  describe('doubleBet()', () => {
+    verify.it('should double a players initial bet', () => {
+      const bob = new Player('Bob', 5000, fakeLogger)
+      bob.bets = [1000]
+      bob.doubleBet()
+      bob.bets.should.eql([2000])
+    })
+  })
+
   describe('getBets()', () => {
     verify.it('should return a players bets', Gen.integerBetween(1,9000), (bet) => {
       const bob = new Player('Bob', 9000, fakeLogger)
