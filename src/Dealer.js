@@ -14,12 +14,12 @@ class Dealer extends Player {
     this.hands[0].takeCard(card)
   }
 
-  removeCard(index) {
-    return this.hands[0].getCard(index)
-  }
-
   showHand() {
     return this.hands[0].showCards()
+  }
+
+  handValue() {
+    return this.hands[0].value()
   }
 
   discardHand() {

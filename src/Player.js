@@ -127,7 +127,7 @@ class Player {
   splitHand() {
     const hand = this.hands[0]
 
-    if(hand.isSplittable() && this.chips >= this.bets[0]) {
+    if(hand.isSplittable() && this.canBetAgain()) {
       const newHands = hand.split()
       this.hands[0] = newHands[0]
       this.hands.push(newHands[1])
@@ -138,7 +138,7 @@ class Player {
 
   displayCards () {
     return this.hands.map((hand) => {
-      return `[${hand.showCards().map((card) => card.face )}]`
+      return `[${hand.showCards().map((card) => card.face)}]`
     })
   }
 

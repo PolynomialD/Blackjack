@@ -30,19 +30,6 @@ describe('Dealer', () => {
       dealer.showsAnAce().should.eql(false)
     })
   })
-  describe('removeCard()', () => {
-    verify.it('should remove a card from the dealers hand', Gen.integerBetween(1,52), (cards) => {
-      const deck = new Deck()
-      const dealer = new Dealer()
-      const index = Gen.integerBetween(0, cards-1)()
-
-      for(let i=0; i<cards; i++) {
-        dealer.hands[0].cards.push(deck.cards[i])
-      }
-      const removedCard = dealer.hands[0].cards[index]
-      dealer.removeCard(index).should.eql(removedCard)
-    })
-  })
 
   describe('handSize()', () => {
    verify.it('should give the size of the dealers hand', Gen.integerBetween(2,50), (amount) => {
