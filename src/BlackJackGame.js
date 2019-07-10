@@ -5,7 +5,7 @@ const Logger = require('./Logger')
 
 class BlackJackGame {
   constructor (deck, players) {
-    this.deck = deck || this.createBlackJackDeck()
+    this.deck = deck || this.createBlackJackShoe()
     this.dealer = new Dealer()
     this.players = players || []
     this.currentPlayer = 0
@@ -67,7 +67,8 @@ class BlackJackGame {
     this.betCount = 0
     this.currentPlayer = 0
     if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
-      this.deck = this.createBlackJackDeck()
+      this.deck = this.createBlackJackShoe()
+      this.deck.shuffle()
     }
     this.dealer.discardHand()
     this.players.forEach((player) => {
@@ -121,7 +122,7 @@ class BlackJackGame {
     this.deck.changeCardColour()
   }
 
-  createBlackJackDeck(decks = 6) {
+  createBlackJackShoe(decks = 6) {
     this.cardCount = 0
     const suits = []
     for(decks; decks>0; decks--) {

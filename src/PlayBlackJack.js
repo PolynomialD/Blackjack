@@ -337,7 +337,6 @@ function playDealersHand() {
   playSound('chips1')
   game.playDealersHand()
   game.addRoundToHistory()
-  console.log(game.history)
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'
@@ -352,7 +351,6 @@ function playDealersHand() {
 
 function nextRound() {
   playSound('card_fan1')
-  if(game.deck.dealtCardsSize() === 0) window.alert('new cards!')
   game.nextRound()
 
   Html.getAndSetAttributes('table-div', {
