@@ -331,6 +331,13 @@ function splitCards() {
 
   setHandValue(0)
   setHandValue(1)
+
+  const player = game.players[game.getCurrentPlayer()]
+  if(player.getStatus() === 'done') {
+    hideMainButtons(0)
+    hideMainButtons(1)
+    nextPlayer()
+  }
 }
 
 function playDealersHand() {
