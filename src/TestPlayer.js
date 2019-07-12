@@ -2,7 +2,7 @@ const Player = require('./Player')
 
 class TestPlayer {
   constructor (
-    name = 'bob', 
+    name = 'bob',
     chips = 1000,
     hands = null,
     bets = [],

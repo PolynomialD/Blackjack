@@ -326,4 +326,30 @@ describe('BlackJackGame', () => {
       game.deck.cardColour.should.not.eql(initialColour)
     })
   })
+
+  describe('logWinnings()', () => {
+    verify.it('should log the players wins to logger messages', Gen.integerBetween(1000, 9000), (winnings) => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 1000)
+      bob.winnings = winnings
+      game.logWinnings()
+      game.logger.messages[1].should.eql(`Bob wins ${winnings}`)
+    })
+
+    verify.it('should log the players losses to logger messages', Gen.integerBetween(1000, 9000), (losses) => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 1000)
+      bob.winnings = -losses
+      game.logWinnings()
+      game.logger.messages[1].should.eql(`Bob loses -${losses}`)
+    })
+
+    verify.it('should log the players break evens to logger messages', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 1000)
+      bob.winnings = 0
+      game.logWinnings()
+      game.logger.messages[1].should.eql(`Bob breaks even`)
+    })
+  })
 })

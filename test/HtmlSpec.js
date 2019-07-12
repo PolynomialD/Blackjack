@@ -186,6 +186,13 @@ describe('Html', () => {
     })
   })
 
+  describe('textNode()', () => {
+    verify.it('should create a text node', Gen.string, (text) => {
+     const node = Html.textNode(text)
+     node.textContent.should.eql(text)
+    })
+  })
+
   // describe('setFocus()', () => {
   //   verify.it('should set the focus to an element', Gen.string, (id) => {
      

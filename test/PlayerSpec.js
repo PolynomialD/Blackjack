@@ -172,6 +172,14 @@ describe('Player', () => {
     })
   })
 
+  describe('getInsuranceBet()', () => {
+    verify.it('should return a players insurance bet', Gen.integerBetween(1,9000), (bet) => {
+      const bob = new Player('Bob', 9000, fakeLogger)
+      bob.insuranceBet = [bet]
+      bob.getInsuranceBet().should.eql([bet])
+    })
+  })
+
   describe('removeBet()', () => {
     verify.it('should remove a bet from bets', () => { 
       const bob = new Player('Bob', 9000, fakeLogger)
