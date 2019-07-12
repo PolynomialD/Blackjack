@@ -7,6 +7,7 @@ class Player {
     this.chips = chips
     this.bets = []
     this.insuranceBet = 0
+    this.winnings = 0
     this.logger = logger
   }
 
@@ -52,6 +53,7 @@ class Player {
   }
 
   removeBet() {
+    this.winnings -= this.bets[0]
     return this.bets.pop()
   }
 
@@ -61,16 +63,19 @@ class Player {
     this.logger.log(`${this.name} doubles bet to ${newBet}`)
     this.bets[0] = newBet
     this.chips -= bet
-    this.hands[0].setState('complete')
+  }
 
-    if(this.handValue(0) > 21) {
-      this.logger.log(`${this.name} goes bust!`)
+  doubleDown() {
+    this.hands[0].setState('complete')
+    if(this.handValue(0) < 22) {
+      this.logger.log(`${this.name} sticks on ${this.handValue(0)}`)
     }
   }
 
   removeInsuranceBet() {
     const bet = this.insuranceBet
     this.insuranceBet = 0
+    this.winnings -= bet
     return bet
   }
 
@@ -89,6 +94,7 @@ class Player {
   receiveChips(amount) {
     this.logger.log(`${this.name} receives ${amount}`)
     this.chips += amount
+    this.winnings += amount
   }
 
   placeBet(bet) {
@@ -155,6 +161,7 @@ class Player {
 
   discardHands() {
     this.hands = [new Hand()]
+    this.winnings = 0
   }
 
   receiveCard(card, hand = 0) {

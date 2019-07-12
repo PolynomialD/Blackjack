@@ -93,6 +93,7 @@ class BlackJackGame {
     const player = this.players[this.currentPlayer]
     player.doubleBet()
     this.drawCard(0)
+    player.doubleDown()
   }
 
   splitHand() {
@@ -169,18 +170,18 @@ class BlackJackGame {
           this.removeBet(player)
           hand.setResult('win')
         } else if(player.hasBlackJack(i) ) {
-          this.payWinner(player)
+          this.PayBetAmount(player)
           this.removeBet(player)
           hand.setResult('win')
         } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
           this.removeBet(player)
           hand.setResult('draw')
         } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-          this.payWinner(player)
+          this.PayBetAmount(player)
           this.removeBet(player)
           hand.setResult('win')
         } else if(playerHandValue < 22 && dealerHandValue > 21) {
-          this.payWinner(player)
+          this.PayBetAmount(player)
           this.removeBet(player)
           hand.setResult('win')
         } else {
@@ -195,7 +196,7 @@ class BlackJackGame {
     player.receiveChips(player.removeBet())
   }
 
-  payWinner(player) {
+  PayBetAmount(player) {
     player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
   }
 

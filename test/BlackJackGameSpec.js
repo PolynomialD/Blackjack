@@ -150,12 +150,25 @@ describe('BlackJackGame', () => {
     })
   })
 
-  describe('getCurrentPlayer()', () => {
+  describe('getCurrentPlayerIndex()', () => {
     verify.it('should get the current players position', Gen.integerBetween(1,12), (player) => {
       const game = new BlackJackGame()
       game.currentPlayer = player
 
       game.getCurrentPlayerIndex().should.eql(player)
+    })
+  })
+
+  describe('getCurrentPlayer()', () => {
+    verify.it('should get the current player',  Gen.integerBetween(0,2), (index) => {
+      const game = new BlackJackGame()
+      game.addPlayer('Bob', 0)
+      game.addPlayer('Jim', 9000)
+      game.addPlayer('Joe', 0)
+      const expected = game.players[index]
+      
+      game.currentPlayer = index
+      game.getCurrentPlayer().should.eql(expected)
     })
   })
 
