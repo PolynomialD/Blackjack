@@ -140,6 +140,11 @@ class Player {
       this.logger.log(`${this.name} splits the hand`)
       this.placeBet(this.bets[0])
     }
+
+    if(this.showHand(0)[0].value === 11 && this.showHand(1)[0].value === 11) {
+      this.stick(0)
+      this.stick(1)
+    }
   }
 
   displayCards () {

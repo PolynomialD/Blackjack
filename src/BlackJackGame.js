@@ -100,10 +100,6 @@ class BlackJackGame {
     player.splitHand()
     this.drawCard(0)
     this.drawCard(1)
-    if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
-      player.stick(0)
-      player.stick(1)
-    }
     this.logger.log(`${player.name} shows ${player.displayCards()}`)
   }
 
