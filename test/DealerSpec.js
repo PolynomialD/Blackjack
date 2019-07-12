@@ -5,7 +5,7 @@ const Hand = require('../src/Hand')
 
 describe('Dealer', () => {
   describe('receiveCard', () => {
-    verify.it('should put a card into the dealers hand', Gen.integerBetween(1,52), (card) => {
+    verify.it('should put a card into the dealers hand', Gen.integerBetween(0,51), (card) => {
       const deck = new Deck()
       const dealer = new Dealer()
       const expected = deck.cards[card]

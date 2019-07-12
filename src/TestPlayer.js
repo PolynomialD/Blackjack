@@ -40,7 +40,7 @@ class TestPlayer {
   }
 
   build () {
-    const fakeLogger = () => undefined
+    const fakeLogger = { log: () => undefined }
     const player = new Player(this.name, this.chips, fakeLogger)
     if (this.hands) player.hands = this.hands
     player.bets = this.bets
