@@ -54,7 +54,7 @@ describe('Player', () => {
 
   describe('discardHands()', () => {
     verify.it('should remove hands and create a new hand', Gen.integerBetween(1,10), (amount) => {
-      const player = new Player('Bob')
+      const player = new Player('Bob', 0, fakeLogger)
       player.hands = new Array(amount).fill(0)
       player.discardHands()
       player.hands.length.should.eql(1)

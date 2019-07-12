@@ -350,6 +350,7 @@ function playDealersHand() {
   })
 
   game.payWinners()
+  game.logWinnings()
   displayAllCards()
   setHandValueColours()
   refreshChipsTotals()

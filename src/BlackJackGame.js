@@ -135,6 +135,18 @@ class BlackJackGame {
     })
   }
 
+  logWinnings() {
+    this.players.forEach((player) => {
+      if(player.winnings > 0) {
+        player.logger.log(`${player.name} wins ${player.winnings}`)
+      } else if(player.winnings < 0) {
+        player.logger.log(`${player.name} loses ${player.winnings}`)
+      } else {
+        player.logger.log(`${player.name} breaks even`)
+      }
+    })
+  }
+
   addPlayer(name, chips) {
     const player = new Player(name, chips, this.logger)
     this.players.push(player)
