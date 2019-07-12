@@ -191,7 +191,7 @@ function createPlayerButtons() {
 }
 
 function createSplitElements() {
-  const index = game.getCurrentPlayer()
+  const index = game.getCurrentPlayerIndex()
   const elements = [
     Html.div({
       id: `player${index}-split-cards`
@@ -224,7 +224,7 @@ function createSplitElements() {
 }
 
 function drawCard(hand) {
-  const player = game.players[game.getCurrentPlayer()]
+  const player = game.getCurrentPlayer()
 
   game.drawCard(hand)
   setHandValue(hand)
@@ -242,7 +242,7 @@ function drawCard(hand) {
 }
 
 function stick(hand) {
-  const player = game.players[game.getCurrentPlayer()]
+  const player = game.getCurrentPlayer()
   const value = setHandValue(hand)
   if(value < 22) playSound('click1')
 
@@ -256,7 +256,7 @@ function stick(hand) {
 }
 
 function doubleDown() {
-  const index = game.getCurrentPlayer()
+  const index = game.getCurrentPlayerIndex()
   game.doubleDown()
 
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
@@ -272,7 +272,7 @@ function doubleDown() {
 }
 
 function nextPlayer() {
-  const index = game.getCurrentPlayer()
+  const index = game.getCurrentPlayerIndex()
   if(index+1 === game.getNumberOfPlayers()) {
     playDealersHand()
   } else {
@@ -287,8 +287,8 @@ function nextPlayer() {
 }
 
 function insuranceBet() {
-  const index = game.getCurrentPlayer()
-  const player = game.players[index]
+  const index = game.getCurrentPlayerIndex()
+  const player = game.getCurrentPlayer()
   player.placeInsuranceBet()
 
   Html.getAndHideElement(`player${index}-insuranceButton`)
@@ -332,7 +332,7 @@ function splitCards() {
   setHandValue(0)
   setHandValue(1)
 
-  const player = game.players[game.getCurrentPlayer()]
+  const player = game.getCurrentPlayer()
   if(player.getStatus() === 'done') {
     hideMainButtons(0)
     hideMainButtons(1)
@@ -377,13 +377,13 @@ function nextRound() {
 }
 
 function hideMainButtons(hand) {
-  const index = game.getCurrentPlayer()
+  const index = game.getCurrentPlayerIndex()
   const cards = (hand === 0) ? '' : '-split'
   Html.getAndHideElement(`player${index}${cards}-drawCardButton`, `player${index}${cards}-stickButton`)
 }
 
 function hideAltButtons(hand) {
-  const index = game.getCurrentPlayer()
+  const index = game.getCurrentPlayerIndex()
   const cards = (hand === 0) ? '' : '-split'
   Html.checkForAndHideElement(`player${index}${cards}-doubleButton`)
   Html.checkForAndHideElement(`player${index}${cards}-splitButton`)
@@ -470,7 +470,7 @@ function setHandValues() {
   })
 }
 
-function setHandValue(hand, index = game.getCurrentPlayer()) {
+function setHandValue(hand, index = game.getCurrentPlayerIndex()) {
   const cards = (hand === 0) ? '' : '-split'
   const handValue = game.players[index].handValue(hand)
   const handDiv = document.getElementById(`player${index}${cards}-hand-value`)

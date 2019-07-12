@@ -50,8 +50,12 @@ class BlackJackGame {
     this.betCount++
   }
 
-  getCurrentPlayer() {
+  getCurrentPlayerIndex() {
     return this.currentPlayer
+  }
+
+  getCurrentPlayer() {
+    return this.players[this.currentPlayer]
   }
 
   getRound() {

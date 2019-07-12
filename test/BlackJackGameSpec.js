@@ -127,7 +127,7 @@ describe('BlackJackGame', () => {
       const game = new BlackJackGame()
       game.currentPlayer = player
 
-      game.getCurrentPlayer().should.eql(player)
+      game.getCurrentPlayerIndex().should.eql(player)
     })
   })
 
