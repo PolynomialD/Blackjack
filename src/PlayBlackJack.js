@@ -392,14 +392,14 @@ function hideAltButtons(hand) {
 
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
-    Html.clearHtml(`player${index}-cards`)
-      player.hands.forEach((hand, i) => {
-          hand.cards.forEach((_, j ) => {
-          const cardToAppend = Html.img({
+    player.hands.forEach((hand, i) => {
+      const cards = (i === 0) ? '' : '-split'
+      Html.clearHtml(`player${index}${cards}-cards`)
+      hand.cards.forEach((_, j ) => {
+        const cardToAppend = Html.img({
           class: 'card',
           src: `${player.showHand(i)[j].image}`
         })
-        const cards = (i === 0) ? '' : '-split'
         Html.getAndAppendChild(`player${index}${cards}-cards`, cardToAppend)
       })
     })

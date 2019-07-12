@@ -59,6 +59,34 @@ describe('BlackJackGame', () => {
     })
   })
 
+  describe('doubleDown()', () => {
+    verify.it('should double the bet', Gen.integerBetween(1000,9000), (bet) => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 9000)
+      const expected = bet * 2
+      bob.bets = [bet]
+      game.doubleDown()
+      bob.bets.should.eql([expected])
+    })
+
+    verify.it('should draw 1 card', Gen.integerBetween(1,12), (cards) => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 9000)
+      bob.bets = [1000]
+      bob.hands[0].cards = new Array(cards).fill(0)
+      game.doubleDown()
+      bob.hands[0].cards.length.should.eql(cards+1)
+    })
+
+    verify.it('should stick after drawing a card', () => {
+      const game = new BlackJackGame()
+      const bob = game.addPlayer('Bob', 9000)
+      bob.bets = [1000]
+      game.doubleDown()
+      bob.getStatus().should.eql('done')
+    })
+  })
+
   describe('playDealersHand()', () => {
     verify.it('should draw cards until hand value is between 17 and 21', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['5',5],['5',5]])

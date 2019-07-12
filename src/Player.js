@@ -24,11 +24,7 @@ class Player {
 
   stick(hand) {
     this.hands[hand].setState('complete')
-    if(this.handValue(hand) > 21) {
-      this.logger.log(`${this.name} goes bust!`)
-    } else {
-      this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
-    }
+    this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
   }
 
   getStatus() {
@@ -65,6 +61,11 @@ class Player {
     this.logger.log(`${this.name} doubles bet to ${newBet}`)
     this.bets[0] = newBet
     this.chips -= bet
+    this.hands[0].setState('complete')
+
+    if(this.handValue(0) > 21) {
+      this.logger.log(`${this.name} goes bust!`)
+    }
   }
 
   removeInsuranceBet() {
@@ -156,7 +157,8 @@ class Player {
     this.hands[hand].takeCard(card)
 
     if(this.handValue(hand) > 21) {
-      this.stick(hand)
+      this.hands[hand].setState('complete')
+      this.logger.log(`${this.name} goes bust!`)
     }
   }
 }

@@ -93,20 +93,18 @@ class BlackJackGame {
     const player = this.players[this.currentPlayer]
     player.doubleBet()
     this.drawCard(0)
-    player.stick(0)
   }
 
   splitHand() {
     const player = this.players[this.currentPlayer]
-
     player.splitHand()
     this.drawCard(0)
     this.drawCard(1)
-    this.logger.log(`${player.name} shows ${player.displayCards()}`)
     if(player.showHand(0)[0].value === 11 && player.showHand(1)[0].value === 11) {
       player.stick(0)
       player.stick(1)
     }
+    this.logger.log(`${player.name} shows ${player.displayCards()}`)
   }
 
   changeCardColour() {
@@ -166,7 +164,7 @@ class BlackJackGame {
     this.players.forEach((player) => {
       if(this.dealer.hasBlackJack()) {
         this.payInsuranceBet(player)
-      } else player.removeInsuranceBet()
+      } else this.dealer.receiveChips(player.removeInsuranceBet())
 
       player.hands.forEach((hand, i) => {
         const playerHandValue = hand.value()
