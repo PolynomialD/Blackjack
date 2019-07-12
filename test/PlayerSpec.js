@@ -29,13 +29,13 @@ describe('Player', () => {
     })
 
     verify.it('should set the players status to done after sticking 1 hand', () => {
-      const player = new Player('Bob')
+      const player = new Player('Bob', 0, fakeLogger)
       player.stick(0)
       player.getStatus().should.eql('done')
     })
 
     verify.it('should set the players status to done after sticking 2 hands', () => {
-      const player = new Player('Bob')
+      const player = new Player('Bob', 0, fakeLogger)
       player.hands = [new Hand(['test']),new Hand(['test'])]
       player.stick(1)
       player.stick(0)

@@ -24,6 +24,7 @@ class Player {
 
   stick(hand) {
     this.hands[hand].setState('complete')
+    this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
   }
 
   getStatus() {
@@ -149,6 +150,11 @@ class Player {
   receiveCard(card, hand = 0) {
     this.logger.log(`${this.name} is dealt ${card.face}`)
     this.hands[hand].takeCard(card)
+
+    if(this.handValue(hand) > 21) {
+      this.stick(hand)
+      this.logger.log(`${this.name} goes bust!`)
+    }
   }
 }
 

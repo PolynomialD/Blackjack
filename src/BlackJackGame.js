@@ -86,15 +86,10 @@ class BlackJackGame {
     const card = this.deck.dealCard()
 
     player.receiveCard(card, hand)
-    if(player.handValue(hand) > 21) {
-      player.stick(hand)
-      this.logger.log(`${player.getName()} goes bust!`)
-    }
   }
 
   stick(hand) {
     const player = this.players[this.currentPlayer]
-    this.logger.log(`${player.getName()} sticks on ${player.handValue(hand)}`)
     player.stick(hand)
   }
 
@@ -174,29 +169,29 @@ class BlackJackGame {
     const dealerHandValue = this.dealer.handValue()
     this.players.forEach((player) => {
       if(this.dealer.hasBlackJack()) {
-        player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))
+        this.payInsuranceBet(player)
       } else player.removeInsuranceBet()
 
       player.hands.forEach((hand, i) => {
         const playerHandValue = hand.value()
         if(player.hasBlackJack(0) && player.getHandAmount() === 1) {
-          player.receiveChips(this.dealer.giveChips(player.getBets()[0] + player.getBets()[0]/2))
-          player.receiveChips(player.removeBet())
+          this.payBlackJack(player)
+          this.removeBet(player)
           hand.setResult('win')
         } else if(player.hasBlackJack(i) ) {
-          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
-          player.receiveChips(player.removeBet())
+          this.payWinner(player)
+          this.removeBet(player)
           hand.setResult('win')
         } else if(playerHandValue < 22 && playerHandValue === dealerHandValue) {
-          player.receiveChips(player.removeBet())
+          this.removeBet(player)
           hand.setResult('draw')
         } else if(playerHandValue < 22 && playerHandValue > dealerHandValue) {
-          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
-          player.receiveChips(player.removeBet())
+          this.payWinner(player)
+          this.removeBet(player)
           hand.setResult('win')
         } else if(playerHandValue < 22 && dealerHandValue > 21) {
-          player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
-          player.receiveChips(player.removeBet())
+          this.payWinner(player)
+          this.removeBet(player)
           hand.setResult('win')
         } else {
           this.dealer.receiveChips(player.removeBet())
@@ -204,6 +199,22 @@ class BlackJackGame {
         }
       })
     })
+  }
+
+  removeBet(player) {
+    player.receiveChips(player.removeBet())
+  }
+
+  payWinner(player) {
+    player.receiveChips(this.dealer.giveChips(player.getBets()[0]))
+  }
+
+  payInsuranceBet(player) {
+    player.receiveChips(this.dealer.giveChips(player.removeInsuranceBet() * 2))
+  }
+
+  payBlackJack(player) {
+    player.receiveChips(this.dealer.giveChips(player.getBets()[0] + player.getBets()[0]/2))
   }
 }
 

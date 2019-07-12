@@ -52,7 +52,7 @@ class Hand {
   value() {
     const clone = JSON.parse(JSON.stringify(this.cards))
     return clone.sort((a, b) => a.value - b.value).reduce((total, card) => {
-      if(card.face.includes('A') && total + card.value > 21) {
+      if(card.value === 11 && total + card.value > 21) {
         return total + 1
       }
       return total + card.value
