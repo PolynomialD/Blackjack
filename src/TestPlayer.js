@@ -36,7 +36,7 @@ class TestPlayer {
   }
 
   withInsuranceBet (insuranceBet) {
-    return new TestPlayer(this.name, this.chips, this.hands, bets, insuranceBet)
+    return new TestPlayer(this.name, this.chips, this.hands, this.bets, insuranceBet)
   }
 
   build () {

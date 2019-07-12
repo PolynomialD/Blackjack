@@ -108,7 +108,8 @@ describe('Player', () => {
 
   describe('getChips()', () => {
     verify.it('should give the players chips total',Gen.integerBetween(1,9000), (bet) => {
-      const bob = new Player('Bob', 9000, fakeLogger)
+      // const bob = new Player('Bob', 9000, fakeLogger)
+      const bob = TestPlayer.create().withChips(9000).build()
       const expected = 9000 - bet
       bob.placeBet(bet)
       bob.getChips().should.eql(expected)
