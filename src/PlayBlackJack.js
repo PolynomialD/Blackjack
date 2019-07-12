@@ -246,7 +246,7 @@ function stick(hand) {
   const value = setHandValue(hand)
   if(value < 22) playSound('click1')
 
-  game.stick(hand)
+  player.stick(hand)
   hideMainButtons(hand)
   hideAltButtons(hand)
 
@@ -348,7 +348,7 @@ function playDealersHand() {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'
   })
-  
+
   game.payWinners()
   displayAllCards()
   setHandValueColours()
@@ -393,23 +393,16 @@ function hideAltButtons(hand) {
 function displayPlayerCards() {
   game.players.forEach((player, index) => {
     Html.clearHtml(`player${index}-cards`)
-    player.hands[0].cards.forEach((_, i ) => {
-      const cardToAppend = Html.img({
-        class: 'card',
-        src: `${player.showHand(0)[i].image}`
-      })
-      Html.getAndAppendChild(`player${index}-cards`, cardToAppend)
-    })
-    if(document.getElementById(`player${index}-split-cards`)) {
-      Html.clearHtml(`player${index}-split-cards`)
-      player.hands[1].cards.forEach((_, i ) => {
-        const cardToAppend = Html.img({
+      player.hands.forEach((hand, i) => {
+          hand.cards.forEach((_, j ) => {
+          const cardToAppend = Html.img({
           class: 'card',
-          src: `${player.showHand(1)[i].image}`
+          src: `${player.showHand(i)[j].image}`
         })
-        Html.getAndAppendChild(`player${index}-split-cards`, cardToAppend)
+        const cards = (i === 0) ? '' : '-split'
+        Html.getAndAppendChild(`player${index}${cards}-cards`, cardToAppend)
       })
-    }
+    })
   })
 }
 

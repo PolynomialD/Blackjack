@@ -86,15 +86,7 @@ class BlackJackGame {
   }
 
   drawCard(hand) {
-    const player = this.players[this.currentPlayer]
-    const card = this.deck.dealCard()
-
-    player.receiveCard(card, hand)
-  }
-
-  stick(hand) {
-    const player = this.players[this.currentPlayer]
-    player.stick(hand)
+    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(), hand)
   }
 
   doubleDown() {

@@ -24,7 +24,11 @@ class Player {
 
   stick(hand) {
     this.hands[hand].setState('complete')
-    this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
+    if(this.handValue(hand) > 21) {
+      this.logger.log(`${this.name} goes bust!`)
+    } else {
+      this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
+    }
   }
 
   getStatus() {
@@ -153,7 +157,6 @@ class Player {
 
     if(this.handValue(hand) > 21) {
       this.stick(hand)
-      this.logger.log(`${this.name} goes bust!`)
     }
   }
 }
