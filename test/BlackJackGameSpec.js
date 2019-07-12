@@ -133,27 +133,27 @@ describe('BlackJackGame', () => {
 
     verify.it('should set current player to 0', Gen.integerBetween(1,12), (player) => {
       const game = new BlackJackGame()
-      game.currentPlayer = player
+      game.currentPlayerIndex = player
       game.nextRound()
 
-      game.currentPlayer.should.eql(0)
+      game.currentPlayerIndex.should.eql(0)
     })
   })
 
   describe('nextPlayer()', () => {
     verify.it('should increase currentPlayer by 1', Gen.integerBetween(1,12), (player) => {
       const game = new BlackJackGame()
-      game.currentPlayer = player
+      game.currentPlayerIndex = player
       game.nextPlayer()
 
-      game.currentPlayer.should.eql(player+1)
+      game.currentPlayerIndex.should.eql(player+1)
     })
   })
 
   describe('getCurrentPlayerIndex()', () => {
     verify.it('should get the current players position', Gen.integerBetween(1,12), (player) => {
       const game = new BlackJackGame()
-      game.currentPlayer = player
+      game.currentPlayerIndex = player
 
       game.getCurrentPlayerIndex().should.eql(player)
     })
@@ -167,7 +167,7 @@ describe('BlackJackGame', () => {
       game.addPlayer('Joe', 0)
       const expected = game.players[index]
       
-      game.currentPlayer = index
+      game.currentPlayerIndex = index
       game.getCurrentPlayer().should.eql(expected)
     })
   })

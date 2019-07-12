@@ -8,7 +8,7 @@ class BlackJackGame {
     this.deck = deck || this.createBlackJackShoe()
     this.dealer = new Dealer()
     this.players = players || []
-    this.currentPlayer = 0
+    this.currentPlayerIndex = 0
     this.round = 1
     this.betCount = 0
     this.logger = new Logger()
@@ -35,11 +35,11 @@ class BlackJackGame {
   }
 
   getCurrentPlayerIndex() {
-    return this.currentPlayer
+    return this.currentPlayerIndex
   }
 
   getCurrentPlayer() {
-    return this.players[this.currentPlayer]
+    return this.players[this.currentPlayerIndex]
   }
 
   getRound() {
@@ -47,13 +47,13 @@ class BlackJackGame {
   }
 
   nextPlayer() {
-    this.currentPlayer++
+    this.currentPlayerIndex++
   }
 
   nextRound() {
     this.round++
     this.betCount = 0
-    this.currentPlayer = 0
+    this.currentPlayerIndex = 0
     if(this.deck.size() < (this.getNumberOfPlayers()+1) * 8) {
       this.deck = this.createBlackJackShoe()
       this.deck.shuffle()
@@ -70,18 +70,18 @@ class BlackJackGame {
   }
 
   drawCard(hand) {
-    this.players[this.currentPlayer].receiveCard(this.deck.dealCard(), hand)
+    this.players[this.currentPlayerIndex].receiveCard(this.deck.dealCard(), hand)
   }
 
   doubleDown() {
-    const player = this.players[this.currentPlayer]
+    const player = this.players[this.currentPlayerIndex]
     player.doubleBet()
     this.drawCard(0)
     player.doubleDown()
   }
 
   splitHand() {
-    const player = this.players[this.currentPlayer]
+    const player = this.players[this.currentPlayerIndex]
     player.splitHand()
     this.drawCard(0)
     this.drawCard(1)
