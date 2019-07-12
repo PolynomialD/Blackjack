@@ -91,10 +91,8 @@ describe('Player', () => {
 
   describe('showHands()', () => {
     verify.it('should return all of a players hands', () => {
-      const bob = new Player('Bob', 5000, fakeLogger)
-      bob.hands = [new Hand(), new Hand()]
-      bob.hands[0].cards = [{value: 'test'}]
-      bob.hands[1].cards = [{value: 'test'}]
+      const bob = TestPlayer.create().withChips(5000).withHands(new Hand([{value: 'test'}]),new Hand([{value: 'test'}])).build()
+
       bob.showHands().should.eql([[{value: 'test'}],[{value: 'test'}]])
     })
   })
@@ -108,7 +106,6 @@ describe('Player', () => {
 
   describe('getChips()', () => {
     verify.it('should give the players chips total',Gen.integerBetween(1,9000), (bet) => {
-      // const bob = new Player('Bob', 9000, fakeLogger)
       const bob = TestPlayer.create().withChips(9000).build()
       const expected = 9000 - bet
       bob.placeBet(bet)
@@ -119,7 +116,7 @@ describe('Player', () => {
   describe('receiveChips()', () => {
     verify.it('should add chips to the players chips total',
       Gen.integerBetween(1, 9000), Gen.integerBetween(1,9000), (chips, pot) => {
-        const bob = new Player('Bob', chips, fakeLogger)
+        const bob = TestPlayer.create().withChips(chips).build()
         const expected = chips + pot
         bob.receiveChips(pot)
         bob.chips.should.eql(expected)
@@ -134,10 +131,10 @@ describe('Player', () => {
     })
 
     verify.it('should remove chips from the player', Gen.integerBetween(1,5000), (bet) => {
-      const player = new Player('Bob', 5000, fakeLogger)
+      const bob = TestPlayer.create().withChips(5000).build()
       const expected = 5000 - bet
-      player.placeBet(bet)
-      player.chips.should.eql(expected)
+      bob.placeBet(bet)
+      bob.chips.should.eql(expected)
     })
 
     verify.it('should place a bet not more than the players chips', Gen.integerBetween(5001,10000), (bet) => {
