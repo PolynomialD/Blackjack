@@ -2,6 +2,7 @@ const Deck = require('../src/Deck')
 const Player = require('../src/Player')
 const Gen = require('verify-it').Gen
 const Hand = require('../src/Hand')
+const TestPlayer = require('../src/TestPlayer')
 
 const fakeLogger = {
   log: () => undefined
