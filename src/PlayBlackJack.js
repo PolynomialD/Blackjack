@@ -447,8 +447,7 @@ function refreshChipsTotals() {
 
 function showChipsDifference() {
   game.players.forEach((player, index) => {
-    const previousChips = game.history[game.getRound() - 1].players[index].chips
-    const difference = player.getChips() - previousChips
+    const difference = player.winnings
     const valueDiv = Html.div({
       class: 'bet-div'
     }, (difference < 0) ? `Lost: ${difference}` : (difference > 0) ? `Won: ${difference}` : 'Break Even')

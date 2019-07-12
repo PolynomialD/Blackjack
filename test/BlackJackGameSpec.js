@@ -326,17 +326,4 @@ describe('BlackJackGame', () => {
       game.deck.cardColour.should.not.eql(initialColour)
     })
   })
-
-  describe('history', () => {
-    verify.it('should log player info to the history', () => {
-      const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
-      bob.bets = [1000]
-      game.dealCards()
-      game.addRoundToHistory()
-
-      game.history[0].players[0].bets.should.eql([1000])
-      game.history[0].players[0].hands.length.should.eql(1)
-    })
-  })
 })
