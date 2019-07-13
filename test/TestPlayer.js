@@ -1,4 +1,4 @@
-const Player = require('./Player')
+const Player = require('../src/Player')
 
 class TestPlayer {
   constructor (

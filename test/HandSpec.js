@@ -11,19 +11,16 @@ generateCards = (amount) => {
   }
 }
 
-describe('getState()', () => {
-  verify.it('should get the state of the hand', () => {
+describe('completeHand', () => {
+  verify.it('should return false for a new hand', () => {
     const hand = new Hand()
-    hand.state = 'test'
-    hand.getState().should.eql('test')
+    hand.isComplete().should.be.false
   })
-})
 
-describe('setState()', () => {
-  verify.it('should set the state of the hand', () => {
+  verify.it('should return true for a complete hand', () => {
     const hand = new Hand()
-    hand.setState('test')
-    hand.state.should.eql('test')
+    hand.completeHand()
+    hand.isComplete().should.be.true
   })
 })
 

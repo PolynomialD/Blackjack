@@ -2,15 +2,15 @@ class Hand {
   constructor (cards) {
     this.cards = cards || [],
     this.result = ''
-    this.state = ''
+    this.complete = false
   }
   
-  getState() {
-    return this.state
+  isComplete() {
+    return this.complete
   }
 
-  setState(state) {
-    this.state = state
+  completeHand() {
+    this.complete = true
   }
 
   setResult(result) {

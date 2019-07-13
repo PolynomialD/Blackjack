@@ -2,6 +2,8 @@ const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const game = new BlackJackGame()
 
+const MAX_HAND_VALUE = 21
+
 function addNewPlayer() {
   const name = document.getElementById('nameInput')
   const chips = document.getElementById('chipsInput')
@@ -231,7 +233,7 @@ function drawCard(hand) {
   hideAltButtons(hand)
   displayPlayerCards()
 
-  if(player.hands[hand].getState() === 'complete') {
+  if(player.hands[hand].isComplete()) {
     hideMainButtons(hand)
   }
   if(player.getStatus() === 'done') {
@@ -244,7 +246,7 @@ function drawCard(hand) {
 function stick(hand) {
   const player = game.getCurrentPlayer()
   const value = setHandValue(hand)
-  if(value < 22) playSound('click1')
+  if(value <= MAX_HAND_VALUE) playSound('click1')
 
   player.stick(hand)
   hideMainButtons(hand)
@@ -264,7 +266,7 @@ function doubleDown() {
   hideAltButtons(0)
 
   const value = setHandValue(0)
-  if(value < 22) playSound('click1')
+  if(value <= MAX_HAND_VALUE) playSound('click1')
 
   displayPlayerCards()
   refreshChipsTotals()
@@ -469,7 +471,7 @@ function setHandValue(hand, index = game.getCurrentPlayerIndex()) {
   const handDiv = document.getElementById(`player${index}${cards}-hand-value`)
   handDiv.innerHTML = handValue
 
-  if(handValue > 21) {
+  if(handValue > MAX_HAND_VALUE) {
     handDiv.setAttribute('class', 'loseColour')
     playSound('groan1')
   }
@@ -480,7 +482,7 @@ function setHandValueColours() {
   const dealerHandValue = document.getElementById('dealer-hand-value')
   dealerHandValue.innerHTML = game.dealer.handValue()
   dealerHandValue.setAttribute('class', '')
-  if(game.dealer.handValue() > 21) {
+  if(game.dealer.handValue() > MAX_HAND_VALUE) {
     dealerHandValue.setAttribute('class', 'loseColour')
   }
   game.players.forEach((player, index) => {

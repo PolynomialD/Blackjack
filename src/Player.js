@@ -24,15 +24,15 @@ class Player {
   }
 
   stick(hand) {
-    this.hands[hand].setState('complete')
+    this.hands[hand].completeHand()
     this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
   }
 
   getStatus() {
-    if(this.getHandAmount() === 1 && this.hands[0].getState() === 'complete') {
+    if(this.getHandAmount() === 1 && this.hands[0].isComplete()) {
       return 'done'
     } else if(this.getHandAmount() === 2) {
-      if(this.hands[0].getState() === 'complete' && this.hands[1].getState() === 'complete') {
+      if(this.hands[0].isComplete() && this.hands[1].isComplete()) {
         return 'done'
       }
     } else return 'playing'
@@ -66,7 +66,7 @@ class Player {
   }
 
   doubleDown() {
-    this.hands[0].setState('complete')
+    this.hands[0].completeHand()
     if(this.handValue(0) < 22) {
       this.logger.log(`${this.name} sticks on ${this.handValue(0)}`)
     }
@@ -146,8 +146,8 @@ class Player {
       this.logger.log(`${this.name} splits the hand`)
       this.placeBet(this.bets[0])
       if(this.showHand(0)[0].value === 11 && this.showHand(1)[0].value === 11) {
-        this.stick(0)
-        this.stick(1)
+        this.hands[0].completeHand()
+        this.hands[1].completeHand()
       }
     }
   }
@@ -168,7 +168,7 @@ class Player {
     this.hands[hand].takeCard(card)
 
     if(this.handValue(hand) > 21) {
-      this.hands[hand].setState('complete')
+      this.hands[hand].completeHand()
       this.logger.log(`${this.name} goes bust!`)
     }
   }

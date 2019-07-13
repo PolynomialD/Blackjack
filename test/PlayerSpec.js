@@ -2,7 +2,7 @@ const Deck = require('../src/Deck')
 const Player = require('../src/Player')
 const Gen = require('verify-it').Gen
 const Hand = require('../src/Hand')
-const TestPlayer = require('../src/TestPlayer')
+const TestPlayer = require('./TestPlayer')
 
 const fakeLogger = {
   log: () => undefined
@@ -76,24 +76,25 @@ describe('Player', () => {
     })
   })
 
-  describe('showHand()', () => {
-    verify.it('should give the correct handsize',
-      Gen.integerBetween(0,52), (cardsToDeal) => {
-        const deck = new Deck()
-        const bob = new Player('Bob', 5000, fakeLogger)
-        const expected = cardsToDeal
-        for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
-          bob.receiveCard(deck.dealCard())
-        }
-        bob.showHand().length.should.eql(expected)
-    })
-  })
+  // describe('showHand()', () => {
+  //   verify.it('should give the correct handsize', Gen.integerBetween(0,52), (cardsToDeal) => {
+  //     const cards = []
+  //     for(cardsToDeal; cardsToDeal>0; cardsToDeal--) {
+  //       cards.push({value: 'test'})
+  //     }
+  //     const hand = new Hand([cards])
+  //       const bob = TestPlayer.create().withChips(5000).withHands(hand).build()
+
+  //       bob.showHand().length.should.eql(cardsToDeal)
+  //   })
+  // })
 
   describe('showHands()', () => {
     verify.it('should return all of a players hands', () => {
-      const bob = TestPlayer.create().withChips(5000).withHands(new Hand([{value: 'test'}]),new Hand([{value: 'test'}])).build()
+      const hand = [new Hand([{value:'test'}]),new Hand([{value:'test'}])]
+      const bob = TestPlayer.create().withChips(5000).withHands(hand[0],hand[1]).build()
 
-      bob.showHands().should.eql([[{value: 'test'}],[{value: 'test'}]])
+      bob.showHands().should.eql([[{value:'test'}],[{value:'test'}]])
     })
   })
 
@@ -199,8 +200,8 @@ describe('Player', () => {
     })
 
     verify.it('should remove chips from the player', Gen.integerBetween(1,5000), (bet) => {
-      const player = new Player('Bob', 10000, fakeLogger)
-      const expected = 10000 - bet / 2
+      const player = new Player('Bob', 9000, fakeLogger)
+      const expected = 9000 - bet / 2
       player.bets = [bet]
       player.placeInsuranceBet()
 
@@ -210,8 +211,7 @@ describe('Player', () => {
 
   describe('removeInsuranceBet()', () => {
     verify.it('should change InsuranceBet to 0', () => { 
-      const bob = new Player('Bob', 9000, fakeLogger)
-      bob.insuranceBet = 1000
+      const bob = TestPlayer.create().withChips(9000).withInsuranceBet(1000).build()
       bob.removeInsuranceBet()
 
       bob.insuranceBet.should.eql(0)
@@ -220,11 +220,8 @@ describe('Player', () => {
 
   describe('splitHand()', () => {
     verify.it('should split the players hand', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 9000, fakeLogger)
-      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-
-      bob.bets = [1000]
-      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
+      const hand = new Hand([{value},{value}])
+      const bob = TestPlayer.create().withChips(9000).withBets([1000]).withHands(hand).build()
       bob.splitHand()
 
       bob.hands.length.should.eql(2)
