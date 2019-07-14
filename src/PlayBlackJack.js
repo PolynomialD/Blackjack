@@ -345,7 +345,6 @@ function splitCards() {
 function playDealersHand() {
   playSound('chips1')
   game.playDealersHand()
-  game.addRoundToHistory()
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
     class: 'buttonImage cursor'

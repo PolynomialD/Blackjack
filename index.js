@@ -4,11 +4,14 @@ const { app, BrowserWindow, Menu, ipcMain } = electron
 
 let mainWindow
 
-app.on('ready', () => {
+const callback = () => {
   mainWindow = new BrowserWindow({
-    width: 1100,
+    width: 1800,
     height: 770
   })
+
+  if (process.env.NODE_ENV !== 'production') mainWindow.toggleDevTools()
+
   mainWindow.loadURL(`file://${__dirname}/index.html`)
   const mainMenu = Menu.buildFromTemplate(menuTemplate)
   Menu.setApplicationMenu(mainMenu)
@@ -16,7 +19,9 @@ app.on('ready', () => {
   mainWindow.on('closed', () => {
     app.quit()
   })
-})
+}
+
+app.on('ready', callback)
 
 const menuTemplate = [
   {
