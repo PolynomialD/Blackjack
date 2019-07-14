@@ -7,9 +7,7 @@ class Strategy {
     this.currentStrat = this.basic
   }
 
-  correctMove(dealerCard, playerHand) {
-    const clone = JSON.parse(JSON.stringify(playerHand.cards))
-    clone.sort((a, b) => a.value - b.value)
+  correctMove(dealerCard, playerHandValue) {
     return this.currentStrat[playerHandValue][dealerCard]
   }
 }

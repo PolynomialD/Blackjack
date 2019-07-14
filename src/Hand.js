@@ -58,6 +58,22 @@ class Hand {
       return total + card.value
     }, 0)
   }
+
+  trueValue() {
+    const clone = JSON.parse(JSON.stringify(this.cards))
+    const sortedClone = clone.sort((a, b) => a.value - b.value)
+    const cloneValue = sortedClone.reduce((total) => {
+      return total + card.value
+    })
+
+    if(this.size === 2 && clone[0].value === clone[1].value) {
+      return `pair of ${clone[0].value}'s`
+    } else if(sortedClone[sortedClone.length-1].value = 11 && cloneValue <= 21) {
+      return `soft ${cloneValue}`
+    } else {
+      return `hard ${this.value}`
+    }
+  }
 }
 
 module.exports = Hand
