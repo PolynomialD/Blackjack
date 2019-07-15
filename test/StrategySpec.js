@@ -2,7 +2,7 @@ const Strategy = require('../src/Strategy')
 const Gen = require('verify-it').Gen
 
 describe('Strategy', () => {
-  describe.only('correctMove()', () => {
+  describe('correctMove()', () => {
     verify.it('should give the correct move for pairs', () => {
       new Strategy().correctMove(10, "pair of 9's").should.eql('stick')
       new Strategy().correctMove(9, "pair of 9's").should.eql('split')

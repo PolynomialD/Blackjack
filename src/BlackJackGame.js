@@ -2,6 +2,7 @@ const Deck = require('./Deck')
 const Dealer = require('./Dealer')
 const Player = require('./Player')
 const Logger = require('./Logger')
+const Strategy = require('./Strategy')
 
 class BlackJackGame {
   constructor (deck, players) {
@@ -12,6 +13,17 @@ class BlackJackGame {
     this.round = 1
     this.betCount = 0
     this.logger = new Logger()
+  }
+
+  checkOptimalMove(hand, move) {
+    const player = this.getCurrentPlayer()
+    const dealerCardValue = this.dealer.hands[0].cards[1].value
+    const playerValue = player.hands[hand].trueValue()
+    const optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
+    if(player.hands[hand].size() !== 2 && optimalMove === 'double down') {
+      optimalMove = 'card'
+    }
+    return move === optimalMove
   }
 
   getCardCount() {
