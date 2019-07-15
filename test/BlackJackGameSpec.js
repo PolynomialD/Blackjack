@@ -2,12 +2,16 @@ const BlackJackGame = require('../src/BlackJackGame')
 const Deck = require('../src/Deck')
 const Gen = require('verify-it').Gen
 
+const fakeLogger = {
+  log: () => undefined
+}
+
 describe('BlackJackGame', () => {
   describe('dealCards()', () => {
     it('should deal 2 cards to each player', () => {
       const game = new BlackJackGame()
-      game.addPlayer('Bob', 9000)
-      game.addPlayer('Joe', 9000)
+      game.addPlayer('Bob', 9000, fakeLogger)
+      game.addPlayer('Joe', 9000, fakeLogger)
       game.dealCards()
 
       game.players.forEach((player) => {
@@ -19,7 +23,7 @@ describe('BlackJackGame', () => {
   describe('addPlayer()', () => {
     verify.it('should add a player', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
 
       game.players[0].should.eql(bob)
     }) 
@@ -28,9 +32,9 @@ describe('BlackJackGame', () => {
   describe('removePlayer()', () => {
     verify.it('should remove a player from the game', Gen.integerBetween(0,2), (player) => {
       const game = new BlackJackGame()
-      game.addPlayer('Bob', 9000)
-      game.addPlayer('Joe', 9000)
-      game.addPlayer('Jim', 9000)
+      game.addPlayer('Bob', 9000, fakeLogger)
+      game.addPlayer('Joe', 9000, fakeLogger)
+      game.addPlayer('Jim', 9000, fakeLogger)
       game.removePlayer(player)
 
       game.players.length.should.eql(2)
@@ -40,7 +44,7 @@ describe('BlackJackGame', () => {
   describe('splitHand()', () => {
     verify.it('should deal a card to each hand', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
       bob.bets = [1000]
       bob.hands[0].cards = [{value: 'test', face: ''}, {value: 'test', face: ''}]
       game.splitHand()
@@ -51,7 +55,7 @@ describe('BlackJackGame', () => {
 
     verify.it('should only deal 1 card to split aces then stick', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
       bob.bets = [1000]
       bob.hands[0].cards = [{value: 11, face: ''}, {value: 11, face: ''}]
       game.splitHand()
@@ -62,7 +66,7 @@ describe('BlackJackGame', () => {
   describe('doubleDown()', () => {
     verify.it('should double the bet', Gen.integerBetween(1000,9000), (bet) => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
       const expected = bet * 2
       bob.bets = [bet]
       game.doubleDown()
@@ -71,7 +75,7 @@ describe('BlackJackGame', () => {
 
     verify.it('should draw 1 card', Gen.integerBetween(1,12), (cards) => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
       bob.bets = [1000]
       bob.hands[0].cards = new Array(cards).fill(0)
       game.doubleDown()
@@ -80,7 +84,7 @@ describe('BlackJackGame', () => {
 
     verify.it('should stick after drawing a card', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
       bob.bets = [1000]
       game.doubleDown()
       bob.getStatus().should.eql('done')
@@ -101,7 +105,7 @@ describe('BlackJackGame', () => {
   describe('nextRound()', () => {
     verify.it('should discard the players and dealers hands', () => {
       const game = new BlackJackGame()
-      const jim = game.addPlayer('Jim', 9000)
+      const jim = game.addPlayer('Jim', 9000, fakeLogger)
       game.dealer.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       jim.hands[0].cards = [{value: 'test'}, {value: 'test'}]
       game.nextRound()
@@ -112,9 +116,9 @@ describe('BlackJackGame', () => {
 
     verify.it('should remove players with no chips', () => {
       const game = new BlackJackGame()
-      game.addPlayer('Bob', 0)
-      game.addPlayer('Jim', 9000)
-      game.addPlayer('Joe', 0)
+      game.addPlayer('Bob', 0, fakeLogger)
+      game.addPlayer('Jim', 9000, fakeLogger)
+      game.addPlayer('Joe', 0, fakeLogger)
       game.nextRound()
 
       game.players.length.should.eql(1)
@@ -123,8 +127,8 @@ describe('BlackJackGame', () => {
     verify.it('should create a new deck when the deck is low', () => {
       const deck = new Deck(['♣', '♦', '♥'],[['A',11],['K',10],['Q',10],['J',10]])
       const game = new BlackJackGame(deck)
-      game.addPlayer('Jim', 9000)
-      game.addPlayer('Bob', 9000)
+      game.addPlayer('Jim', 9000, fakeLogger)
+      game.addPlayer('Bob', 9000, fakeLogger)
       game.dealCards()
       game.nextRound()
 
@@ -162,9 +166,9 @@ describe('BlackJackGame', () => {
   describe('getCurrentPlayer()', () => {
     verify.it('should get the current player',  Gen.integerBetween(0,2), (index) => {
       const game = new BlackJackGame()
-      game.addPlayer('Bob', 0)
-      game.addPlayer('Jim', 9000)
-      game.addPlayer('Joe', 0)
+      game.addPlayer('Bob', 0, fakeLogger)
+      game.addPlayer('Jim', 9000, fakeLogger)
+      game.addPlayer('Joe', 0, fakeLogger)
       const expected = game.players[index]
       
       game.currentPlayerIndex = index
@@ -204,8 +208,8 @@ describe('BlackJackGame', () => {
     verify.it('should get the correct card count for high cards', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['Q',10],['K',10]])
       const game = new BlackJackGame(deck)
-      game.addPlayer('Bob', 9000)
-      game.addPlayer('Jim', 9000)
+      game.addPlayer('Bob', 9000, fakeLogger)
+      game.addPlayer('Jim', 9000, fakeLogger)
       game.dealCards()
       game.getCardCount().should.eql(-6)
     })
@@ -213,8 +217,8 @@ describe('BlackJackGame', () => {
     verify.it('should get the correct card count for low cards', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['2',2],['3',3]])
       const game = new BlackJackGame(deck)
-      game.addPlayer('Bob', 9000)
-      game.addPlayer('Jim', 9000)
+      game.addPlayer('Bob', 9000, fakeLogger)
+      game.addPlayer('Jim', 9000, fakeLogger)
       game.dealCards()
       game.getCardCount().should.eql(6)
     })
@@ -224,8 +228,8 @@ describe('BlackJackGame', () => {
     verify.it('should pay winners when the dealer goes bust', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['J',10],['Q',10],['K',10]])
       const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 1000)
-      const jim = game.addPlayer('Jim', 1000)
+      const bob = game.addPlayer('Bob', 1000, fakeLogger)
+      const jim = game.addPlayer('Jim', 1000, fakeLogger)
 
       bob.bets = [1000]
       jim.bets = [1000]
@@ -240,8 +244,8 @@ describe('BlackJackGame', () => {
     verify.it('should pay 1.5 for a blackjack', () => {
       const deck = new Deck(['♣', '♦'],[['A',11],['K',10],['Q',10],['J',10]])
       const game = new BlackJackGame(deck)
-      const jim = game.addPlayer('Jim', 9000)
-      const bob = game.addPlayer('Bob', 9000)
+      const jim = game.addPlayer('Jim', 9000, fakeLogger)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
 
       jim.bets = [1000]
       bob.bets = [1000]
@@ -255,8 +259,8 @@ describe('BlackJackGame', () => {
     verify.it('should give chips for split bets', () => {
       const deck = new Deck(['♣', '♦', '♥', '♠'],[['A',11],['K',10],['Q',10]])
       const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 9000)
-      const jim = game.addPlayer('Jim', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
+      const jim = game.addPlayer('Jim', 9000, fakeLogger)
 
       jim.bets = [1000]
       bob.bets = [1000]
@@ -274,7 +278,7 @@ describe('BlackJackGame', () => {
     verify.it('should return chips to the player if its a draw', Gen.integerBetween(1,10), (value) => {
       const deck = new Deck(['♣', '♦', '♥'],[['K',value],['Q',value]])
       const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 0)
+      const bob = game.addPlayer('Bob', 0, fakeLogger)
 
       bob.bets = [1000]
       game.dealCards()
@@ -286,7 +290,7 @@ describe('BlackJackGame', () => {
     verify.it('should remove chips from the player if they go bust', () => {
       const deck = new Deck(['♣', '♦', '♥'],[['K',10],['Q',10]])
       const game = new BlackJackGame(deck)
-      const bob = game.addPlayer('Bob', 9000)
+      const bob = game.addPlayer('Bob', 9000, fakeLogger)
 
       bob.bets = [1000]
       game.dealCards()
@@ -298,7 +302,7 @@ describe('BlackJackGame', () => {
 
     verify.it('should pay insurance bets if the dealer has blackjack', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 1000)
+      const bob = game.addPlayer('Bob', 1000, fakeLogger)
       game.dealer.hands[0].cards = [{value: 10, face: ''},{value: 11, face:''}]
       bob.insuranceBet = 1000
       game.payWinners()
@@ -308,7 +312,7 @@ describe('BlackJackGame', () => {
 
     verify.it('should remove insurance bets if the dealer does not have blackjack', () => {
       const game = new BlackJackGame()
-      const bob = game.addPlayer('Bob', 1000)
+      const bob = game.addPlayer('Bob', 1000, fakeLogger)
       game.dealer.hands[0].cards = [{value: 10, face: ''},{value: 10, face:''}]
       bob.insuranceBet = 1000
       game.payWinners()
