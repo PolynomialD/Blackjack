@@ -1,6 +1,7 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const game = new BlackJackGame()
+const Strategy = require('./Strategy')
 
 const MAX_HAND_VALUE = 21
 
@@ -227,6 +228,9 @@ function createSplitElements() {
 
 function drawCard(hand) {
   const player = game.getCurrentPlayer()
+  if(checkOptimalMove(hand, 'card')) {
+    console.log('CORRECT!!!1!1!!11')
+  }
 
   game.drawCard(hand)
   setHandValue(hand)
@@ -247,7 +251,9 @@ function stick(hand) {
   const player = game.getCurrentPlayer()
   const value = setHandValue(hand)
   if(value <= MAX_HAND_VALUE) playSound('click1')
-
+  if(checkOptimalMove(hand, 'stick')) {
+    console.log('CORRECT!!!1!1!!11')
+  }
   player.stick(hand)
   hideMainButtons(hand)
   hideAltButtons(hand)
@@ -259,6 +265,10 @@ function stick(hand) {
 
 function doubleDown() {
   const index = game.getCurrentPlayerIndex()
+  if(checkOptimalMove(0, 'double down')) {
+    console.log('CORRECT!!!1!1!!11')
+  }
+
   game.doubleDown()
 
   document.getElementById(`player${index}-bet-div`).innerHTML = `Bet:${game.players[index].getBets()[0]}`
@@ -323,6 +333,9 @@ function dealCards() {
 
 function splitCards() {
   playSound('card_split1')
+  if(checkOptimalMove(0, 'split')) {
+    console.log('CORRECT!!!1!1!!11')
+  }
   game.splitHand()
 
   hideAltButtons(0)
@@ -533,6 +546,14 @@ function playSound(sound, option) {
   const audio = new Audio(path)
   if(option === 'loop') audio.loop = true
   audio.play()
+}
+
+function checkOptimalMove(hand, move) {
+  const player = game.getCurrentPlayer()
+  const dealerCardValue = game.dealer.hands[0].cards[1].value
+  const playerValue = player.hands[hand].trueValue()
+  const optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
+  return move === optimalMove
 }
 
 window.insuranceBet = insuranceBet

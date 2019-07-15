@@ -23,6 +23,10 @@ const callback = () => {
 
 app.on('ready', callback)
 
+// ipcMain.on('game:start', () => {
+//   mainWindow.webContents.send('game:initialise')
+// })
+
 const menuTemplate = [
   {
     label: 'file',
