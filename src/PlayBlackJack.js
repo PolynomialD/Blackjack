@@ -229,7 +229,7 @@ function createSplitElements() {
 function drawCard(hand) {
   const player = game.getCurrentPlayer()
   if(checkOptimalMove(hand, 'card')) {
-    console.log('CORRECT!!!1!1!!11')
+    playSound('ding', 0.5)
   }
 
   game.drawCard(hand)
@@ -252,7 +252,7 @@ function stick(hand) {
   const value = setHandValue(hand)
   if(value <= MAX_HAND_VALUE) playSound('click1')
   if(checkOptimalMove(hand, 'stick')) {
-    console.log('CORRECT!!!1!1!!11')
+    playSound('ding', 0.5)
   }
   player.stick(hand)
   hideMainButtons(hand)
@@ -266,7 +266,7 @@ function stick(hand) {
 function doubleDown() {
   const index = game.getCurrentPlayerIndex()
   if(checkOptimalMove(0, 'double down')) {
-    console.log('CORRECT!!!1!1!!11')
+    playSound('ding', 0.5)
   }
 
   game.doubleDown()
@@ -334,7 +334,7 @@ function dealCards() {
 function splitCards() {
   playSound('card_split1')
   if(checkOptimalMove(0, 'split')) {
-    console.log('CORRECT!!!1!1!!11')
+    playSound('ding', 0.5)
   }
   game.splitHand()
 
@@ -544,7 +544,11 @@ function decreaseBet(index) {
 function playSound(sound, option) {
   const path = `../assets/audio/${sound}.mp3`
   const audio = new Audio(path)
-  if(option === 'loop') audio.loop = true
+  if(option === 'loop') {
+    audio.loop = true
+  } else if(option) {
+    audio.volume = option
+  }
   audio.play()
 }
 
@@ -553,6 +557,9 @@ function checkOptimalMove(hand, move) {
   const dealerCardValue = game.dealer.hands[0].cards[1].value
   const playerValue = player.hands[hand].trueValue()
   const optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
+  if(player.hands[hand].size() !== 2 && move === 'double down') {
+    move = 'card'
+  }
   return move === optimalMove
 }
 
