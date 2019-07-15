@@ -102,4 +102,34 @@ describe('Hand', () => {
       expect(newHands).to.be.undefined
     })
   })
+
+  describe('trueValue()', ()=> {
+    verify.it('should give the true value of blackjack', () => {
+      const deck = new Deck(['♣'], [['A', 11],['10', 10]])
+      const hand = new Hand(deck.cards)
+      const expected = 'blackjack'
+      hand.trueValue().should.eql(expected)
+    })
+
+    verify.it('should give the true value of the hand with a pair', Gen.integerBetween(2,11), (value) => {
+      const deck = new Deck(['♣'], [['', value],['', value]])
+      const hand = new Hand(deck.cards)
+      const expected = `pair of ${value}'s`
+      hand.trueValue().should.eql(expected)
+    })
+
+    verify.it('should give the true value of a soft hand', Gen.integerBetween(2,9), (value) => {
+      const deck = new Deck(['♣'], [['A', 11],['', value]])
+      const hand = new Hand(deck.cards)
+      const expected = `soft ${hand.value()}`
+      hand.trueValue().should.eql(expected)
+    })
+
+    verify.it('should give the true value of a hard hand', Gen.integerBetween(2,6), Gen.integerBetween(7,10), (first, second) => {
+      const deck = new Deck(['♣'], [['', first],['', second]])
+      const hand = new Hand(deck.cards)
+      const expected = `hard ${hand.value()}`
+      hand.trueValue().should.eql(expected)
+    })
+  })
 })

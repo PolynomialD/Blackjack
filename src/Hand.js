@@ -60,18 +60,19 @@ class Hand {
   }
 
   trueValue() {
-    const clone = JSON.parse(JSON.stringify(this.cards))
-    const sortedClone = clone.sort((a, b) => a.value - b.value)
-    const cloneValue = sortedClone.reduce((total) => {
+    const sortedClone = JSON.parse(JSON.stringify(this.cards)).sort((a, b) => a.value - b.value)
+    const cloneRawValue = sortedClone.reduce((total, card) => {
       return total + card.value
-    })
+    }, 0)
 
-    if(this.size === 2 && clone[0].value === clone[1].value) {
-      return `pair of ${clone[0].value}'s`
-    } else if(sortedClone[sortedClone.length-1].value = 11 && cloneValue <= 21) {
-      return `soft ${cloneValue}`
+    if(this.size() === 2 && cloneRawValue === 21) {
+      return 'blackjack'
+    } else if(this.size() === 2 && this.cards[0].value === this.cards[1].value) {
+      return `pair of ${this.cards[0].value}'s`
+    } else if(sortedClone[sortedClone.length-1].value === 11 && cloneRawValue <= 21) {
+      return `soft ${cloneRawValue}`
     } else {
-      return `hard ${this.value}`
+      return `hard ${this.value()}`
     }
   }
 }
