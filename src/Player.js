@@ -40,7 +40,7 @@ class Player {
 
   getHandResult(hand) {
     const result = this.hands[hand].getResult()
-    this.logger.log(`${this.name}: ${result}`)
+    this.logger.log(`${this.name} ${result}s with ${this.displayCards()[hand]}`)
     return result
   }
 
