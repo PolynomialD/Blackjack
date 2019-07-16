@@ -18,9 +18,10 @@ class BlackJackGame {
   checkOptimalMove(hand, move) {
     const player = this.getCurrentPlayer()
     const dealerCardValue = this.dealer.hands[0].cards[1].value
-    const playerValue = player.hands[hand].trueValue()
-    const optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
-    if(player.hands[hand].size() !== 2 || player.getHandAmount() !== 1 && optimalMove === 'double down') {
+    const playerValue = player.adjustedHandValue(hand)
+    let optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
+
+    if((player.hands[hand].size() !== 2 || player.getHandAmount() !== 1) && optimalMove === 'double down') {
       optimalMove = 'card'
     }
     return move === optimalMove

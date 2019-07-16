@@ -229,7 +229,7 @@ function createSplitElements() {
 function drawCard(hand) {
   const player = game.getCurrentPlayer()
   if(game.checkOptimalMove(hand, 'card')) {
-    playSound('ding', 0.5)
+    playSound('ding', 0.3)
   }
 
   game.drawCard(hand)
@@ -252,7 +252,7 @@ function stick(hand) {
   const value = setHandValue(hand)
   if(value <= MAX_HAND_VALUE) playSound('click1')
   if(game.checkOptimalMove(hand, 'stick')) {
-    playSound('ding', 0.5)
+    playSound('ding', 0.3)
   }
   player.stick(hand)
   hideMainButtons(hand)
@@ -266,7 +266,7 @@ function stick(hand) {
 function doubleDown() {
   const index = game.getCurrentPlayerIndex()
   if(game.checkOptimalMove(0, 'double down')) {
-    playSound('ding', 0.5)
+    playSound('ding', 0.3)
   }
 
   game.doubleDown()
@@ -334,7 +334,7 @@ function dealCards() {
 function splitCards() {
   playSound('card_split1')
   if(game.checkOptimalMove(0, 'split')) {
-    playSound('ding', 0.5)
+    playSound('ding', 0.3)
   }
   game.splitHand()
 

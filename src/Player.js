@@ -11,10 +11,6 @@ class Player {
     this.logger = logger
   }
 
-  hasBlackJack(hand = 0) {
-    return this.hands[hand].value() === 21 && this.handSize() === 2
-  }
-
   canBetAgain() {
     return this.chips >= this.bets[0]
   }
@@ -171,6 +167,22 @@ class Player {
       this.hands[hand].completeHand()
       this.logger.log(`${this.name} goes bust!`)
     }
+  }
+
+  adjustedHandValue(hand = 0) {
+    if(this.getHandAmount() !== 1 && this.hasAPair(hand)) {
+      return `hard ${this.handValue()}`
+    } else {
+      return this.hands[hand].trueValue()
+    }
+  }
+
+  hasBlackJack(hand = 0) {
+    return this.hands[hand].value() === 21 && this.handSize() === 2
+  }
+
+  hasAPair(hand = 0) {
+    return this.showHand(hand)[0].value === this.showHand(hand)[1].value
   }
 }
 
