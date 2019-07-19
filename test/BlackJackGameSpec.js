@@ -100,6 +100,22 @@ describe('BlackJackGame', () => {
 
       game.dealer.hands[0].cards.length.should.eql(4)
     })
+
+    verify.it('should draw a card on a soft 17', () => {
+      const game = new BlackJackGame()
+      game.dealer.hands[0].cards = [{value: 11, face: 'A'}, {value: 6, face: '6'}]
+      game.playDealersHand()
+
+      game.dealer.hands[0].cards.length.should.not.eql(2)
+    })
+
+    verify.it('should not draw a card on a hard 17', () => {
+      const game = new BlackJackGame()
+      game.dealer.hands[0].cards = [{value: 10, face: 'K'}, {value: 7, face: '7'}]
+      game.playDealersHand()
+
+      game.dealer.hands[0].cards.length.should.eql(2)
+    })
   })
 
   describe('nextRound()', () => {

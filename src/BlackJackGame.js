@@ -163,6 +163,9 @@ class BlackJackGame {
     while(this.dealer.handValue() < 17) {
       this.dealer.receiveCard(this.deck.dealCard())
     }
+    if(this.dealer.hands[0].trueValue() === 'soft 17') {
+      this.dealer.receiveCard(this.deck.dealCard())      
+    }
   }
 
   payWinners() {
