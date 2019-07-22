@@ -178,11 +178,11 @@ class Player {
   }
 
   hasBlackJack(hand = 0) {
-    return this.hands[hand].value() === 21 && this.handSize() === 2
+    return this.hands[hand].isBlackJack()
   }
 
   hasAPair(hand = 0) {
-    return this.showHand(hand)[0].value === this.showHand(hand)[1].value
+    return this.hands[hand].isAPair()
   }
 }
 

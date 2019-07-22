@@ -63,8 +63,9 @@ class Strategy {
     return strat
   }
 
-  compareMove(dealerCardValue, playerHandValue, move) {
-
+  compareMove(dealerCardValue, playerHandValue, move, hands = 1) {
+    if(hands !== 1)
+    return move === this.correctMove(dealerCardValue, playerHandValue)
   }
 }
 
