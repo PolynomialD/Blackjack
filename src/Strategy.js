@@ -62,6 +62,10 @@ class Strategy {
     }
     return strat
   }
+
+  compareMove(dealerCardValue, playerHandValue, move) {
+
+  }
 }
 
 module.exports = Strategy

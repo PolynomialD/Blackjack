@@ -4,6 +4,14 @@ class Hand {
     this.result = ''
     this.complete = false
   }
+
+  isBlackJack() {
+    return this.size() === 2 && this.value() === 21
+  }
+
+  isAPair() {
+    return this.size() === 2 && this.cards[0].value === this.cards[1].value
+  }
   
   isComplete() {
     return this.complete
@@ -65,9 +73,9 @@ class Hand {
       return total + card.value
     }, 0)
 
-    if(this.size() === 2 && cloneRawValue === 21) {
+    if(this.isBlackJack()) {
       return 'blackjack'
-    } else if(this.size() === 2 && this.cards[0].value === this.cards[1].value) {
+    } else if(this.isAPair()) {
       return `pair of ${this.cards[0].value}'s`
     } else if(sortedClone[sortedClone.length-1].value === 11 && cloneRawValue <= 21) {
       return `soft ${cloneRawValue}`
