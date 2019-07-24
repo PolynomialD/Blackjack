@@ -1,7 +1,6 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const game = new BlackJackGame()
-const Strategy = require('./Strategy')
 
 const MAX_HAND_VALUE = 21
 
