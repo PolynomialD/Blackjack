@@ -1,5 +1,6 @@
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
+const Sound = require('./Sound')
 const game = new BlackJackGame()
 
 const MAX_HAND_VALUE = 21
@@ -10,7 +11,7 @@ function addNewPlayer() {
 
   if(chips.value !== '') {
     game.addPlayer(name.value, chips.value)
-    playSound('click2')
+    Sound.playSound('click2')
 
     const li = Html.li()
     Html.appendChildren(li, [
@@ -44,7 +45,7 @@ function placeBet(index) {
     Html.getAndHideElement(`player${index}-increase-bet-button`, `player${index}-decrease-bet-button`)
     Html.hideElement(betInput)
     game.addBetToCount()
-    playSound('chips_stack1')
+    Sound.playSound('chips_stack1')
   }
   refreshChipsTotals()
 }
@@ -228,7 +229,7 @@ function createSplitElements() {
 function drawCard(hand) {
   const player = game.getCurrentPlayer()
   if(game.checkOptimalMove(hand, 'card')) {
-    playSound('ding', 0.3)
+    Sound.playSound('ding', 0.3)
   }
 
   game.drawCard(hand)
@@ -242,16 +243,16 @@ function drawCard(hand) {
   if(player.getStatus() === 'done') {
     nextPlayer()
   } else {
-    playSound('card_place1')
+    Sound.playSound('card_place1')
   }
 }
 
 function stick(hand) {
   const player = game.getCurrentPlayer()
   const value = setHandValue(hand)
-  if(value <= MAX_HAND_VALUE) playSound('click1')
+  if(value <= MAX_HAND_VALUE) Sound.playSound('click1')
   if(game.checkOptimalMove(hand, 'stick')) {
-    playSound('ding', 0.3)
+    Sound.playSound('ding', 0.3)
   }
   player.stick(hand)
   hideMainButtons(hand)
@@ -265,7 +266,7 @@ function stick(hand) {
 function doubleDown() {
   const index = game.getCurrentPlayerIndex()
   if(game.checkOptimalMove(0, 'double down')) {
-    playSound('ding', 0.3)
+    Sound.playSound('ding', 0.3)
   }
 
   game.doubleDown()
@@ -275,7 +276,7 @@ function doubleDown() {
   hideAltButtons(0)
 
   const value = setHandValue(0)
-  if(value <= MAX_HAND_VALUE) playSound('click1')
+  if(value <= MAX_HAND_VALUE) Sound.playSound('click1')
 
   displayPlayerCards()
   refreshChipsTotals()
@@ -308,7 +309,7 @@ function insuranceBet() {
 }
 
 function startGame() {
-  playSound('card_fan1')
+  Sound.playSound('card_fan1')
   Html.getAndSetAttributes('table-div', {
     class: 'displayBlock'
   })
@@ -319,7 +320,7 @@ function startGame() {
 }
 
 function dealCards() {
-  playSound('fast_deal1')
+  Sound.playSound('fast_deal1')
   Html.getAndHideElement('deck-button','hint-button')
   Html.clearHtml('hint-text')
   game.dealCards()
@@ -331,9 +332,9 @@ function dealCards() {
 }
 
 function splitCards() {
-  playSound('card_split1')
+  Sound.playSound('card_split1')
   if(game.checkOptimalMove(0, 'split')) {
-    playSound('ding', 0.3)
+    Sound.playSound('ding', 0.3)
   }
   game.splitHand()
 
@@ -355,7 +356,7 @@ function splitCards() {
 }
 
 function playDealersHand() {
-  playSound('chips1')
+  Sound.playSound('chips1')
   game.playDealersHand()
   Html.getAndSetAttributes('dealer-img', {
     onclick: 'nextRound()',
@@ -371,7 +372,7 @@ function playDealersHand() {
 }
 
 function nextRound() {
-  playSound('card_fan1')
+  Sound.playSound('card_fan1')
   game.nextRound()
 
   Html.getAndSetAttributes('table-div', {
@@ -484,7 +485,7 @@ function setHandValue(hand, index = game.getCurrentPlayerIndex()) {
 
   if(handValue > MAX_HAND_VALUE) {
     handDiv.setAttribute('class', 'loseColour')
-    playSound('groan1')
+    Sound.playSound('groan1')
   }
   return handValue
 }
@@ -540,21 +541,9 @@ function decreaseBet(index) {
   input.value = currentBet - 500
 }
 
-function playSound(sound, option) {
-  const path = `../assets/audio/${sound}.mp3`
-  const audio = new Audio(path)
-  if(option === 'loop') {
-    audio.loop = true
-  } else if(option) {
-    audio.volume = option
-  }
-  audio.play()
-}
-
 window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet
 window.decreaseBet = decreaseBet
-window.playSound = playSound
 window.displayDealerCard = displayDealerCard
 window.changeCardColour = changeCardColour
 window.makeBets = makeBets
