@@ -23,10 +23,6 @@ const callback = () => {
 
 app.on('ready', callback)
 
-// ipcMain.on('game:start', () => {
-//   mainWindow.webContents.send('game:initialise')
-// })
-
 const menuTemplate = [
   {
     label: 'file',
@@ -36,6 +32,19 @@ const menuTemplate = [
         accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
         click() {
           app.quit()
+        }
+      }
+    ]
+  },
+  {
+    label: 'options',
+    submenu: [
+      {
+        label:'toggle strat sounds',
+        accelerator: process.platform === 'darwin' ? 'Command+H' : 'Ctrl+H',
+        click() {
+          console.log('clicked')
+          mainWindow.webContents.send('hi', 'hello')
         }
       }
     ]
