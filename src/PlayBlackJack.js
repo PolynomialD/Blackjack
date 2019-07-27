@@ -1,5 +1,3 @@
-const electron = require('electron')
-const { ipcRenderer } = electron
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const Sound = require('./Sound')
@@ -230,9 +228,7 @@ function createSplitElements() {
 
 function drawCard(hand) {
   const player = game.getCurrentPlayer()
-  if(game.checkOptimalMove(hand, 'card')) {
-    Sound.playSound('ding', 0.3)
-  }
+  game.checkOptimalMove(hand, 'card')
 
   game.drawCard(hand)
   setHandValue(hand)
@@ -253,9 +249,7 @@ function stick(hand) {
   const player = game.getCurrentPlayer()
   const value = setHandValue(hand)
   if(value <= MAX_HAND_VALUE) Sound.playSound('click1')
-  if(game.checkOptimalMove(hand, 'stick')) {
-    Sound.playSound('ding', 0.3)
-  }
+  game.checkOptimalMove(hand, 'stick')
   player.stick(hand)
   hideMainButtons(hand)
   hideAltButtons(hand)
@@ -267,9 +261,7 @@ function stick(hand) {
 
 function doubleDown() {
   const index = game.getCurrentPlayerIndex()
-  if(game.checkOptimalMove(0, 'double down')) {
-    Sound.playSound('ding', 0.3)
-  }
+  game.checkOptimalMove(0, 'double down')
 
   game.doubleDown()
 
@@ -335,9 +327,7 @@ function dealCards() {
 
 function splitCards() {
   Sound.playSound('card_split1')
-  if(game.checkOptimalMove(0, 'split')) {
-    Sound.playSound('ding', 0.3)
-  }
+  game.checkOptimalMove(0, 'split')
   game.splitHand()
 
   hideAltButtons(0)
@@ -542,10 +532,6 @@ function decreaseBet(index) {
   const currentBet = Number(input.value)
   input.value = currentBet - 500
 }
-
-ipcRenderer.on('toggle-help', () => {
-  console.log('helped')
-})
 
 window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet

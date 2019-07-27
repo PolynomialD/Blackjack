@@ -1,4 +1,4 @@
-const path = require('path');
+var path = require('path');
 
 module.exports = {
   mode: 'development',
@@ -6,5 +6,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
-  }
+  },
+  target: 'node'
 };

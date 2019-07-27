@@ -3,6 +3,7 @@ const Dealer = require('./Dealer')
 const Player = require('./Player')
 const Logger = require('./Logger')
 const Strategy = require('./Strategy')
+const Sound = require('./Sound')
 
 class BlackJackGame {
   constructor (deck, players) {
@@ -24,7 +25,7 @@ class BlackJackGame {
     if((player.hands[hand].size() !== 2 || player.getHandAmount() !== 1) && optimalMove === 'double down') {
       optimalMove = 'card'
     }
-    return move === optimalMove
+    return move === optimalMove ? Sound.playSound('ding', 0.3) : Sound.playSound('error_sound')
   }
 
   getCardCount() {
@@ -83,18 +84,18 @@ class BlackJackGame {
   }
 
   drawCard(hand) {
-    this.players[this.currentPlayerIndex].receiveCard(this.deck.dealCard(), hand)
+    this.getCurrentPlayer().receiveCard(this.deck.dealCard(), hand)
   }
 
   doubleDown() {
-    const player = this.players[this.currentPlayerIndex]
+    const player = this.getCurrentPlayer()
     player.doubleBet()
     this.drawCard(0)
     player.doubleDown()
   }
 
   splitHand() {
-    const player = this.players[this.currentPlayerIndex]
+    const player = this.getCurrentPlayer()
     player.splitHand()
     this.drawCard(0)
     this.drawCard(1)
