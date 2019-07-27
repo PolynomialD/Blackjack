@@ -40,11 +40,10 @@ const menuTemplate = [
     label: 'options',
     submenu: [
       {
-        label:'toggle strat sounds',
+        label:'toggle help sounds',
         accelerator: process.platform === 'darwin' ? 'Command+H' : 'Ctrl+H',
         click() {
-          console.log('clicked')
-          mainWindow.webContents.send('hi', 'hello')
+          mainWindow.webContents.send('toggle-help')
         }
       }
     ]

@@ -1,3 +1,5 @@
+const electron = require('electron')
+const { ipcRenderer } = electron
 const Html = require('./Html')
 const BlackJackGame = require('./BlackJackGame')
 const Sound = require('./Sound')
@@ -540,6 +542,10 @@ function decreaseBet(index) {
   const currentBet = Number(input.value)
   input.value = currentBet - 500
 }
+
+ipcRenderer.on('toggle-help', () => {
+  console.log('helped')
+})
 
 window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet
