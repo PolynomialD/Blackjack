@@ -222,38 +222,35 @@ describe('Player', () => {
     verify.it('should split the players hand', Gen.integerBetween(1,11), (value) => {
       const hand = new Hand([{value},{value}])
       const bob = TestPlayer.create().withChips(9000).withBets([1000]).withHands(hand).build()
+
       bob.splitHand()
 
       bob.hands.length.should.eql(2)
     })
 
     verify.it('should only split when values are equal',
-    Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
-      const bob = new Player('Bob', 9000, fakeLogger)
-      const deck = new Deck(['♥'],[[`${firstValue}`,firstValue],[`${secondValue}`,secondValue]])
+      Gen.integerBetween(1,5), Gen.integerBetween(6,11), (firstValue, secondValue) => {
+      const hand = new Hand([{firstValue},{secondValue}])
+      const bob = TestPlayer.create().withChips(9000).withHands(hand).build()
 
-      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
 
       bob.hands.length.should.eql(1)
     })
 
     verify.it('should place another bet', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 9000, fakeLogger)
-      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
+      const hand = new Hand([{value},{value}])
+      const bob = TestPlayer.create().withChips(9000).withBets([1000]).withHands(hand).build()
 
-      bob.bets = [1000]
-      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
       bob.splitHand()
 
       bob.bets.should.eql([1000,1000])
     })
 
     verify.it('should not split if the player cannot place a matching bet', Gen.integerBetween(1,11), (value) => {
-      const bob = new Player('Bob', 900)
-      const deck = new Deck(['♣','♥'],[[`${value}`,value]])
-      bob.bets = [1000]
-      bob.hands[0].cards.push(deck.cards[0],deck.cards[1])
+      const hand = new Hand([{value},{value}])
+      const bob = TestPlayer.create().withChips(900).withBets([1000]).withHands(hand).build()
+
       bob.splitHand()
 
       bob.hands.length.should.eql(1)
@@ -262,32 +259,28 @@ describe('Player', () => {
 
   describe('canBetAgain', () => {
     verify.it('should return true if the player has enough chips to bet again', () => {
-      const bob = new Player('Bob', 2000)
-      bob.bets = [2000]
-      
+      const bob = TestPlayer.create().withChips(2000).withBets([2000]).build()
+
       bob.canBetAgain().should.eql(true)
     })
 
     verify.it('should return false if the player does not have enough chips to bet again', () => {
-      const bob = new Player('Bob', 1000)
-      bob.bets = [2000]
-      
+      const bob = TestPlayer.create().withChips(1000).withBets([2000]).build()
+
       bob.canBetAgain().should.eql(false)
     })
   })
 
   describe('canHalfBetAgain', () => {
     verify.it('should return true if the player has enough chips to bet half again', () => {
-      const bob = new Player('Bob', 1000)
-      bob.bets = [2000]
-      
+      const bob = TestPlayer.create().withChips(1000).withBets([2000]).build()
+
       bob.canHalfBetAgain().should.eql(true)
     })
 
     verify.it('should return false if the player does not have enough chips to bet half again', () => {
-      const bob = new Player('Bob', 900)
-      bob.bets = [2000]
-      
+      const bob = TestPlayer.create().withChips(900).withBets([2000]).build()
+
       bob.canHalfBetAgain().should.eql(false)
     })
   })
