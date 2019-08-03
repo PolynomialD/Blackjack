@@ -65,6 +65,13 @@ h1, h2 {
   cursor: pointer;
 }
 
+.start-game-link {
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+}
+
 .button:hover {opacity: 1}
 
 #dealer-hand-value {
@@ -127,7 +134,8 @@ h1, h2 {
 }
 
 #choose-game-div {
-  text-align: center
+  text-align: center;
+  position: relative;
 }
 
 #hint-button {
@@ -171,4 +179,157 @@ h1, h2 {
 
 .inputButton:hover {
   opacity: 1
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    font-family: 'Exo', sans-serif;
+}
+
+
+.context {
+    width: 100%;
+    position: absolute;
+    top:20vh;
+    
+}
+
+.context h1{
+    text-align: center;
+    color: rgb(8, 8, 8);
+    font-size: 50px;
+}
+
+.area{
+    background: rgba(6, 65, 12, 0.267);
+    background: -webkit-linear-gradient(to left, #108028, #023b1c);  
+    width: 100%;
+    height:100%;
+}
+
+.circles{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.circles img{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+}
+
+.circles img:nth-child(1){
+    left: 25%;
+    width: 56px;
+    height: 80px;
+    animation-delay: 0s;
+    border-radius: 3px;
+}
+
+
+.circles img:nth-child(2){
+    left: 10%;
+    width: 14px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(3){
+    left: 70%;
+    width: 14px;
+    height: 20px;
+    animation-delay: 4s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(4){
+    left: 40%;
+    width: 42px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(5){
+    left: 65%;
+    width: 14px;
+    height: 20px;
+    animation-delay: 0s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(6){
+    left: 75%;
+    width: 77px;
+    height: 110px;
+    animation-delay: 3s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(7){
+    left: 35%;
+    width: 105px;
+    height: 150px;
+    animation-delay: 7s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(8){
+    left: 50%;
+    width: 18px;
+    height: 26px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(9){
+    left: 20%;
+    width: 10px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+    border-radius: 3px;
+}
+
+.circles img:nth-child(10){
+    left: 85%;
+    width: 105px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+    border-radius: 3px;
+}
+
+
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+    }
+
 }
