@@ -25,7 +25,14 @@ class BlackJackGame {
     if((player.hands[hand].size() !== 2 || player.getHandAmount() !== 1) && optimalMove === 'double down') {
       optimalMove = 'card'
     }
-    return move === optimalMove ? Sound.playSound('ding', 0.3) : Sound.playSound('error_sound')
+    if(move === optimalMove) {
+      Sound.playSound('ding', 0.3)
+      player.increaseCombo()
+      console.log(player.getCombo())
+    } else {
+      Sound.playSound('error_sound')
+      player.resetCombo()
+    }
   }
 
   getCardCount() {

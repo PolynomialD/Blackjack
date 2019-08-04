@@ -1,5 +1,6 @@
 body {
-  background-color: darkgreen
+  background-color: darkgreen;
+  margin: 30px
 }
 
 li {
@@ -186,10 +187,9 @@ h1, h2 {
     padding: 0px;
 }
 
-body{
+body {
     font-family: 'Exo', sans-serif;
 }
-
 
 .context {
     width: 100%;
@@ -318,8 +318,6 @@ body{
     border-radius: 3px;
 }
 
-
-
 @keyframes animate {
 
     0%{
@@ -331,5 +329,4 @@ body{
         transform: translateY(-1000px) rotate(720deg);
         opacity: 0;
     }
-
 }

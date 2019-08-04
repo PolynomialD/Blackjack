@@ -9,6 +9,19 @@ class Player {
     this.insuranceBet = 0
     this.winnings = 0
     this.logger = logger
+    this.combo = 0
+  }
+
+  getCombo() {
+    return this.combo
+  }
+
+  resetCombo() {
+    this.combo = 0
+  }
+
+  increaseCombo() {
+    this.combo += 1
   }
 
   canBetAgain() {
