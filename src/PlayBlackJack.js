@@ -84,6 +84,10 @@ function createPlayerElements() {
         id: `player${index}-name`
       }, player.getName()),
 
+      Html.div({
+        id: `player${index}-medals`
+      }),
+
       playerChips,
 
       Html.div({
