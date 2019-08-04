@@ -28,9 +28,9 @@ class BlackJackGame {
     if(move === optimalMove) {
       Sound.playSound('ding', 0.3)
       player.increaseCombo()
-      console.log(player.getCombo())
     } else {
       Sound.playSound('error_sound')
+      player.checkForMedal()
       player.resetCombo()
     }
   }

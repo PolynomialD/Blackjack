@@ -10,6 +10,9 @@ class Player {
     this.winnings = 0
     this.logger = logger
     this.combo = 0
+    this.bronze = 0
+    this.silver = 0
+    this.gold = 0
   }
 
   getCombo() {
@@ -22,6 +25,16 @@ class Player {
 
   increaseCombo() {
     this.combo += 1
+  }
+
+  checkForMedal() {
+    if(this.combo > 19 && this.combo < 50) {
+      this.bronze += 1
+    } else if(this.combo > 49 && this.combo < 100) {
+      this.silver += 1
+    } else if(this.combo > 99) {
+      this.gold += 1
+    }
   }
 
   canBetAgain() {
