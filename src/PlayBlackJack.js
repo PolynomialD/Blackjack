@@ -545,8 +545,8 @@ function displayMedals() {
     Html.clearHtml(`player${index}-medals`)
     player.medals.forEach((colour) => {
       const medalImage = Html.img({
-        src: `../assets/cards/medal_icon.jpg`,
-        class: `medal ${colour}`
+        src: `../assets/cards/${colour}_icon.png`,
+        class: 'medal'
       })
       medalsDiv.appendChild(medalImage)
     })
