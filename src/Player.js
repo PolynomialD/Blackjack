@@ -37,8 +37,6 @@ class Player {
       this.medals.push('bronze')
     } else if(this.combo > 19 && this.combo < 50) {
       this.medals.push('silver')
-    } else if(this.combo > 49) {
-      this.medals.push('gold')
     }
   }
 
