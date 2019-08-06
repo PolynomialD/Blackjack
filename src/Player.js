@@ -27,6 +27,8 @@ class Player {
 
   checkForGold() {
     if(this.combo > 29) {
+      this.resetCombo()
+      this.logger.log(`${this.getName()} earns gold!`)
       if(this.medals.length < 3) {
         this.medals.push('gold')
       } else {
@@ -46,9 +48,11 @@ class Player {
   checkForMedal() {
     if(this.combo > 2 && this.combo < 20) {
       if(this.medals.length < 3) {
+        this.logger.log(`${this.getName()} earns bronze!`)
         this.medals.push('bronze')
       }
     } else if(this.combo > 19 && this.combo < 30) {
+      this.logger.log(`${this.getName()} earns silver!`)
         if(this.medals.length < 3) {
           this.medals.push('silver')
         } else {
