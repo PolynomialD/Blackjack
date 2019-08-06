@@ -43,7 +43,7 @@ const menuTemplate = [
         label:'toggle help sounds',
         accelerator: process.platform === 'darwin' ? 'Command+H' : 'Ctrl+H',
         click() {
-          console.log('clicked')
+          // todo: add toggle
         }
       }
     ]

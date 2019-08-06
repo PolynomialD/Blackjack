@@ -64,8 +64,9 @@ class Strategy {
   }
 
   compareMove(dealerCardValue, playerHandValue, move, hands = 1) {
-    if(hands !== 1)
-    return move === this.correctMove(dealerCardValue, playerHandValue)
+    let correctMove = this.correctMove(dealerCardValue, playerHandValue)
+    if(hands !== 1 && correctMove === 'double down') {correctMove = 'card'}
+    return move === correctMove
   }
 }
 

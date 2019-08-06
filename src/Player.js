@@ -32,9 +32,25 @@ class Player {
       this.bronze += 1
     } else if(this.combo > 49 && this.combo < 100) {
       this.silver += 1
-    } else if(this.combo > 99) {
+    } else if(this.combo > 1) {
       this.gold += 1
     }
+  }
+
+  getMedals() {
+    return [this.gold, this.silver, this.bronze]
+  }
+
+  getGold() {
+    return this.gold
+  }
+
+  getSilver() {
+    return this.silver
+  }
+
+  getBronze() {
+    return this.bronze
   }
 
   canBetAgain() {

@@ -365,6 +365,7 @@ function playDealersHand() {
   setHandValueColours()
   refreshChipsTotals()
   showChipsDifference()
+  displayMedals()
 }
 
 function nextRound() {
@@ -535,6 +536,20 @@ function decreaseBet(index) {
   const input = document.getElementById(`player${index}-bet-input`)
   const currentBet = Number(input.value)
   input.value = currentBet - 500
+}
+
+function displayMedals() {
+  game.players.forEach((player, index) => {
+    const medalsDiv = document.getElementById(`player${index}-medals`)
+    Html.clearHtml(`player${index}-medals`)
+    console.log(player.getGold())
+    if(player.getGold() > 0) {
+      const medal = Html.img({
+        src: '../assets/cards/medal_icon.jpg'
+      })
+      medalsDiv.appendChild(medal)
+    }
+  })
 }
 
 window.insuranceBet = insuranceBet
