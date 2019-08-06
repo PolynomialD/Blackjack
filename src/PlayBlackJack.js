@@ -327,6 +327,7 @@ function dealCards() {
   displayPlayerCards()
   createPlayerButtons()
   setHandValues()
+  displayMedals()
 }
 
 function splitCards() {
@@ -542,13 +543,13 @@ function displayMedals() {
   game.players.forEach((player, index) => {
     const medalsDiv = document.getElementById(`player${index}-medals`)
     Html.clearHtml(`player${index}-medals`)
-    console.log(player.getGold())
-    if(player.getGold() > 0) {
-      const medal = Html.img({
-        src: '../assets/cards/medal_icon.jpg'
+    player.medals.forEach((colour) => {
+      const medalImage = Html.img({
+        src: `../assets/cards/medal_icon.jpg`,
+        class: `medal ${colour}`
       })
-      medalsDiv.appendChild(medal)
-    }
+      medalsDiv.appendChild(medalImage)
+    })
   })
 }
 

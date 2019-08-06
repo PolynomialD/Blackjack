@@ -10,9 +10,7 @@ class Player {
     this.winnings = 0
     this.logger = logger
     this.combo = 0
-    this.bronze = 0
-    this.silver = 0
-    this.gold = 0
+    this.medals = []
   }
 
   getCombo() {
@@ -27,30 +25,25 @@ class Player {
     this.combo += 1
   }
 
+  checkForGold() {
+    if(this.combo > 49) {
+      this.medals.push('gold')
+      this.resetCombo()
+    }
+  }
+
   checkForMedal() {
-    if(this.combo > 19 && this.combo < 50) {
-      this.bronze += 1
-    } else if(this.combo > 49 && this.combo < 100) {
-      this.silver += 1
-    } else if(this.combo > 1) {
-      this.gold += 1
+    if(this.combo > 2 && this.combo < 20) {
+      this.medals.push('bronze')
+    } else if(this.combo > 19 && this.combo < 50) {
+      this.medals.push('silver')
+    } else if(this.combo > 49) {
+      this.medals.push('gold')
     }
   }
 
   getMedals() {
-    return [this.gold, this.silver, this.bronze]
-  }
-
-  getGold() {
-    return this.gold
-  }
-
-  getSilver() {
-    return this.silver
-  }
-
-  getBronze() {
-    return this.bronze
+    return this.medals
   }
 
   canBetAgain() {

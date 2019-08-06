@@ -28,6 +28,7 @@ class BlackJackGame {
     if(move === optimalMove) {
       Sound.playSound('ding', 0.3)
       player.increaseCombo()
+      player.checkForGold()
     } else {
       Sound.playSound('error_sound')
       player.checkForMedal()

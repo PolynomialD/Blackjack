@@ -95,6 +95,23 @@ h1, h2 {
   color: red;
 }
 
+.medal {
+  height: 22px;
+  width: 22px;
+}
+
+.bronze {
+  background-color: brown
+}
+
+.silver {
+  background-color: silver
+}
+
+.gold {
+  background-color: gold
+}
+
 .fadedButton{
   background-color: #e0e2d9e5;
   border: none;
