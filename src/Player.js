@@ -30,13 +30,13 @@ class Player {
       if(this.medals.length < 3) {
         this.medals.push('gold')
       } else {
-        const bronze = medals.indexOf('bronze')
+        const bronze = this.medals.indexOf('bronze')
         if(bronze !== -1) {
-          medals[bronze] = 'gold'
+          this.medals[bronze] = 'gold'
         } else {
           const silver = medals.indexOf('silver')
           if(silver !== -1) {
-            medals[silver] = 'gold'
+            this.medals[silver] = 'gold'
           }
         }
       }
@@ -52,9 +52,9 @@ class Player {
         if(this.medals.length < 3) {
           this.medals.push('silver')
         } else {
-          const bronze = medals.indexOf('bronze')
+          const bronze = this.medals.indexOf('bronze')
           if(bronze !== -1) {
-            medals[bronze] = 'silver'
+            this.medals[bronze] = 'silver'
           }
         }
     }
