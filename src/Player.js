@@ -26,17 +26,37 @@ class Player {
   }
 
   checkForGold() {
-    if(this.combo > 49) {
-      this.medals.push('gold')
-      this.resetCombo()
+    if(this.combo > 29) {
+      if(this.medals.length < 3) {
+        this.medals.push('gold')
+      } else {
+        const bronze = medals.indexOf('bronze')
+        if(bronze !== -1) {
+          medals[bronze] = 'gold'
+        } else {
+          const silver = medals.indexOf('silver')
+          if(silver !== -1) {
+            medals[silver] = 'gold'
+          }
+        }
+      }
     }
   }
 
   checkForMedal() {
     if(this.combo > 2 && this.combo < 20) {
-      this.medals.push('bronze')
-    } else if(this.combo > 19 && this.combo < 50) {
-      this.medals.push('silver')
+      if(this.medals.length < 3) {
+        this.medals.push('bronze')
+      }
+    } else if(this.combo > 19 && this.combo < 30) {
+        if(this.medals.length < 3) {
+          this.medals.push('silver')
+        } else {
+          const bronze = medals.indexOf('bronze')
+          if(bronze !== -1) {
+            medals[bronze] = 'silver'
+          }
+        }
     }
   }
 
