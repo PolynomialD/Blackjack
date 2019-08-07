@@ -191,11 +191,10 @@ class Player {
     this.combo += 1
   }
 
-  checkGold() {
+  addGoldMedal() {
     const bronze = this.medals.indexOf('bronze')
     const silver = this.medals.indexOf('silver')
 
-    this.logger.log(`${this.getName()} earns gold!`)
     if(this.medals.length < 3) {
       this.medals.push('gold')
     } else if(~bronze) {
@@ -205,10 +204,9 @@ class Player {
     }
   }
 
-  checkSilver() {
+  addSilverMedal() {
     const bronze = this.medals.indexOf('bronze')
 
-    this.logger.log(`${this.getName()} earns silver!`)
     if(this.medals.length < 3) {
       this.medals.push('silver')
     } else if(~bronze) {
@@ -216,17 +214,23 @@ class Player {
     }
   }
 
-  checkBronze() {
-    this.logger.log(`${this.getName()} earns bronze!`)
+  addBronzeMedal() {
     if(this.medals.length < 3) {
       this.medals.push('bronze')
     }
   }
 
   receiveMedal(medal) {
-    if(medal === 'gold') this.checkGold()
-    if(medal === 'silver') this.checkSilver()
-    if(medal === 'bronze') this.checkBronze()
+    if(medal === 'gold') {
+      this.logger.log(`${this.getName()} earns gold!`)
+      this.addGoldMedal()
+    } else if(medal === 'silver') {
+      this.logger.log(`${this.getName()} earns silver!`)
+      this.addSilverMedal()
+    } else if(medal === 'bronze') {
+      this.logger.log(`${this.getName()} earns bronze!`)
+      this.addBronzeMedal()
+    }
     this.resetCombo()
   }
 
