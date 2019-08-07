@@ -542,13 +542,16 @@ function decreaseBet(index) {
 function displayMedals() {
   game.players.forEach((player, index) => {
     const medalsDiv = document.getElementById(`player${index}-medals`)
+    const topMedals = player.medals.sort((a, b) => a.value - b.value).slice(0,3)
     Html.clearHtml(`player${index}-medals`)
-    player.medals.forEach((colour) => {
-      const medalImage = Html.img({
-        src: `../assets/cards/${colour}_icon.png`,
-        class: 'medal'
-      })
-      medalsDiv.appendChild(medalImage)
+    topMedals.forEach((medal) => {
+      if(medal.value > 0) {
+        const medalImage = Html.img({
+          src: `../assets/cards/${medal.name}_icon.png`,
+          class: 'medal'
+        })
+        medalsDiv.appendChild(medalImage)
+      }
     })
   })
 }

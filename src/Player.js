@@ -191,46 +191,52 @@ class Player {
     this.combo += 1
   }
 
-  addGoldMedal() {
-    const bronze = this.medals.indexOf('bronze')
-    const silver = this.medals.indexOf('silver')
+  // addGoldMedal() {
+  //   const bronze = this.medals.indexOf('bronze')
+  //   const silver = this.medals.indexOf('silver')
 
-    if(this.medals.length < 3) {
-      this.medals.push('gold')
-    } else if(~bronze) {
-      this.medals[bronze] = 'gold'
-    } else if(~silver) {
-      this.medals[silver] = 'gold'
-    }
-  }
+  //   if(this.medals.length < 3) {
+  //     this.medals.push('gold')
+  //   } else if(~bronze) {
+  //     this.medals[bronze] = 'gold'
+  //   } else if(~silver) {
+  //     this.medals[silver] = 'gold'
+  //   }
+  // }
 
-  addSilverMedal() {
-    const bronze = this.medals.indexOf('bronze')
+  // addSilverMedal() {
+  //   const bronze = this.medals.indexOf('bronze')
 
-    if(this.medals.length < 3) {
-      this.medals.push('silver')
-    } else if(~bronze) {
-      this.medals[bronze] = 'silver'
-    }
-  }
+  //   if(this.medals.length < 3) {
+  //     this.medals.push('silver')
+  //   } else if(~bronze) {
+  //     this.medals[bronze] = 'silver'
+  //   }
+  // }
 
-  addBronzeMedal() {
-    if(this.medals.length < 3) {
-      this.medals.push('bronze')
-    }
-  }
+  // addBronzeMedal() {
+  //   if(this.medals.length < 3) {
+  //     this.medals.push('bronze')
+  //   }
+  // }
+
+  // receiveMedal(medal) {
+  //   if(medal === 'gold') {
+  //     this.logger.log(`${this.getName()} earns gold!`)
+  //     this.addGoldMedal()
+  //   } else if(medal === 'silver') {
+  //     this.logger.log(`${this.getName()} earns silver!`)
+  //     this.addSilverMedal()
+  //   } else if(medal === 'bronze') {
+  //     this.logger.log(`${this.getName()} earns bronze!`)
+  //     this.addBronzeMedal()
+  //   }
+  //   this.resetCombo()
+  // }
 
   receiveMedal(medal) {
-    if(medal === 'gold') {
-      this.logger.log(`${this.getName()} earns gold!`)
-      this.addGoldMedal()
-    } else if(medal === 'silver') {
-      this.logger.log(`${this.getName()} earns silver!`)
-      this.addSilverMedal()
-    } else if(medal === 'bronze') {
-      this.logger.log(`${this.getName()} earns bronze!`)
-      this.addBronzeMedal()
-    }
+    this.logger.log(`${this.getName()} earns ${medal.name}!`)
+    this.medals.push(medal)
     this.resetCombo()
   }
 
