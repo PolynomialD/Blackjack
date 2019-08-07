@@ -13,69 +13,6 @@ class Player {
     this.medals = []
   }
 
-  getCombo() {
-    return this.combo
-  }
-
-  resetCombo() {
-    this.combo = 0
-  }
-
-  increaseCombo() {
-    this.combo += 1
-  }
-
-  checkForGold() {
-    if(this.combo > 29) {
-      this.resetCombo()
-      this.logger.log(`${this.getName()} earns gold!`)
-      if(this.medals.length < 3) {
-        this.medals.push('gold')
-      } else {
-        const bronze = this.medals.indexOf('bronze')
-        if(bronze !== -1) {
-          this.medals[bronze] = 'gold'
-        } else {
-          const silver = medals.indexOf('silver')
-          if(silver !== -1) {
-            this.medals[silver] = 'gold'
-          }
-        }
-      }
-    }
-  }
-
-  checkForMedal() {
-    if(this.combo > 2 && this.combo < 20) {
-      if(this.medals.length < 3) {
-        this.logger.log(`${this.getName()} earns bronze!`)
-        this.medals.push('bronze')
-      }
-    } else if(this.combo > 19 && this.combo < 30) {
-      this.logger.log(`${this.getName()} earns silver!`)
-        if(this.medals.length < 3) {
-          this.medals.push('silver')
-        } else {
-          const bronze = this.medals.indexOf('bronze')
-          if(bronze !== -1) {
-            this.medals[bronze] = 'silver'
-          }
-        }
-    }
-  }
-
-  getMedals() {
-    return this.medals
-  }
-
-  canBetAgain() {
-    return this.chips >= this.bets[0]
-  }
-
-  canHalfBetAgain() {
-    return this.chips >= this.bets[0]/2
-  }
-
   stick(hand) {
     this.hands[hand].completeHand()
     this.logger.log(`${this.getName()} sticks on ${this.handValue(hand)}`)
@@ -240,6 +177,69 @@ class Player {
 
   hasAPair(hand = 0) {
     return this.hands[hand].isAPair()
+  }
+
+  getCombo() {
+    return this.combo
+  }
+
+  resetCombo() {
+    this.combo = 0
+  }
+
+  increaseCombo() {
+    this.combo += 1
+  }
+
+  checkGold() {
+    const bronze = this.medals.indexOf('bronze')
+    const silver = this.medals.indexOf('silver')
+
+    this.logger.log(`${this.getName()} earns gold!`)
+    if(this.medals.length < 3) {
+      this.medals.push('gold')
+    } else if(~bronze) {
+      this.medals[bronze] = 'gold'
+    } else if(~silver) {
+      this.medals[silver] = 'gold'
+    }
+  }
+
+  checkSilver() {
+    const bronze = this.medals.indexOf('bronze')
+
+    this.logger.log(`${this.getName()} earns silver!`)
+    if(this.medals.length < 3) {
+      this.medals.push('silver')
+    } else if(~bronze) {
+      this.medals[bronze] = 'silver'
+    }
+  }
+
+  checkBronze() {
+    this.logger.log(`${this.getName()} earns bronze!`)
+    if(this.medals.length < 3) {
+      this.medals.push('bronze')
+    }
+  }
+
+  receiveMedal(medal) {
+    if(medal === 'gold') this.checkGold()
+    if(medal === 'silver') this.checkSilver()
+    if(medal === 'bronze') this.checkBronze()
+    this.resetCombo()
+  }
+
+  getMedals() {
+    return this.medals
+  }
+
+  canBetAgain() {
+    return this.chips >= this.bets[0]
+  }
+
+  canHalfBetAgain() {
+    return this.chips >= this.bets[0]/2
   }
 }
 

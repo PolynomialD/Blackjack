@@ -4,6 +4,7 @@ const Player = require('./Player')
 const Logger = require('./Logger')
 const Strategy = require('./Strategy')
 const Sound = require('./Sound')
+const Medals = require('./Medals')
 
 class BlackJackGame {
   constructor (deck, players) {
@@ -28,11 +29,9 @@ class BlackJackGame {
     if(move === optimalMove) {
       Sound.playSound('ding', 0.3)
       player.increaseCombo()
-      player.checkForGold()
     } else {
       Sound.playSound('error_sound')
-      player.checkForMedal()
-      player.resetCombo()
+      player.receiveMedal(Medals.awardMedal(player.getCombo()))
     }
   }
 
