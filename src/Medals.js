@@ -19,7 +19,7 @@ class Medals {
       }
       break
       default: medal = {
-        name: 'wood',
+        name: 'no medal',
         value: 0
       }
     }
