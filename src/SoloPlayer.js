@@ -6,6 +6,7 @@ class SoloPlayer {
     this.chips = chips || 50000
     this.logger = logger || { log: () => undefined }
     this.hands = this.createHands(hands)
+    this.medals = []
   }
 
   createHands(amount) {
@@ -20,6 +21,10 @@ class SoloPlayer {
     return this.hands
   }
 
+  getName() {
+    return this.name
+  }
+
   adjustChips() {
     let adjustment = 0
     this.hands.forEach((hand) => { // reduce
@@ -32,15 +37,22 @@ class SoloPlayer {
     return this.chips
   }
 
+  receiveMedal(medal) {
+    this.logger.log(`${this.getName()} earns ${medal.name}!`)
+    if(medal.value > 0) this.medals.push(medal)
+    this.resetCombo()
+  }
+
   resetCombo() {
     this.hands.forEach((hand) => {
-      hand.combo = 0
+      hand.resetCombo()
     })
   }
 
   getCombo() {
-    const combo = this.hands.reduce((total, acc) => {
-      return total + acc
+    let combo = 0
+    this.hands.forEach((hand) => { // reduce
+      combo += (hand.getCombo())
     })
     return combo
   }

@@ -23,13 +23,19 @@ class BlackJackGame {
   checkOptimalMove(hand, move) {
     const player = this.getCurrentPlayer()
     const dealerCardValue = this.dealer.hands[0].cards[1].value
+    const playerValue = player.adjustedHandValue(hand)
+    let optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
 
-    if(new Strategy().compareMove(dealerCardValue, player, hand, move)) {
+    if((player.hands[hand].size() !== 2 || player.getHandAmount() !== 1) && optimalMove === 'double down') {
+      optimalMove = 'card'
+    }
+    if(move === optimalMove) {
       Sound.playSound('ding', 0.3)
       player.increaseCombo()
     } else {
       Sound.playSound('error_sound')
       player.receiveMedal(Medals.awardMedal(player.getCombo()))
+      if(this.soloGame === true) this.soloPlayer.receiveMedal(Medals.awardMedal(this.soloPlayer.getCombo()))
     }
   }
 

@@ -48,6 +48,8 @@ function placeBet(index) {
     Sound.playSound('chips_stack1')
   }
   refreshChipsTotals()
+
+  if(game.soloGame === true) hidePlayerChips()
 }
 
 function makeBets() {
@@ -311,11 +313,8 @@ function startSoloGame() {
   const hands = document.getElementById('solo-game-hands-input').value
   game.addSoloPlayer(name, 50000, hands)
   startGame()
-  game.players.forEach((_, index) => {
-    Html.getAndHideElement(`player${index}-chips`)
-  })
+  hidePlayerChips()
   game.soloGame = true
-  console.log(game.soloPlayer.getChips())
 }
 
 function startGame() {
@@ -382,8 +381,6 @@ function playDealersHand() {
 }
 
 function nextRound() {
-  game.soloPlayer.adjustChips()
-
   Sound.playSound('card_fan1')
   game.nextRound()
 
@@ -401,6 +398,11 @@ function nextRound() {
   })
   Html.showHintButton()
   createPlayerElements()
+
+  if(game.soloGame === true) {
+    game.soloPlayer.adjustChips()
+    hidePlayerChips()
+  }
 }
 
 function hideMainButtons(hand) {
@@ -551,6 +553,13 @@ function decreaseBet(index) {
   const input = document.getElementById(`player${index}-bet-input`)
   const currentBet = Number(input.value)
   input.value = currentBet - 500
+}
+
+function hidePlayerChips() {
+  game.players.forEach((_, index) => {
+    Html.getAndHideElement(`player${index}-chips`)
+    Html.getAndHideElement(`player${index}-img`)
+  })
 }
 
 function displayMedals() {
