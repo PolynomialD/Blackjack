@@ -306,6 +306,12 @@ function insuranceBet() {
   refreshChipsTotals()
 }
 
+function startSoloGame() {
+  const hands = document.getElementById('solo-game-hands-input').value
+  game.addSoloPlayer(50000, hands)
+  startGame()
+}
+
 function startGame() {
   Sound.playSound('card_fan1')
   Html.getAndSetAttributes('table-div', {
@@ -554,6 +560,7 @@ function displayMedals() {
   })
 }
 
+window.startSoloGame = startSoloGame
 window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet
 window.decreaseBet = decreaseBet

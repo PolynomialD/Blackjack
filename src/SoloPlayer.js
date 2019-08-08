@@ -1,12 +1,10 @@
 const Player = require('./Player')
 
-class SuperPlayer {
-  constructor(name, chips, hands, logger) {
-    this.name = name
-    this.chips = chips
+class SoloPlayer {
+  constructor(chips, hands, logger) {
+    this.chips = chips || 50000
     this.logger = logger || { log: () => undefined }
     this.hands = this.createHands(hands)
-    this.combo = 0
   }
 
   createHands(amount) {
@@ -17,26 +15,34 @@ class SuperPlayer {
     return hands
   }
 
-  adjustChips() {
+  getHands() {
+    return this.hands
+  }
+
+  adjustChips(hands) {
     let adjustment
-    this.hands.forEach((hand) => {
+    hands.forEach((hand) => {
       adjustment += (hand.getChips() - 100000)
     })
     this.chips += adjustment
   }
 
-  resetCombo() {
-    this.hands.forEach((hand) => {
+  getChips() {
+    return this.chips
+  }
+
+  resetCombo(hands) {
+    hands.forEach((hand) => {
       hand.combo = 0
     })
   }
 
-  getCombo() {
-    const combo = this.hands.reduce((total, acc) => {
+  getCombo(hands) {
+    const combo = hands.reduce((total, acc) => {
       return total + acc
     })
     return combo
   }
 }
 
-module.exports = SuperPlayer
+module.exports = SoloPlayer

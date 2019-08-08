@@ -5,6 +5,7 @@ const Logger = require('./Logger')
 const Strategy = require('./Strategy')
 const Sound = require('./Sound')
 const Medals = require('./Medals')
+const SoloPlayer = require('./SoloPlayer')
 
 class BlackJackGame {
   constructor (deck, players) {
@@ -150,6 +151,12 @@ class BlackJackGame {
         this.logger.log(`${player.name} breaks even`)
       }
     })
+  }
+
+  addSoloPlayer(chips, hands, logger) {
+    const player = new SoloPlayer(chips, hands, logger)
+    this.players = player.getHands()
+    this.logger.log(`solo player joins the table`)
   }
 
   addPlayer(name, chips, logger = this.logger) {
