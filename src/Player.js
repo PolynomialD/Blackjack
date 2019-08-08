@@ -208,6 +208,10 @@ class Player {
   canHalfBetAgain() {
     return this.chips >= this.bets[0]/2
   }
+
+  getWinnings() {
+    return this.winnings
+  }
 }
 
 module.exports = Player

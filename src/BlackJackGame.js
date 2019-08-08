@@ -16,18 +16,15 @@ class BlackJackGame {
     this.round = 1
     this.betCount = 0
     this.logger = new Logger()
+    this.soloGame = false
+    this.soloPlayer = null
   }
 
   checkOptimalMove(hand, move) {
     const player = this.getCurrentPlayer()
     const dealerCardValue = this.dealer.hands[0].cards[1].value
-    const playerValue = player.adjustedHandValue(hand)
-    let optimalMove = new Strategy().correctMove(dealerCardValue, playerValue)
 
-    if((player.hands[hand].size() !== 2 || player.getHandAmount() !== 1) && optimalMove === 'double down') {
-      optimalMove = 'card'
-    }
-    if(move === optimalMove) {
+    if(new Strategy().compareMove(dealerCardValue, player, hand, move)) {
       Sound.playSound('ding', 0.3)
       player.increaseCombo()
     } else {
@@ -153,10 +150,10 @@ class BlackJackGame {
     })
   }
 
-  addSoloPlayer(chips, hands, logger) {
-    const player = new SoloPlayer(chips, hands, logger)
-    this.players = player.getHands()
-    this.logger.log(`solo player joins the table`)
+  addSoloPlayer(name, chips, hands, logger) {
+    this.soloPlayer = new SoloPlayer(name, chips, hands, logger)
+    this.players = this.soloPlayer.getHands()
+    this.logger.log(`${name} joins the table`)
   }
 
   addPlayer(name, chips, logger = this.logger) {

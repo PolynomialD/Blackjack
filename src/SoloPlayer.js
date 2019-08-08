@@ -1,7 +1,8 @@
 const Player = require('./Player')
 
 class SoloPlayer {
-  constructor(chips, hands, logger) {
+  constructor(name, chips, hands, logger) {
+    this.name = name
     this.chips = chips || 50000
     this.logger = logger || { log: () => undefined }
     this.hands = this.createHands(hands)
@@ -19,10 +20,10 @@ class SoloPlayer {
     return this.hands
   }
 
-  adjustChips(hands) {
-    let adjustment
-    hands.forEach((hand) => {
-      adjustment += (hand.getChips() - 100000)
+  adjustChips() {
+    let adjustment = 0
+    this.hands.forEach((hand) => { // reduce
+      adjustment += (hand.getWinnings())
     })
     this.chips += adjustment
   }
@@ -31,14 +32,14 @@ class SoloPlayer {
     return this.chips
   }
 
-  resetCombo(hands) {
-    hands.forEach((hand) => {
+  resetCombo() {
+    this.hands.forEach((hand) => {
       hand.combo = 0
     })
   }
 
-  getCombo(hands) {
-    const combo = hands.reduce((total, acc) => {
+  getCombo() {
+    const combo = this.hands.reduce((total, acc) => {
       return total + acc
     })
     return combo

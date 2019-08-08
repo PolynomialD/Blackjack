@@ -33,8 +33,12 @@
     <br><br>
     <ul id="playersList"></ul>
     <br><br>
-    <button id="create-solo-game-button" onclick="startSoloGame()">Start Solo Game</button>
-    <input id="solo-game-hands-input" class="input" type="number"/>
+    <div>
+      <label>Number Of Hands</label>
+      <input id="solo-game-hands-input" class="input" type="number"/>
+    </div>
+    <br>
+    <button id="create-solo-game-button" class="inputButton" onclick="startSoloGame()">Create Solo Game</button>
   </div>
   <div id="table-div" class="hidden">
     <div id="dealer" style="text-align:center">

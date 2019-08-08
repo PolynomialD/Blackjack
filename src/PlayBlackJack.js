@@ -307,9 +307,15 @@ function insuranceBet() {
 }
 
 function startSoloGame() {
+  // const name = document.getElementById('solo-game-name-input').value
   const hands = document.getElementById('solo-game-hands-input').value
-  game.addSoloPlayer(50000, hands)
+  game.addSoloPlayer(name, 50000, hands)
   startGame()
+  game.players.forEach((_, index) => {
+    Html.getAndHideElement(`player${index}-chips`)
+  })
+  game.soloGame = true
+  console.log(game.soloPlayer.getChips())
 }
 
 function startGame() {
@@ -376,6 +382,8 @@ function playDealersHand() {
 }
 
 function nextRound() {
+  game.soloPlayer.adjustChips()
+
   Sound.playSound('card_fan1')
   game.nextRound()
 
