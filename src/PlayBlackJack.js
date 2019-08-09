@@ -49,7 +49,10 @@ function placeBet(index) {
   }
   refreshChipsTotals()
 
-  if(game.soloGame === true) hidePlayerChips()
+  if(game.soloGame === true) {
+    appendSoloImage()
+    hidePlayerChips()
+  }
 }
 
 function makeBets() {
@@ -309,10 +312,11 @@ function insuranceBet() {
 }
 
 function startSoloGame() {
-  // const name = document.getElementById('solo-game-name-input').value
+  const name = document.getElementById('solo-game-name-input').value
   const hands = document.getElementById('solo-game-hands-input').value
   game.addSoloPlayer(name, 50000, hands)
   startGame()
+  appendSoloImage()
   hidePlayerChips()
   game.soloGame = true
 }
@@ -382,8 +386,7 @@ function playDealersHand() {
 
 function nextRound() {
   Sound.playSound('card_fan1')
-  game.nextRound()
-
+  
   Html.getAndSetAttributes('table-div', {
     class: 'displayBlock'
   })
@@ -398,11 +401,13 @@ function nextRound() {
   })
   Html.showHintButton()
   createPlayerElements()
-
+  
   if(game.soloGame === true) {
     game.soloPlayer.adjustChips()
+    appendSoloImage()
     hidePlayerChips()
   }
+  game.nextRound()
 }
 
 function hideMainButtons(hand) {
@@ -560,6 +565,23 @@ function hidePlayerChips() {
     Html.getAndHideElement(`player${index}-chips`)
     Html.getAndHideElement(`player${index}-img`)
   })
+}
+
+function appendSoloImage() {
+  const soloImage = Html.img({
+    id: `solo-player-img`,
+    src: '../assets/avatars/player_avatar.png',
+    class: 'playerImage'
+  })
+  const soloChips = Html.div({
+    id: `solo-player-chips-text`
+  }, `${game.soloPlayer.getChips()}`)
+
+  Html.clearHtml('solo-player-div')
+
+  Html.getAndAppendChild('solo-player-div', soloImage)
+  Html.getAndAppendChild('solo-player-div', soloChips)
+
 }
 
 function displayMedals() {

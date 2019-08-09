@@ -63,11 +63,11 @@ class Strategy {
     return strat
   }
 
-  compareMove(dealerCardValue, player, hand, move) {
-    let correctMove = this.correctMove(dealerCardValue, player.adjustedHandValue(hand))
-    if(player.hands[hand].size() !== 2 || hand !== 1 && correctMove === 'double down') {correctMove = 'card'}
-    return move === correctMove
-  }
+  // compareMove(dealerCardValue, player, hand, move) {
+  //   let correctMove = this.correctMove(dealerCardValue, player.adjustedHandValue(hand))
+  //   if(player.hands[hand].size() !== 2 || hand !== 1 && correctMove === 'double down') {correctMove = 'card'}
+  //   return move === correctMove
+  // }
 }
 
 module.exports = Strategy

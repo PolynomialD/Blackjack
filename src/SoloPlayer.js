@@ -28,12 +28,13 @@ class SoloPlayer {
   adjustChips() {
     let adjustment = 0
     this.hands.forEach((hand) => { // reduce
-      adjustment += (hand.getWinnings())
+      adjustment += hand.getWinnings()
     })
     this.chips += adjustment
   }
 
   getChips() {
+    console.log('chips', this.chips)
     return this.chips
   }
 
