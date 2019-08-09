@@ -50,8 +50,7 @@ function placeBet(index) {
   refreshChipsTotals()
 
   if(game.soloGame === true) {
-    appendSoloImage()
-    hidePlayerChips()
+    createSoloElements()
   }
 }
 
@@ -316,8 +315,7 @@ function startSoloGame() {
   const hands = document.getElementById('solo-game-hands-input').value
   game.addSoloPlayer(name, 50000, hands)
   startGame()
-  appendSoloImage()
-  hidePlayerChips()
+  createSoloElements()
   game.soloGame = true
 }
 
@@ -404,8 +402,7 @@ function nextRound() {
   
   if(game.soloGame === true) {
     game.soloPlayer.adjustChips()
-    appendSoloImage()
-    hidePlayerChips()
+    createSoloElements()
   }
   game.nextRound()
 }
@@ -560,14 +557,12 @@ function decreaseBet(index) {
   input.value = currentBet - 500
 }
 
-function hidePlayerChips() {
+function createSoloElements() {
   game.players.forEach((_, index) => {
-    Html.getAndHideElement(`player${index}-chips`)
+    const chipsDiv = document.getElementById(`player${index}-chips-text`)
+    chipsDiv.innerHTML = ''
     Html.getAndHideElement(`player${index}-img`)
   })
-}
-
-function appendSoloImage() {
   const soloImage = Html.img({
     id: `solo-player-img`,
     src: '../assets/avatars/player_avatar.png',
@@ -577,14 +572,22 @@ function appendSoloImage() {
     id: `solo-player-chips-text`
   }, `${game.soloPlayer.getChips()}`)
 
+  const soloMedals = Html.div({
+    id: `solo-player-medals-div`
+  })
+
   Html.clearHtml('solo-player-div')
 
   Html.getAndAppendChild('solo-player-div', soloImage)
   Html.getAndAppendChild('solo-player-div', soloChips)
-
+  Html.getAndAppendChild('solo-player-div', soloMedals)
 }
 
 function displayMedals() {
+  (game.soloGame === true) ? displaySoloMedals() : displayAllMedals()
+}
+
+function displayAllMedals() {
   game.players.forEach((player, index) => {
     const medalsDiv = document.getElementById(`player${index}-medals`)
     const topMedals = player.getMedals().sort((a, b) => b.value - a.value).slice(0,3)
@@ -597,6 +600,19 @@ function displayMedals() {
       medalsDiv.appendChild(medalImage)
     })
   })
+}
+
+function displaySoloMedals() {
+    const medalsDiv = document.getElementById(`solo-player-medals-div`)
+    const topMedals = game.soloPlayer.getMedals().sort((a, b) => b.value - a.value).slice(0,3)
+    Html.clearHtml(`solo-player-medals-div`)
+    topMedals.forEach((medal) => {
+      const medalImage = Html.img({
+        src: `../assets/cards/${medal.name}_icon.png`,
+        class: 'medal'
+      })
+      medalsDiv.appendChild(medalImage)
+    })
 }
 
 window.startSoloGame = startSoloGame

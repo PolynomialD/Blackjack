@@ -34,7 +34,6 @@ class SoloPlayer {
   }
 
   getChips() {
-    console.log('chips', this.chips)
     return this.chips
   }
 
@@ -56,6 +55,10 @@ class SoloPlayer {
       combo += (hand.getCombo())
     })
     return combo
+  }
+
+  getMedals() {
+    return this.medals
   }
 }
 
