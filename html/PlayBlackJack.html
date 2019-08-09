@@ -20,8 +20,17 @@
     </header>
   </div>
   <div id="createGameForm" style="text-align:center">
-    <h2>Create Game</h2>
+    <h2>Create Solo Game</h2>
     <div>
+        <label>Enter Player Name</label>
+        <input id="solo-game-name-input" class="input" type="text"/> <br>
+        <label>Number Of Hands</label>
+        <input id="solo-game-hands-input" class="input" type="number"/>
+      </div>
+      <br>
+      <button id="create-solo-game-button" class="inputButton" onclick="startSoloGame()">Create Game</button> <br><br>
+    <div>
+      <h2>Create Game</h2>
       <label>Enter Player Name</label>
       <input id="nameInput" class="input" type="text" onkeypress="addNewPlayerButton(event)" autofocus /> </br>
       <label>Enter Player Chips</label>
@@ -32,15 +41,6 @@
     <button id="createGameButton" class="fadedButton">Create Game</button>
     <br><br>
     <ul id="playersList"></ul>
-    <br><br>
-    <div>
-        <label>Enter Player Name</label>
-        <input id="solo-game-name-input" class="input" type="text"/>
-      <label>Number Of Hands</label>
-      <input id="solo-game-hands-input" class="input" type="number"/>
-    </div>
-    <br>
-    <button id="create-solo-game-button" class="inputButton" onclick="startSoloGame()">Create Solo Game</button>
   </div>
   <div id="table-div" class="hidden">
     <div id="dealer" style="text-align:center">

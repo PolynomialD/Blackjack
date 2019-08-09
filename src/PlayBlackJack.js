@@ -313,10 +313,12 @@ function insuranceBet() {
 function startSoloGame() {
   const name = document.getElementById('solo-game-name-input').value
   const hands = document.getElementById('solo-game-hands-input').value
-  game.addSoloPlayer(name, 50000, hands)
-  startGame()
-  createSoloElements()
-  game.soloGame = true
+  if (hands > 0) {
+    game.addSoloPlayer(name, 50000, hands)
+    startGame()
+    createSoloElements()
+    game.soloGame = true
+  }
 }
 
 function startGame() {
@@ -559,8 +561,7 @@ function decreaseBet(index) {
 
 function createSoloElements() {
   game.players.forEach((_, index) => {
-    const chipsDiv = document.getElementById(`player${index}-chips-text`)
-    chipsDiv.innerHTML = ''
+    document.getElementById(`player${index}-chips-text`).innerHTML = ''
     Html.getAndHideElement(`player${index}-img`)
   })
   const soloImage = Html.img({
@@ -604,7 +605,7 @@ function displayAllMedals() {
 
 function displaySoloMedals() {
     const medalsDiv = document.getElementById(`solo-player-medals-div`)
-    const topMedals = game.soloPlayer.getMedals().sort((a, b) => b.value - a.value).slice(0,3)
+    const topMedals = game.soloPlayer.getMedals().sort((a, b) => b.value - a.value).slice(0,5)
     Html.clearHtml(`solo-player-medals-div`)
     topMedals.forEach((medal) => {
       const medalImage = Html.img({
