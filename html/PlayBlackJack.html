@@ -16,11 +16,13 @@
     <button id="solo-game-button" class="game-button" onclick="showGameInputs('solo')">Solo Game</button><br>
     <button id="game-button" class="game-button" onclick="showGameInputs()">Multiplayer</button>
     <div id="solo-game-form" class="hidden">
-      <h2>Create Solo Game</h2>
+      <h2>Create Game</h2>
       <label>Enter Player Name</label>
       <input id="solo-game-name-input" class="input" type="text"/> <br>
       <label>Number Of Hands</label>
-      <input id="solo-game-hands-input" class="input" type="number"/><br>
+      <input id="solo-game-hands-input" class="input" type="number" value="5"/><br>
+      <label>Number Of Chips</label>
+      <input id="solo-game-chips-input" class="input" type="number" value="50000" step="10000"/><br>
       <button id="create-solo-game-button" class="inputButton" onclick="startSoloGame()">Create Game</button> <br><br>
     </div>
     <div id="game-form" class="hidden">

@@ -313,8 +313,9 @@ function insuranceBet() {
 function startSoloGame() {
   const name = document.getElementById('solo-game-name-input').value
   const hands = document.getElementById('solo-game-hands-input').value
+  const chips = Number(document.getElementById('solo-game-chips-input').value)
   if (hands > 0) {
-    game.addSoloPlayer(name, 50000, hands)
+    game.addSoloPlayer(name, chips, hands)
     startGame()
     createSoloElements()
     game.soloGame = true
