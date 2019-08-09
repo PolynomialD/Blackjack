@@ -380,9 +380,13 @@ function playDealersHand() {
   game.logWinnings()
   displayAllCards()
   setHandValueColours()
+  displayMedals()
+  
+  if(game.soloGame === true) {
+    game.soloPlayer.adjustChips()
+  }
   refreshChipsTotals()
   showChipsDifference()
-  displayMedals()
 }
 
 function nextRound() {
@@ -404,7 +408,6 @@ function nextRound() {
   createPlayerElements()
   
   if(game.soloGame === true) {
-    game.soloPlayer.adjustChips()
     createSoloElements()
   }
   game.nextRound()
@@ -473,7 +476,9 @@ function displayAllCards() {
 
 
 function refreshChipsTotals() {
-  if(game.soloGame === false) {
+  if(game.soloGame === true) {
+    document.getElementById(`solo-player-chips-text`).innerHTML = `${game.soloPlayer.getChips()}`
+  } else {
     game.players.forEach((player, index) => {
       document.getElementById(`player${index}-chips-text`).innerHTML = `${player.getChips()}`
     })
