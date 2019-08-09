@@ -606,18 +606,25 @@ function displayAllMedals() {
 }
 
 function displaySoloMedals() {
-    const medalsDiv = document.getElementById(`solo-player-medals-div`)
-    const topMedals = game.soloPlayer.getMedals().sort((a, b) => b.value - a.value).slice(0,5)
-    Html.clearHtml(`solo-player-medals-div`)
-    topMedals.forEach((medal) => {
-      const medalImage = Html.img({
-        src: `../assets/cards/${medal.name}_icon.png`,
-        class: 'medal'
-      })
-      medalsDiv.appendChild(medalImage)
+  const medalsDiv = document.getElementById(`solo-player-medals-div`)
+  const topMedals = game.soloPlayer.getMedals().sort((a, b) => b.value - a.value).slice(0,5)
+  Html.clearHtml(`solo-player-medals-div`)
+  topMedals.forEach((medal) => {
+    const medalImage = Html.img({
+      src: `../assets/cards/${medal.name}_icon.png`,
+      class: 'medal'
     })
+    medalsDiv.appendChild(medalImage)
+  })
 }
 
+function showGameInputs(type) {
+  const gameType = (type === 'solo') ? 'solo-' : ''
+  Html.getAndSetAttributes(`${gameType}game-form`, { class: '' })
+  Html.getAndHideElement('game-button', 'solo-game-button')
+}
+
+window.showGameInputs = showGameInputs
 window.startSoloGame = startSoloGame
 window.insuranceBet = insuranceBet
 window.increaseBet = increaseBet

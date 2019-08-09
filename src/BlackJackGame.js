@@ -156,7 +156,7 @@ class BlackJackGame {
     })
   }
 
-  addSoloPlayer(name, chips, hands, logger) {
+  addSoloPlayer(name, chips, hands, logger = this.logger) {
     this.soloPlayer = new SoloPlayer(name, chips, hands, logger)
     this.players = this.soloPlayer.getHands()
     this.logger.log(`${name} joins the table`)

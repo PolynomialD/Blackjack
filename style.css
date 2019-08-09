@@ -15,7 +15,12 @@ h1, h2 {
 }
 
 .hint {
-  float: right
+  text-align: center
+}
+
+#nav {
+  padding: 5px;
+  margin-bottom: 30px
 }
 
 .hidden {
@@ -67,6 +72,25 @@ h1, h2 {
   cursor: pointer;
 }
 
+.game-button {
+  background-color: #e0e2d9e5;
+  border: none;
+  border-radius: 2px;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: 26px;
+  margin: 35px 1px;
+  opacity: 0.5;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+#solo-game-button {
+  margin-top: 100px
+}
+
 .start-game-link {
   text-decoration: none;
   font-size: 22px;
@@ -107,7 +131,7 @@ h1, h2 {
   padding: 4px 8px;
   text-align: center;
   font-size: 15px;
-  margin: 2px 1px;
+  margin: 20px 1px;
   opacity: 0.5;
   text-decoration: none;
 }
@@ -119,6 +143,10 @@ h1, h2 {
 .playerImage {
   height: 60px;
   width: 60px
+}
+
+#dealer-img {
+  margin-top: 25px;
 }
 
 .chipsText {
@@ -153,7 +181,8 @@ h1, h2 {
   font-size: 12px;
   margin: 2px 1px;
   opacity: 0.8;
-  cursor: pointer
+  cursor: pointer;
+  float: right;
 }
 
 .betInput {
@@ -177,7 +206,7 @@ h1, h2 {
   padding: 4px 8px;
   text-align: center;
   font-size: 15px;
-  margin: 2px 1px;
+  margin: 20px 1px;
   opacity: 0.8;
   transition: 0.3s;
   text-decoration: none;
@@ -186,6 +215,10 @@ h1, h2 {
 
 .inputButton:hover {
   opacity: 1
+}
+
+#createGameForm {
+  padding-top: 30px
 }
 
 *{

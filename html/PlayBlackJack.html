@@ -7,44 +7,36 @@
   <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
-  <nav id="nav"> 
+  <div id="nav"> 
     <a href="../index.html">Main Menu</a>
-    <div class="hint">
-      <button id="hint-button" onclick="displayTheCount()" class="hidden">Hint</button>
-    </div>
-  </nav>
-  <div id="hint-text" class="hint"></div>
-  <div>
-    <header>
-      <h1>&spades;&hearts; BlackJack &clubs;&diams;</h1>
-    </header>
+    <div id="hint-text" class="hint"></div>
+    <button id="hint-button" onclick="displayTheCount()" class="hidden">Hint</button>
   </div>
   <div id="createGameForm" style="text-align:center">
-    <h2>Create Solo Game</h2>
-    <div>
-        <label>Enter Player Name</label>
-        <input id="solo-game-name-input" class="input" type="text"/> <br>
-        <label>Number Of Hands</label>
-        <input id="solo-game-hands-input" class="input" type="number"/>
-      </div>
-      <br>
+    <button id="solo-game-button" class="game-button" onclick="showGameInputs('solo')">Solo Game</button><br>
+    <button id="game-button" class="game-button" onclick="showGameInputs()">Multiplayer</button>
+    <div id="solo-game-form" class="hidden">
+      <h2>Create Solo Game</h2>
+      <label>Enter Player Name</label>
+      <input id="solo-game-name-input" class="input" type="text"/> <br>
+      <label>Number Of Hands</label>
+      <input id="solo-game-hands-input" class="input" type="number"/><br>
       <button id="create-solo-game-button" class="inputButton" onclick="startSoloGame()">Create Game</button> <br><br>
-    <div>
+    </div>
+    <div id="game-form" class="hidden">
       <h2>Create Game</h2>
       <label>Enter Player Name</label>
       <input id="nameInput" class="input" type="text" onkeypress="addNewPlayerButton(event)" autofocus /> </br>
       <label>Enter Player Chips</label>
-      <input id="chipsInput" class="input" type="number" value="10000" step="5000"/>
-    </div>
-    <br>
-    <button id="addNewPlayerButton" class="inputButton" onclick="addNewPlayer()">AddPlayer</button>
-    <button id="createGameButton" class="fadedButton">Create Game</button>
-    <br><br>
+      <input id="chipsInput" class="input" type="number" value="10000" step="5000"/><br>
+      <button id="addNewPlayerButton" class="inputButton" onclick="addNewPlayer()">AddPlayer</button>
+      <button id="createGameButton" class="fadedButton">Create Game</button>
+    </div><br>
     <ul id="playersList"></ul>
   </div>
   <div id="table-div" class="hidden">
     <div id="dealer" style="text-align:center">
-      <img id="dealer-img"  class="buttonImage" type="button" src="../assets/avatars/dealer_avatar.png">
+      <img id="dealer-img" class="buttonImage" type="button" src="../assets/avatars/dealer_avatar.png">
       <div id="dealer-cards-div"></div>
       <div id="dealCards-div" style="text-align:center">
         <div id="dealer-hand-value"></div>
