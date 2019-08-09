@@ -472,9 +472,11 @@ function displayAllCards() {
 
 
 function refreshChipsTotals() {
-  game.players.forEach((player, index) => {
-    document.getElementById(`player${index}-chips-text`).innerHTML = `${player.getChips()}`
-  })
+  if(game.soloGame === false) {
+    game.players.forEach((player, index) => {
+      document.getElementById(`player${index}-chips-text`).innerHTML = `${player.getChips()}`
+    })
+  }
 }
 
 function showChipsDifference() {
